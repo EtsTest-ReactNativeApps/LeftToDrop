@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>151213451221-i6r510n4a1d4jcb2t4t2oi4lu421vj3o.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.151213451221-i6r510n4a1d4jcb2t4t2oi4lu421vj3o</string>
+	<key>API_KEY</key>
+	<string>AIzaSyATz0ciWzXV2BG0jjKsylqKlzvDhWIK19E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>151213451221</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.krlargo.lefttodrop</string>
+	<key>PROJECT_ID</key>
+	<string>left-to-drop-9f551</string>
+	<key>STORAGE_BUCKET</key>
+	<string>left-to-drop-9f551.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:151213451221:ios:4cd61fc8f8e41b0e</string>
+	<key>DATABASE_URL</key>
+	<string>https://left-to-drop-9f551.firebaseio.com</string>
+</dict>
+</plist>
