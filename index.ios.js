@@ -12,13 +12,46 @@ import CategoriesScreen from './CategoriesScreen.js';
 import ItemsScreen from './ItemsScreen.js';
 import ItemScreen from './ItemScreen.js';
 
+var defaultNavOptions = (title) => {
+	return({
+		title: title,
+		headerTitleStyle: {
+			fontFamily: 'Futura',
+			fontSize: 20,
+			fontStyle: 'italic'
+		},
+		headerStyle: {
+			backgroundColor: 'red'
+		},
+		headerTintColor: 'white'
+	})
+}
+
 const LeftToDrop = StackNavigator({
-  Home: { screen: HomeScreen },			// Left To Drop, Already Dropped
-	Favorites: { screen: FavoritesScreen },
-	Seasons: { screen: SeasonsScreen }, 			// e.g. SS17, FW17, SS18
-	Categories: { screen: CategoriesScreen }, // e.g. all, jackets, shirts
-	Items: { screen: ItemsScreen },						// e.g. box logo, nas
-	Item: { screen: ItemScreen }							// e.g. individual item w/ rating
+	Home: {
+		screen: HomeScreen,
+		navigationOptions: defaultNavOptions('Left To Drop')
+	},
+	Favorites: {
+		screen: FavoritesScreen,
+		navigationOptions: defaultNavOptions('Favorites')
+	},
+	Seasons: {
+		screen: SeasonsScreen,
+		navigationOptions: defaultNavOptions('Seasons')
+	},
+	Categories: {
+		screen: CategoriesScreen,
+		navigationOptions: defaultNavOptions('Categories')
+	},
+	Items: {
+		screen: ItemsScreen,
+		navigationOptions: defaultNavOptions('Items')	
+	},
+	Item: {
+		screen: ItemScreen,
+		navigationOptions: defaultNavOptions('Item')
+	 }
 });
 
 AppRegistry.registerComponent('LeftToDrop', () => LeftToDrop);

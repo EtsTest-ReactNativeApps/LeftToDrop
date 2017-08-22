@@ -8,20 +8,6 @@ import {
 import { StackNavigator } from 'react-navigation';
 
 export default class SeasonsScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Seasons',
-		headerTitleStyle: {
-    	fontFamily: 'Futura',
-    	fontSize: 20,
-			fontStyle: 'italic',
-    	//fontWeight: 'bold',			
-		},
-		headerStyle: {
-			backgroundColor: 'red'
-		},
-		headerTintColor: 'white'
-  }
-
 	render() {
 		const { navigate } = this.props.navigation;
 		return(

@@ -13,27 +13,25 @@ export default class HomeScreen extends React.Component {
 	constructor() {
 		super();
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		const titles = ['Left To Drop', 'Already Dropped', 'Favorites'];
-		const destinations = ['Categories', 'Categories', 'Favorites'];
+		destinations = [
+			{
+				title: 'Left To Drop',
+				screen: 'Categories',
+			},
+			{
+				title: 'Already Dropped',
+				screen: 'Categories',
+			},
+			{
+				title: 'Favorites',
+				screen: 'Favorites',
+			}
+		]
 
 		this.state = {
-			dataSource: ds.cloneWithRows(titles),
+			dataSource: ds.cloneWithRows(destinations),
 		};
 	}
-
-	static navigationOptions = {
-		title: 'Left To Drop',
-		headerTitleStyle: {
-    	fontFamily: 'Futura',
-    	fontSize: 20,
-			fontStyle: 'italic',
-    	//fontWeight: 'bold',			
-		},
-		headerStyle: {
-			backgroundColor: 'red'
-		},
-		headerTintColor: 'white'
-  }
 
 	render() {
 		const { navigate } = this.props.navigation;
@@ -54,7 +52,7 @@ export default class HomeScreen extends React.Component {
 
 	_onPressRow(rowID: number) {
 		const { navigate } = this.props.navigation;
-		navigate(destinations[rowID]);
+		navigate(destinations[rowID].screen);
 	}
 
 	_renderRow(rowData: string, sectionID: number, rowID: number) {
@@ -64,7 +62,7 @@ export default class HomeScreen extends React.Component {
 				underlayColor = 'whitesmoke'>
 				<View style={styles.cell}>
 					<Text style={styles.text}>
-						{rowData}
+						{rowData.title}
 					</Text>
 				</View>
 			</TouchableHighlight>
