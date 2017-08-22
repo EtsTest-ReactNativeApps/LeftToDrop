@@ -56,7 +56,6 @@ export default class SeasonsScreen extends React.Component {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		headerLeft: <Icon name='chevron-left'>
 	});
 }
 
