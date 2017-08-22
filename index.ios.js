@@ -12,9 +12,8 @@ import CategoriesScreen from './CategoriesScreen.js';
 import ItemsScreen from './ItemsScreen.js';
 import ItemScreen from './ItemScreen.js';
 
-var defaultNavOptions = (title) => {
+var defaultNavOptions = () => {
 	return({
-		title: title,
 		headerTitleStyle: {
 			fontFamily: 'Futura',
 			fontSize: 20,
@@ -30,28 +29,22 @@ var defaultNavOptions = (title) => {
 const LeftToDrop = StackNavigator({
 	Home: {
 		screen: HomeScreen,
-		navigationOptions: defaultNavOptions('Left To Drop')
+		navigationOptions: {
+			title: 'Left To Drop'
+		}
 	},
 	Favorites: {
 		screen: FavoritesScreen,
-		navigationOptions: defaultNavOptions('Favorites')
+		navigationOptions: {
+			title: 'Favorites'
+		}
 	},
-	Seasons: {
-		screen: SeasonsScreen,
-		navigationOptions: defaultNavOptions('Seasons')
-	},
-	Categories: {
-		screen: CategoriesScreen,
-		navigationOptions: defaultNavOptions('Categories')
-	},
-	Items: {
-		screen: ItemsScreen,
-		navigationOptions: defaultNavOptions('Items')	
-	},
-	Item: {
-		screen: ItemScreen,
-		navigationOptions: defaultNavOptions('Item')
-	 }
+	Seasons: {screen: SeasonsScreen},
+	Categories: {screen: CategoriesScreen},
+	Items: {screen: ItemsScreen},
+	Item: {screen: ItemScreen}
+}, {
+	navigationOptions: defaultNavOptions()
 });
 
 AppRegistry.registerComponent('LeftToDrop', () => LeftToDrop);

@@ -16,11 +16,11 @@ export default class HomeScreen extends React.Component {
 		destinations = [
 			{
 				title: 'Left To Drop',
-				screen: 'Categories',
+				screen: 'Seasons',
 			},
 			{
 				title: 'Already Dropped',
-				screen: 'Categories',
+				screen: 'Seasons',
 			},
 			{
 				title: 'Favorites',

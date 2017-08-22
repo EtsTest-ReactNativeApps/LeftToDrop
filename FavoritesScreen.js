@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-export default class SeasonsScreen extends React.Component {
+export default class FavoritesScreen extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
 		return(

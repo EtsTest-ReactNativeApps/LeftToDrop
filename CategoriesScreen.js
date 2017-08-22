@@ -13,7 +13,7 @@ export default class CategoriesScreen extends React.Component {
 	constructor() {
 		super();
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		categories = ['all', 'jackets', 'shirts', 'top/sweaters', 'sweatshirts', 'pants', 't-shirts', 'hats', 'bags', 'accessories', 'skate'];
+		categories = ['All', 'Jackets', 'Shirts', 'Top/Sweaters', 'Sweatshirts', 'Pants', 'T-shirts', 'Hats', 'Bags', 'Accessories', 'Skate'];
 
 		this.state = {
 			dataSource: ds.cloneWithRows(categories),
@@ -21,7 +21,6 @@ export default class CategoriesScreen extends React.Component {
 	}
 
 	render() {
-		const { navigate } = this.props.navigation;
 		return(
 			<ListView style={styles.container}
 				dataSource={this.state.dataSource}
@@ -38,7 +37,7 @@ export default class CategoriesScreen extends React.Component {
 
 	_onPressRow(rowID: number) {
 		const { navigate } = this.props.navigation;
-		navigate(categories[rowID]);
+		navigate('Items', { category: categories[rowID]});
 	}
 
   _renderRow(rowData: string, sectionID: number, rowID: number) {
@@ -48,12 +47,16 @@ export default class CategoriesScreen extends React.Component {
         underlayColor = 'whitesmoke'>
         <View style={styles.cell}>
           <Text style={styles.text}>
-            {rowData}
+            {rowData.toLowerCase()}
           </Text>
         </View>
       </TouchableHighlight>
     )
   }
+
+	static navigationOptions = ({ navigation }) => ({
+		title: navigation.state.params.season,
+	});
 }
 
 const styles = StyleSheet.create({

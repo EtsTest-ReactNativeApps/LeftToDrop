@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-export default class SeasonsScreen extends React.Component {
+export default class ItemScreen extends React.Component {
 	static navigationOptions = {
 		title: 'Box Logo Tee',
 		headerTitleStyle: {

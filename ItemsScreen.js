@@ -7,9 +7,10 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-export default class SeasonsScreen extends React.Component {
+export default class ItemsScreen extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
+		const { params } = this.props.navigation.state;
 		return(
 			<View style={styles.view}>
 				<Button
@@ -19,6 +20,10 @@ export default class SeasonsScreen extends React.Component {
 			</View>
 		)
 	}
+
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.category,
+  });
 }
 
 const styles = StyleSheet.create({
