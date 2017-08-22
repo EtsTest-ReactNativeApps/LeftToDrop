@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	Alert,
 	Button,
 	ListView,
 	StyleSheet,
@@ -10,15 +9,12 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
-//let titles = ['Left To Drop', 'Already Dropped', 'Favorites'];
-//let destinations = ['Categories', 'Categories', 'Favorites'];
-
 export default class HomeScreen extends React.Component {
 	constructor() {
 		super();
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		titles = ['Left To Drop', 'Already Dropped', 'Favorites'];
-		destinations = ['Categories', 'Categories', 'Favorites'];
+		const titles = ['Left To Drop', 'Already Dropped', 'Favorites'];
+		const destinations = ['Categories', 'Categories', 'Favorites'];
 
 		this.state = {
 			dataSource: ds.cloneWithRows(titles),
