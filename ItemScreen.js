@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 		marginTop: 5
 	},
   container: {
-    backgroundColor: 'whitesmoke',
+    backgroundColor: 'white',
     flex: 1,
   },
   copButton: {

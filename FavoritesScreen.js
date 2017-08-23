@@ -1,4 +1,6 @@
 import React from 'react';
+import * as firebase from 'firebase';
+
 import {
 	Button,
 	Image,
@@ -11,36 +13,34 @@ import {
 import { StackNavigator } from 'react-navigation';
 import GridView from 'react-native-gridview';
 
+import EmptyScreen from './EmptyScreen.js';
+
 const itemsPerRow = 3;
 
 export default class FavoritesScreen extends React.Component {
 	constructor() {
 		super();
-		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-		favorites = [
-			'http://d17ol771963kd3.cloudfront.net/136407/zo/Ln4sypHd_mE.jpg',
-			'http://d17ol771963kd3.cloudfront.net/136348/zo/wLD0euirh5M.jpg',
-			'http://d17ol771963kd3.cloudfront.net/133570/zo/eaH53yZdTfE.jpg',
-			'http://d17ol771963kd3.cloudfront.net/135346/zo/FP4UwEfjns1.jpg',
-			'http://d17ol771963kd3.cloudfront.net/135974/zo/va2IbTenMUg.jpg',
-			'http://d17ol771963kd3.cloudfront.net/133833/zo/CFXseLxWv_M.jpg'
-		]
-
+		
 		this.state = {
-			dataSource: ds.cloneWithRows(favorites),
+			dataSource: new ListView.DataSource({
+				rowHasChanged: (r1, r2) => r2 !== r2,
+			})
 		}
 	}
 
 	render() {
-		return(
-			<View style={styles.container}>
-				<ListView contentContainerStyle={styles.listView}
-					dataSource={this.state.dataSource}
-					renderRow={this._renderCell.bind(this)}
-				/>
-			</View>
-		);
+		//if(this.state.dataSource.getRowCount() === 0) {
+			return(<EmptyScreen message="No favorited items." />)
+		/*} else {
+			return(
+				<View style={styles.container}>
+					<ListView contentContainerStyle={styles.listView}
+						dataSource={this.state.dataSource}
+						renderRow={this._renderCell.bind(this)}
+					/>
+				</View>
+			);
+		}*/
 	}
 
 	_onPressCell(cellID) {

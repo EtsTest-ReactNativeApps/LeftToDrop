@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
+import EmptyScreen from './EmptyScreen.js';
+
 const firebaseConfig = {
 	apiKey: 'AIzaSyA9QocrVseq9zvO_RI64HGDDf-HLuQYeXw',
 	authDomain: 'left-to-drop-9f551.firebaseapp.com',
@@ -39,13 +41,7 @@ export default class ItemsScreen extends React.Component {
 	
 	render() {
 		if(this.state.dataSource.getRowCount() === 0) {
-			return(
-				<View style={styles.container}>
-					<Text style={styles.emptyText}>
-						No items listed.
-					</Text>
-				</View>
-			)
+			return(<EmptyScreen message="No items listed." />)
 		} else {
 			return(
 				<ListView style={styles.container}
@@ -125,14 +121,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		backgroundColor: 'white',
-		flex: 1,
-	},
-	emptyText: {
-    color: 'black',
-    fontFamily: 'Courier New',
-    fontSize: 15,
-    marginTop: 15,
-    textAlign: 'center',
+		flex: 1
 	},
 	separator: {
 		backgroundColor: '#EEEEEE',
