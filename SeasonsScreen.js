@@ -36,12 +36,12 @@ export default class SeasonsScreen extends React.Component {
 		);
 	}
 
-	_onPressRow(rowID: number) {
+	_onPressRow(rowID) {
 		const { navigate } = this.props.navigation;
 		navigate('Categories', { season: seasons[rowID]});
 	}
 
-	_renderRow(rowData: string, sectionID: number, rowID: number) {
+	_renderRow(rowData, sectionID, rowID) {
 		return (
 			<TouchableHighlight
 				onPress = {this._onPressRow.bind(this, rowID)}

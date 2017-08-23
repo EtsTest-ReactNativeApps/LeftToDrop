@@ -50,12 +50,12 @@ export default class HomeScreen extends React.Component {
 		);
 	}
 
-	_onPressRow(rowID: number) {
+	_onPressRow(rowID) {
 		const { navigate } = this.props.navigation;
 		navigate(destinations[rowID].screen);
 	}
 
-	_renderRow(rowData: string, sectionID: number, rowID: number) {
+	_renderRow(rowData, sectionID, rowID) {
 		return (
 			<TouchableHighlight
 				onPress = {this._onPressRow.bind(this, rowID)}

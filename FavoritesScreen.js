@@ -17,16 +17,6 @@ export default class FavoritesScreen extends React.Component {
 	constructor() {
 		super();
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		/*favorites = [
-			'./CFXseLxWv_M.jpg',
-			'./oq-LV1EbVN4.jpg',
-			'./jRkasa75KqM.jpg',
-			'./Ln4sypHd_mE.jpg',
-			'./wLD0euirh5M.jpg',
-			'./eaH53yZdTfE.jpg',
-			'./FP4UwEfjns1.jpg',	
-			'./YKD4PSmi0uE.jpg'
-		]*/
 
 		favorites = [
 			'http://d17ol771963kd3.cloudfront.net/136407/zo/Ln4sypHd_mE.jpg',
@@ -53,12 +43,12 @@ export default class FavoritesScreen extends React.Component {
 		);
 	}
 
-	_onPressCell(cellID: number) {
+	_onPressCell(cellID) {
 		const { navigate } = this.props.navigation;
 		navigate('Item', { item: items[cellID]});
 	}
 
-	_renderCell(cellData: string, sectionID: number, rowID: number) {
+	_renderCell(cellData, sectionID, rowID) {
 		return(
 			<View style={styles.cell}>
 				<TouchableOpacity

@@ -2,6 +2,7 @@ import React from 'react';
 import {
 	Alert,
 	Button,
+	Image,
 	StyleSheet,
 	Text,
 	TouchableHighlight,
@@ -14,8 +15,14 @@ export default class ItemScreen extends React.Component {
 		const { navigate } = this.props.navigation;
 		return(
 			<View style={styles.view}>
-				<Text style={styles.text}>You're looking at an actual bogo</Text>
-				<View style={styles.image}>
+				<Text style={styles.itemName}>
+					{this.props.navigation.state.params.item}
+				</Text>
+				
+				<View style={styles.imageView}>
+					<Image
+						style={styles.image}
+						source={{uri: imageURL}} />
 				</View>
 
 				<View style={styles.caption}>
@@ -48,10 +55,6 @@ export default class ItemScreen extends React.Component {
 			</View>
 		)
 	}
-
-	static navigationOptions = ({ navigation }) => ({
-		title: navigation.state.params.item,
-	});
 }
 
 const styles = StyleSheet.create({
@@ -74,6 +77,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginTop: 5
 	},
+  container: {
+    backgroundColor: 'whitesmoke',
+    flex: 1,
+  },
   copButton: {
     backgroundColor: 'red',
     borderRadius: 3,
@@ -97,28 +104,28 @@ const styles = StyleSheet.create({
 		marginRight: 2.5
 	},
 	image: {
-		backgroundColor: 'blue',
+		height: '100%',
+		resizeMode: 'contain'
+	},
+	imageView: {
+		backgroundColor: 'white',
 		borderRadius: 3,
 		flex: 2,
 		margin: 15,
 		marginBottom: 5
 	},
+  itemName: {
+    color: 'black',
+    fontFamily: 'Courier New',
+    fontSize: 15,
+    margin: 15,
+    marginBottom: 0,
+    textAlign: 'left',
+    textAlignVertical: 'center'
+  },
 	ratingContainer: {
 		backgroundColor: 'transparent',
 		flexDirection: 'row',
 		height: 35,
 	},
-	text: {
-		color: 'black',
-		fontFamily: 'Courier New',
-		fontSize: 15,
-		margin: 15,
-		marginBottom: 0,
-		textAlign: 'center',
-		textAlignVertical: 'center'
-	},
-	view: {
-		backgroundColor: 'white',
-		flex: 1,
-	}
 })
