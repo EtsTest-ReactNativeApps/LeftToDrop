@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
 	Alert,
 	Button,
@@ -13,16 +14,17 @@ import { StackNavigator } from 'react-navigation';
 export default class ItemScreen extends React.Component {
 	render() {
 		const { navigate } = this.props.navigation;
+		var item = this.props.navigation.state.params.item;
 		return(
-			<View style={styles.view}>
+			<View style={styles.container}>
 				<Text style={styles.itemName}>
-					{this.props.navigation.state.params.item}
+					{item.name}
 				</Text>
 				
 				<View style={styles.imageView}>
 					<Image
 						style={styles.image}
-						source={{uri: imageURL}} />
+						source={{uri: item.image}} />
 				</View>
 
 				<View style={styles.caption}>
@@ -111,8 +113,11 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		borderRadius: 3,
 		flex: 2,
+		justifyContent: 'center',
+		padding: 10,
 		margin: 15,
-		marginBottom: 5
+		marginBottom: 5,
+		overflow: 'hidden'
 	},
   itemName: {
     color: 'black',

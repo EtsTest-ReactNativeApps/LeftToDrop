@@ -1,5 +1,4 @@
 import React from 'react';
-
 import * as firebase from 'firebase';
 
 import {
@@ -76,6 +75,7 @@ export default class ItemsScreen extends React.Component {
 					items.push({
 						// Assign button title to items['name']
 						name: child.val().name,
+						image: child.val().image,
 						_key: child.key
 					});
 				}
@@ -94,7 +94,7 @@ export default class ItemsScreen extends React.Component {
 
 	_onPressRow(rowID, item) {
 		const { navigate } = this.props.navigation;
-		navigate('Item', { item: item.name });
+		navigate('Item', { item: item });	
 	}
 	
 	_renderRow(item, sectionID, rowID) {
