@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 
 import {
 	Alert,
+	AsyncStorage,
 	Button,
 	Image,
 	ListView,
@@ -51,13 +52,19 @@ export default class FavoritesScreen extends React.Component {
 	}
 
 	async listenForItems(itemsRef) {
-		var ds = [];
+    var favorites = [];
+    try {
+      favorites = await AsyncStorage.getItem('favorites');
+      favorites = JSON.parse(favorites);
+    } catch(error) {
+      Alert.alert('Load error');
+    }
 
 		itemsRef.on('value', (snap) => {
 			var items = [];
 
 			snap.forEach((child) => {
-				if(child.key === '0') {
+				if(this.contains(favorites,child.key)) {
         	items.push({
          		// Assign button title to items['name']
          		name: child.val().name,
@@ -71,6 +78,15 @@ export default class FavoritesScreen extends React.Component {
 				dataSource: this.state.dataSource.cloneWithRows(items),
 			});
 		});
+	}
+
+	contains(a,obj) {
+		for(var i = 0; i < a.length; i++) {
+			if(a[i] === obj) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	componentDidMount() {

@@ -77,15 +77,6 @@ export default class ItemScreen extends React.Component {
 			Alert.alert('Save error');
 		}
 	}
-
-	contains(a,obj) {
-		for(var i = 0; i < a.length; i++) {
-			if(a[i] === obj) {
-				return true;
-			}
-		}
-		return false;
-	}
 }
 
 const styles = StyleSheet.create({
