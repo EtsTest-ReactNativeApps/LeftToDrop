@@ -11,8 +11,8 @@ import {
 import { StackNavigator } from 'react-navigation';
 
 export default class SeasonsScreen extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		seasons = ['FW17'];
 
@@ -38,7 +38,9 @@ export default class SeasonsScreen extends React.Component {
 
 	_onPressRow(rowID) {
 		const { navigate } = this.props.navigation;
-		navigate('Categories', { season: seasons[rowID]});
+		navigate(
+			'Categories', {season: seasons[rowID]}
+		);
 	}
 
 	_renderRow(rowData, sectionID, rowID) {

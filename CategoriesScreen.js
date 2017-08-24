@@ -10,8 +10,8 @@ import {
 import { StackNavigator } from 'react-navigation';
 
 export default class CategoriesScreen extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		categories = ['All', 'Jackets', 'Shirts', 'Top/Sweaters', 'Sweatshirts', 'Pants', 'T-shirts', 'Hats', 'Bags', 'Accessories', 'Skate'];
 
@@ -37,7 +37,9 @@ export default class CategoriesScreen extends React.Component {
 
 	_onPressRow(rowID) {
 		const { navigate } = this.props.navigation;
-		navigate('Items', { category: categories[rowID]});
+		navigate(
+			'Items', {category: categories[rowID]}
+		);
 	}
 
   _renderRow(rowData, sectionID, rowID) {

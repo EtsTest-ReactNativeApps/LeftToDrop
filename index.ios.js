@@ -1,4 +1,5 @@
 import React from 'react';
+import * as firebase from 'firebase';
 
 import {
   AppRegistry,
@@ -14,6 +15,16 @@ import CategoriesScreen from './CategoriesScreen.js';
 import ItemsScreen from './ItemsScreen.js';
 import ItemScreen from './ItemScreen.js';
 
+const firebaseConfig = {
+  apiKey: 'AIzaSyA9QocrVseq9zvO_RI64HGDDf-HLuQYeXw',
+  authDomain: 'left-to-drop-9f551.firebaseapp.com',
+  databaseURL: 'https://left-to-drop-9f551.firebaseio.com',
+  storageBucket: 'left-to-drop-9f551.appspot.com'   
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const rootRef = firebase.database().ref();
+const itemsRef = rootRef.child('items');
+
 var defaultNavOptions = () => {
 	return({
 		headerTitleStyle: {
@@ -28,7 +39,7 @@ var defaultNavOptions = () => {
 	})
 }
 
-const LeftToDrop = StackNavigator({
+const Navigator = StackNavigator({
 	Home: {
 		screen: HomeScreen,
 		navigationOptions: {
@@ -48,5 +59,11 @@ const LeftToDrop = StackNavigator({
 }, {
 	navigationOptions: defaultNavOptions()
 });
+
+class LeftToDrop extends React.Component {
+	render() {
+		return <Navigator screenProps={firebaseApp}/>
+	}
+}
 
 AppRegistry.registerComponent('LeftToDrop', () => LeftToDrop);

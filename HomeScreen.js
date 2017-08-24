@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
 	Button,
 	ListView,
@@ -52,7 +53,9 @@ export default class HomeScreen extends React.Component {
 
 	_onPressRow(rowID) {
 		const { navigate } = this.props.navigation;
-		navigate(destinations[rowID].screen);
+		navigate(
+			destinations[rowID].screen,
+		);
 	}
 
 	_renderRow(rowData, sectionID, rowID) {

@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 
 import {
 	Button,
+	Image,
 	ListView,
 	StyleSheet,
 	Text,
@@ -13,30 +14,21 @@ import { StackNavigator } from 'react-navigation';
 
 import EmptyScreen from './EmptyScreen.js';
 
-const firebaseConfig = {
-	apiKey: 'AIzaSyA9QocrVseq9zvO_RI64HGDDf-HLuQYeXw',
-	authDomain: 'left-to-drop-9f551.firebaseapp.com',
-	databaseURL: 'https://left-to-drop-9f551.firebaseio.com',
-	storageBucket: 'left-to-drop-9f551.appspot.com'		
-};
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const rootRef = firebase.database().ref();
-const itemsRef = rootRef.child('items');
-
 export default class ItemsScreen extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		
 		this.state = {
 			dataSource: new ListView.DataSource({
 				rowHasChanged: (r1, r2) => r1 !== r2,
 			})
 		};
-		this.itemsRef = this.getRef().child('items');
+		this.firebaseApp = props.screenProps;
+		this.itemsRef = this.firebaseApp.database().ref().child('items');
 	}
 
 	getRef() {
-		return firebaseApp.database().ref();
+		return this.props.firebaseApp.database().ref();
 	}
 	
 	render() {
@@ -85,6 +77,7 @@ export default class ItemsScreen extends React.Component {
 	}
 
 	componentDidMount() {
+		firebaseApp = this.props.navigation.state.params.firebaseApp
 		this.listenForItems(this.itemsRef);
 	}
 
@@ -99,6 +92,9 @@ export default class ItemsScreen extends React.Component {
 				onPress = {this._onPressRow.bind(this, rowID, item)}
 				underlayColor = 'whitesmoke'>
 				<View style={styles.cell}>
+					<Image
+						style={styles.thumbnailImage}
+						source={{uri: item.image}} />
 					<Text style={styles.text}>
 						{item.name.toLowerCase()}
 					</Text>
@@ -114,10 +110,12 @@ export default class ItemsScreen extends React.Component {
 
 const styles = StyleSheet.create({
 	cell: {
-		alignItems: 'flex-start',
+		alignItems: 'center',
 		flex: 1,
+		flexDirection: 'row',
 		height: 50,
-		justifyContent: 'center'
+		justifyContent: 'center',
+		padding: 5,
 	},
 	container: {
 		backgroundColor: 'white',
@@ -130,10 +128,16 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		color: 'black',
+		flex: 1,
+		flexDirection: 'row',
 		fontFamily: 'Courier New',
 		fontSize: 15,
 		marginLeft: 15,
-		textAlign: 'center',
-		textAlignVertical: 'center'
+		textAlign: 'left',
 	},
+	thumbnailImage: {
+		aspectRatio: 1,
+		height: '100%',
+		resizeMode: 'contain'
+	}
 })

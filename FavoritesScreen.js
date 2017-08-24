@@ -2,6 +2,7 @@ import React from 'react';
 import * as firebase from 'firebase';
 
 import {
+	Alert,
 	Button,
 	Image,
 	ListView,
@@ -18,29 +19,63 @@ import EmptyScreen from './EmptyScreen.js';
 const itemsPerRow = 3;
 
 export default class FavoritesScreen extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		
 		this.state = {
 			dataSource: new ListView.DataSource({
 				rowHasChanged: (r1, r2) => r2 !== r2,
 			})
 		}
+		this.firebaseApp = props.screenProps;
+		this.itemsRef = this.firebaseApp.database().ref().child('items');
+	}
+
+	getRef() {
+		return this.props.firebaseApp.database().ref();
 	}
 
 	render() {
-		//if(this.state.dataSource.getRowCount() === 0) {
+		if(this.state.dataSource.getRowCount() === 0) {
 			return(<EmptyScreen message="No favorited items." />)
-		/*} else {
+		} else {
 			return(
 				<View style={styles.container}>
 					<ListView contentContainerStyle={styles.listView}
 						dataSource={this.state.dataSource}
 						renderRow={this._renderCell.bind(this)}
-					/>
+	 				/>
 				</View>
 			);
-		}*/
+		}
+	}
+
+	async listenForItems(itemsRef) {
+		var ds = [];
+
+		itemsRef.on('value', (snap) => {
+			var items = [];
+
+			snap.forEach((child) => {
+				if(child.key === '0') {
+        	items.push({
+         		// Assign button title to items['name']
+         		name: child.val().name,
+          	image: child.val().image,
+          	_key: child.key
+        	});
+				}
+			});
+
+			this.setState({
+				dataSource: this.state.dataSource.cloneWithRows(items),
+			});
+		});
+	}
+
+	componentDidMount() {
+		//firebaseApp = this.props.navigation.state.params.firebaseApp
+		this.listenForItems(this.itemsRef);
 	}
 
 	_onPressCell(cellID) {
@@ -55,7 +90,7 @@ export default class FavoritesScreen extends React.Component {
 					onPress = {this._onPressCell.bind(this, rowID)}>
 					<Image 
 						style={styles.cellImage}
-						source={{uri: cellData}} />
+						source={{uri: cellData.image}} />
 				</TouchableOpacity>
 			</View>
 		)

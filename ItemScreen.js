@@ -2,11 +2,12 @@ import React from 'react';
 
 import {
 	Alert,
+	AsyncStorage,
 	Button,
 	Image,
 	StyleSheet,
 	Text,
-	TouchableHighlight,
+	TouchableOpacity,
 	View
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -30,23 +31,23 @@ export default class ItemScreen extends React.Component {
 				<View style={styles.caption}>
 					<View style={styles.ratingContainer}>
 
-						<TouchableHighlight
+						<TouchableOpacity
 							style={styles.copButton}
               onPress={()=>{Alert.alert('Upvoted')}}>
 								<Text style={styles.buttonText}>Cop</Text>
-						</TouchableHighlight>			
+						</TouchableOpacity>			
 	
-						<TouchableHighlight
+						<TouchableOpacity
 							style={styles.favoriteButton}
-              onPress={()=>{Alert.alert('Favorited')}}>
+              onPress={this.favoriteItem.bind(this, item._key)}>
 							<Text style={styles.buttonText}>Favorite</Text>
-						</TouchableHighlight>	
+						</TouchableOpacity>	
 
-						<TouchableHighlight
+						<TouchableOpacity
 							style={styles.dropButton}
               onPress={()=>{Alert.alert('Downvoted')}}>
 							<Text style={styles.buttonText}>Drop</Text>
-						</TouchableHighlight>
+						</TouchableOpacity>
 
 					</View>
 
@@ -56,6 +57,34 @@ export default class ItemScreen extends React.Component {
 				</View>		
 			</View>
 		)
+	}
+
+	async favoriteItem(key) {
+		var favorites = [];
+
+		try {
+			favorites = await AsyncStorage.getItem('favorites');
+			favorites = JSON.parse(favorites);
+		} catch(error) {
+			Alert.alert('Load error');
+		}
+		
+		favorites.push(key); 
+		
+		try {
+			await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+		}	catch(error) {
+			Alert.alert('Save error');
+		}
+	}
+
+	contains(a,obj) {
+		for(var i = 0; i < a.length; i++) {
+			if(a[i] === obj) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 
