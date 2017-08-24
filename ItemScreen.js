@@ -68,8 +68,16 @@ export default class ItemScreen extends React.Component {
 		} catch(error) {
 			Alert.alert('Load error');
 		}
-		
-		favorites.push(key); 
+
+		if(this.contains(favorites,key)) {
+			//var index = favorites.indexOf(key);
+			//if(index > -1) {
+			//	favorites = favorites.splice(index,1);
+			//}
+			favorites.filter(k => k !== key);
+		} else {
+			favorites.push(key);
+		}
 		
 		try {
 			await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
@@ -77,6 +85,15 @@ export default class ItemScreen extends React.Component {
 			Alert.alert('Save error');
 		}
 	}
+
+ 	contains(a,obj) {
+    for(var i = 0; i < a.length; i++) {
+      if(a[i] === obj) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 const styles = StyleSheet.create({

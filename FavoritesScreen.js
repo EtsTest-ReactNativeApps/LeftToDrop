@@ -94,19 +94,19 @@ export default class FavoritesScreen extends React.Component {
 		this.listenForItems(this.itemsRef);
 	}
 
-	_onPressCell(cellID) {
+	_onPressCell(cellID, item) {
 		const { navigate } = this.props.navigation;
-		navigate('Item', { item: items[cellID]});
+		navigate('Item', { item: item });
 	}
 
-	_renderCell(cellData, sectionID, rowID) {
+	_renderCell(item, sectionID, rowID) {
 		return(
 			<View style={styles.cell}>
 				<TouchableOpacity
-					onPress = {this._onPressCell.bind(this, rowID)}>
+					onPress = {this._onPressCell.bind(this, rowID, item)}>
 					<Image 
 						style={styles.cellImage}
-						source={{uri: cellData.image}} />
+						source={{uri: item.image}} />
 				</TouchableOpacity>
 			</View>
 		)
