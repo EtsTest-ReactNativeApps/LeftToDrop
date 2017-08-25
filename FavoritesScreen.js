@@ -17,6 +17,7 @@ import { StackNavigator } from 'react-navigation';
 import GridView from 'react-native-gridview';
 
 import EmptyScreen from './EmptyScreen.js';
+import LoadingScreen from './LoadingScreen.js';
 
 const itemsPerRow = 3;
 
@@ -54,6 +55,9 @@ export default class FavoritesScreen extends React.Component {
 	}
 
 	render() {
+		if(this.state.isLoading) {
+			return(<LoadingScreen />)
+		}
 		if(this.state.dataSource.getRowCount() === 0) {
 			return(<EmptyScreen message="No favorited items." />)
 		} else {
