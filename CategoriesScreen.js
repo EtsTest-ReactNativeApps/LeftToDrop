@@ -38,7 +38,11 @@ export default class CategoriesScreen extends React.Component {
 	_onPressRow(rowID) {
 		const { navigate } = this.props.navigation;
 		navigate(
-			'Items', {category: categories[rowID]}
+			'Items',
+			{
+				category: categories[rowID],
+				season: this.props.navigation.state.params.season
+			}
 		);
 	}
 

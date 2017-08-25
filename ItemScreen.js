@@ -4,6 +4,7 @@ import {
 	Alert,
 	AsyncStorage,
 	Button,
+	DeviceEventEmitter,
 	Image,
 	StyleSheet,
 	Text,
@@ -70,13 +71,11 @@ export default class ItemScreen extends React.Component {
 		}
 
 		if(this.contains(favorites,key)) {
-			//var index = favorites.indexOf(key);
-			//if(index > -1) {
-			//	favorites = favorites.splice(index,1);
-			//}
-			favorites.filter(k => k !== key);
+			favorites = favorites.filter(k => k !== key);
+			Alert.alert('contains');
 		} else {
 			favorites.push(key);
+			Alert.alert('didnt contain so add');
 		}
 		
 		try {
@@ -94,6 +93,18 @@ export default class ItemScreen extends React.Component {
     }
     return false;
   }
+
+	goback() {
+		const { navigation } = this.props;
+		const { state } = navigation;
+		let refresh = state.refresh;
+
+		if(typeof refresh === 'function') {
+			refresh();
+		}
+
+		navigation.goBack();
+	}
 }
 
 const styles = StyleSheet.create({

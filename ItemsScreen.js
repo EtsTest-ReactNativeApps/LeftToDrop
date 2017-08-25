@@ -54,12 +54,16 @@ export default class ItemsScreen extends React.Component {
 		itemsRef.on('value', (snap) => {
 	
 			var items = [];
-			var category = this.props.navigation.state.params.category;
+			var selectedSeason = this.props.navigation.state.params.season;
+			var selectedCategory = this.props.navigation.state.params.category;
 
 			snap.forEach((child) => {
+				var itemSeason = child.val().season;
 				var itemCategory = child.val().category;
-				if(itemCategory.toLowerCase() === category.toLowerCase() ||
-					 category.toLowerCase() === 'all') {
+
+				if(selectedSeason.toLowerCase() === itemSeason.toLowerCase() &&
+					(selectedCategory.toLowerCase() === 'all' ||
+					selectedCategory.toLowerCase() === itemCategory.toLowerCase())) {
 					items.push({
 						// Assign button title to items['name']
 						name: child.val().name,

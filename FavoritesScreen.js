@@ -5,6 +5,7 @@ import {
 	Alert,
 	AsyncStorage,
 	Button,
+	DeviceEventEmitter,
 	Image,
 	ListView,
 	StyleSheet,
@@ -30,6 +31,22 @@ export default class FavoritesScreen extends React.Component {
 		}
 		this.firebaseApp = props.screenProps;
 		this.itemsRef = this.firebaseApp.database().ref().child('items');
+		this.favorites = this.loadFavorites();
+	}
+
+	componentWillMount() {
+		DeviceEventEmitter.addListener('FavoritesChanged', () => { this.setState(this.state) })
+	}
+
+	async loadFavorites() {
+    var favorites = [];
+    try {
+      favorites = await AsyncStorage.getItem('favorites');
+      favorites = JSON.parse(favorites);
+    } catch(error) {
+      Alert.alert('Load error');
+    }
+		return favorites;
 	}
 
 	getRef() {
@@ -51,20 +68,14 @@ export default class FavoritesScreen extends React.Component {
 		}
 	}
 
-	async listenForItems(itemsRef) {
-    var favorites = [];
-    try {
-      favorites = await AsyncStorage.getItem('favorites');
-      favorites = JSON.parse(favorites);
-    } catch(error) {
-      Alert.alert('Load error');
-    }
+	listenForItems(itemsRef) {
+		this.loadFavorites();
 
 		itemsRef.on('value', (snap) => {
 			var items = [];
 
 			snap.forEach((child) => {
-				if(this.contains(favorites,child.key)) {
+				if(this.contains(this.favorites,child.key)) {
         	items.push({
          		// Assign button title to items['name']
          		name: child.val().name,
@@ -90,13 +101,16 @@ export default class FavoritesScreen extends React.Component {
 	}
 
 	componentDidMount() {
-		//firebaseApp = this.props.navigation.state.params.firebaseApp
 		this.listenForItems(this.itemsRef);
+	}
+
+	refresh() {
+		this.setState(this.state)
 	}
 
 	_onPressCell(cellID, item) {
 		const { navigate } = this.props.navigation;
-		navigate('Item', { item: item });
+		navigate('Item', { item: item, refresh: this.refresh });
 	}
 
 	_renderCell(item, sectionID, rowID) {

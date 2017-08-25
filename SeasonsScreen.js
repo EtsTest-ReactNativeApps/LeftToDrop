@@ -14,7 +14,7 @@ export default class SeasonsScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		seasons = ['FW17'];
+		seasons = ['FW16','FW17'];
 
 		this.state = {
 			dataSource: ds.cloneWithRows(seasons),
