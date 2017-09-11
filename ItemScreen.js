@@ -17,22 +17,22 @@ export default class ItemScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isFavorite: true,
+			isFavorite: false,
 		};
-		this.checkIfFavorite();
+		item = props.navigation.state.params.item;
+		this.isFavorite(item._key);
 	}
 
 	render() {
 		const { navigate } = this.props.navigation;
-		var item = this.props.navigation.state.params.item;
-		this.checkIfFavorite;
 		var favoriteLabel = this.state.isFavorite ? 'Unfavorite' : 'Favorite';
+
 		return(
 			<View style={styles.container}>
 				<Text style={styles.itemName}>
 					{item.name}
 				</Text>
-				
+
 				<View style={styles.imageView}>
 					<Image
 						style={styles.image}
@@ -46,13 +46,13 @@ export default class ItemScreen extends React.Component {
 							style={styles.copButton}
               onPress={()=>{Alert.alert('Upvoted')}}>
 								<Text style={styles.buttonText}>Cop</Text>
-						</TouchableOpacity>			
-	
+						</TouchableOpacity>
+
 						<TouchableOpacity
 							style={styles.favoriteButton}
-              onPress={this.favoriteItem.bind(this, item._key)}>
+              onPress={this.setFavorite.bind(this, item._key)}>
 							<Text style={styles.buttonText}>{favoriteLabel}</Text>
-						</TouchableOpacity>	
+						</TouchableOpacity>
 
 						<TouchableOpacity
 							style={styles.dropButton}
@@ -63,59 +63,78 @@ export default class ItemScreen extends React.Component {
 					</View>
 
 					<View style={styles.chat}>
-					</View>			
+					</View>
 
-				</View>		
+				</View>
 			</View>
 		)
 	}
 
-	async checkIfFavorite() {
-		var favorites = [];		
-		var key = this.props.navigation.state.params.item._key;
+	async getFavorites() {
+		favorites = [];
 
-		//Alert.alert(key)
-
-		try {
+		try { // Try to load
 			favorites = await AsyncStorage.getItem('favorites');
-			favorites = JSON.parse(favorites);
+			this.setState({
+				favorites: JSON.parse(favorites) // Load saved favorites
+			});
 		} catch(error) {
-			Alert.alert('Load error');
+			this.favorites = favorites; // Keep as new empty array
+
+    	try { // If load fails, try to save []
+   	  	await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+    	} catch(error) {
+      	Alert.alert('Save error');
+      	throw error;
+    	}
+
 			throw error;
 		}
-	
-		this.setState({
-			isFavorite: this.contains(favorites,key)
-		})
 	}
 
-	async favoriteItem(key) {
-		var favorites = [];
+	async isFavorite(key) {
+		var favs = [];
 
 		try {
-			favorites = await AsyncStorage.getItem('favorites');
-			favorites = JSON.parse(favorites);
+			favs = await AsyncStorage.getItem('favorites');
+			favs = JSON.parse(favs);
+
 		} catch(error) {
 			Alert.alert('Load error');
 			throw error;
 		}
 
-		if(this.contains(favorites,key)) {
-			favorites = favorites.filter(k => k !== key);
+		this.setState({
+			isFavorite: this.contains(favs,key)
+		});
+	}
+
+	async setFavorite(key) {
+		var favs = [];
+
+		try {
+			favs = await AsyncStorage.getItem('favorites');
+			favs = JSON.parse(favs);
+
+		} catch(error) {
+			Alert.alert('Load error');
+			throw error;
+		}
+
+		if(this.contains(favs,key)) {
+			favs = favs.filter(k => k !== key);
 			this.setState({
 				isFavorite: false,
 			})
-			Alert.alert('contains');
 		} else {
-			favorites.push(key);
+			favs.push(key)
 			this.setState({
 				isFavorite: true,
 			})
-			Alert.alert('didnt contain so add');
 		}
-		
+
 		try {
-			await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+			await AsyncStorage.setItem('favorites', JSON.stringify(favs));
 		}	catch(error) {
 			Alert.alert('Save error');
 			throw error;
@@ -123,6 +142,14 @@ export default class ItemScreen extends React.Component {
 	}
 
  	contains(a,obj) {
+		if(a === null) {
+			Alert.alert('Array is null');
+			return false;
+		} else if(a === undefined) {
+			Alert.alert('Array is undefined');
+			return false;
+		}
+
     for(var i = 0; i < a.length; i++) {
       if(a[i] === obj) {
         return true;
