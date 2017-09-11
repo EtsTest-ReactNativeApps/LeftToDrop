@@ -14,9 +14,19 @@ import {
 import { StackNavigator } from 'react-navigation';
 
 export default class ItemScreen extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			isFavorite: true,
+		};
+		this.checkIfFavorite();
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 		var item = this.props.navigation.state.params.item;
+		this.checkIfFavorite;
+		var favoriteLabel = this.state.isFavorite ? 'Unfavorite' : 'Favorite';
 		return(
 			<View style={styles.container}>
 				<Text style={styles.itemName}>
@@ -41,7 +51,7 @@ export default class ItemScreen extends React.Component {
 						<TouchableOpacity
 							style={styles.favoriteButton}
               onPress={this.favoriteItem.bind(this, item._key)}>
-							<Text style={styles.buttonText}>Favorite</Text>
+							<Text style={styles.buttonText}>{favoriteLabel}</Text>
 						</TouchableOpacity>	
 
 						<TouchableOpacity
@@ -60,6 +70,25 @@ export default class ItemScreen extends React.Component {
 		)
 	}
 
+	async checkIfFavorite() {
+		var favorites = [];		
+		var key = this.props.navigation.state.params.item._key;
+
+		//Alert.alert(key)
+
+		try {
+			favorites = await AsyncStorage.getItem('favorites');
+			favorites = JSON.parse(favorites);
+		} catch(error) {
+			Alert.alert('Load error');
+			throw error;
+		}
+	
+		this.setState({
+			isFavorite: this.contains(favorites,key)
+		})
+	}
+
 	async favoriteItem(key) {
 		var favorites = [];
 
@@ -68,13 +97,20 @@ export default class ItemScreen extends React.Component {
 			favorites = JSON.parse(favorites);
 		} catch(error) {
 			Alert.alert('Load error');
+			throw error;
 		}
 
 		if(this.contains(favorites,key)) {
 			favorites = favorites.filter(k => k !== key);
+			this.setState({
+				isFavorite: false,
+			})
 			Alert.alert('contains');
 		} else {
 			favorites.push(key);
+			this.setState({
+				isFavorite: true,
+			})
 			Alert.alert('didnt contain so add');
 		}
 		
@@ -82,6 +118,7 @@ export default class ItemScreen extends React.Component {
 			await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
 		}	catch(error) {
 			Alert.alert('Save error');
+			throw error;
 		}
 	}
 

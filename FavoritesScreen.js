@@ -5,7 +5,7 @@ import {
 	Alert,
 	AsyncStorage,
 	Button,
-	DeviceEventEmitter,
+	Dimensions,
 	Image,
 	ListView,
 	StyleSheet,
@@ -28,7 +28,7 @@ export default class FavoritesScreen extends React.Component {
 		this.state = {
 			dataSource: new ListView.DataSource({
 				rowHasChanged: (r1, r2) => r2 !== r2,
-			})
+			}),
 		}
 		this.firebaseApp = props.screenProps;
 		this.itemsRef = this.firebaseApp.database().ref().child('items');
@@ -36,14 +36,14 @@ export default class FavoritesScreen extends React.Component {
 	}
 
 	componentWillMount() {
-		DeviceEventEmitter.addListener('FavoritesChanged', () => { this.setState(this.state) })
+		favorites = this.loadFavorites();
 	}
 
 	async loadFavorites() {
     var favorites = [];
     try {
       favorites = await AsyncStorage.getItem('favorites');
-      favorites = JSON.parse(favorites);
+      this.favorites = JSON.parse(favorites);
     } catch(error) {
       Alert.alert('Load error');
     }
@@ -63,23 +63,30 @@ export default class FavoritesScreen extends React.Component {
 		} else {
 			return(
 				<View style={styles.container}>
-					<ListView contentContainerStyle={styles.listView}
-						dataSource={this.state.dataSource}
-						renderRow={this._renderCell.bind(this)}
-	 				/>
+						<ListView contentContainerStyle={styles.listView}
+							dataSource={this.state.dataSource}
+							renderRow={this._renderCell.bind(this)}
+	 					/>
 				</View>
 			);
 		}
 	}
 
-	listenForItems(itemsRef) {
-		this.loadFavorites();
+	async listenForItems(itemsRef) {
+
+    var favorites = [];
+    try {
+      favorites = await AsyncStorage.getItem('favorites');
+      this.favorites = JSON.parse(favorites);
+    } catch(error) {
+      Alert.alert('Load error');
+    }
 
 		itemsRef.on('value', (snap) => {
 			var items = [];
 
 			snap.forEach((child) => {
-				if(this.contains(this.favorites,child.key)) {
+				if(this.contains(favorites,child.key)) {
         	items.push({
          		// Assign button title to items['name']
          		name: child.val().name,
@@ -109,7 +116,7 @@ export default class FavoritesScreen extends React.Component {
 	}
 
 	refresh() {
-		this.setState(this.state)
+		this.listenForItems(this.itemsRef);
 	}
 
 	_onPressCell(cellID, item) {
@@ -137,23 +144,24 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		borderRadius: 3,
 		justifyContent: 'center',
-		margin: '1.5%',
+		margin: 5,
 		overflow: 'hidden',
-		width: '30%',
+		width: Dimensions.get('window').width/3-5*2.7,
 	},
 	cellImage: {
 		height: 100,
 		resizeMode: 'contain'
 	},
 	container: {
+		alignItems: 'center',
 		backgroundColor: 'whitesmoke',
 		flex: 1,
 	},
-	listView:{
+	listView:	{
+		alignItems: 'center',
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		justifyContent: 'center',
-		padding: '1%'
+		margin: 5
 	},
 	text: {
 		color: 'black',
