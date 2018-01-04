@@ -1,3 +1,6 @@
+To-Dos:
+- Make USERS' .upvotedItemIDs and .downvotedItemIDs into their own separate tables?
+
 // Seasons’ categories, indexed by seasonNames
 seasons: {
   SEASON_ID_X: { // key is season name
@@ -30,7 +33,7 @@ categories: {
 items: {
   ITEM_ID_X: {
     name: String,
-    colors: { #: String },
+    colorways: { String: true },
     upvotes: Int,
     downvotes: Int,
     image: String (URL)
@@ -51,7 +54,7 @@ items: {
 // Users’ metadata indexed by userIDs
 users: {
   USER_ID_X: {
-    displayName: String,
+    username: String,
     email: String,
     upvotedItemIDs: {
       ITEM_ID_X: true
