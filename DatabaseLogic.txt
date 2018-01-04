@@ -1,0 +1,105 @@
+// Seasons’ categories, indexed by seasonNames
+seasons: {
+  SEASON_ID_X: { // key is season name
+    CAT_ID_X: true,
+  }, 
+  SS12: {
+    CAT_ID_0: true
+    CAT_ID_1: true
+  }
+}
+
+// Categories’ names and itemIDs
+categories: {
+  CAT_ID_X: {
+    name: String,
+    itemIDs: {
+      ITEM_ID_X: true,
+    }
+  },
+  CAT_ID_0: {
+    name: “Sweatshirts”,
+    itemIDs: {
+      ITEM_ID_0: true,
+      ITEM_ID_1: true
+    }
+  }
+}
+
+// Items’ metadata
+items: {
+  ITEM_ID_X: {
+    name: String,
+    colors: { #: String },
+    upvotes: Int,
+    downvotes: Int,
+    image: String (URL)
+  },
+  ITEM_ID_0: {
+    name: “Box Logo Hoodie”,
+    colors: {
+      0: gray,
+      1: black,
+      2: navy
+    },
+    upvotes: 100,
+    downvotes: 10,
+    image: “IMG_URL.jpg”
+  }
+}
+
+// Users’ metadata indexed by userIDs
+users: {
+  USER_ID_X: {
+    displayName: String,
+    email: String,
+    upvotedItemIDs: {
+      ITEM_ID_X: true
+    },
+    downvotedItemIDs: {
+      ITEM_ID_X: true
+    },
+  },
+  USER_ID_0: {
+    displayName: “Kanye”,
+    email: “kevinlargoapps@gmail.com”,
+    upvotedItemIDs: {
+      ITEM_ID_0: true
+    },
+    downvotedItemIDs: {
+      ITEM_ID_1: true
+    }
+  }
+}
+
+// Favorites indexed by userIDs
+favorites: {
+  USER_ID_X: {
+    ITEM_ID_X: true
+  },
+  USER_ID_0: {
+    ITEM_ID_0: true,
+    ITEM_ID_1: true
+  }
+}
+
+Logic:
+Voting System: 
+   - Each individual user knows whether they voted on an item or not
+   - Items only know their upvote & downvote totals
+
+  Pseudocode:
+    // render()
+    if currentUser.upvotedItemIDs.contains(currentItem.id)
+      currentItem.upvoteButton.isEnabled = false;
+      currentItem.upvoteButton.color = red;
+    else if currentUser.downvotedItemIDs.contains(currentItem.id)
+      currentItem.downvoteButton.isEnabled = false;
+      currentItem.downvoteButton.color = red;
+    else
+      currentItem.upvoteButton.isEnabled = true;
+      currentItem.upvoteButton.color = gray;
+      currentItem.downvoteButton.isEnabled = true;
+      currentItem.downvoteButton.color = gray; 
+
+
