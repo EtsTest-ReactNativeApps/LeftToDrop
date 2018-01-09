@@ -13,7 +13,7 @@ var defaultNavOptions = () => {
   return {
     headerTitleStyle: {
       fontFamily: 'Futura',
-      fontSize: 20,
+      fontSize: 25,
       fontStyle: 'italic'
     },
     headerStyle: {
