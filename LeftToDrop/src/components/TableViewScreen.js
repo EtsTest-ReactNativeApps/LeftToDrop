@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'black',
     fontFamily: 'Courier New',
-    fontSize: 15,
+    fontSize: 20,
     marginLeft: 15,
     textAlign: 'left'
   }
