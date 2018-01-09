@@ -139,6 +139,9 @@ export default class ItemScreen extends React.Component {
 			Alert.alert('Save error');
 			throw error;
 		}
+
+		// Emit notification
+		DeviceEventEmitter.emit('favoriteChanged', {});
 	}
 
  	contains(a,obj) {
@@ -157,18 +160,6 @@ export default class ItemScreen extends React.Component {
     }
     return false;
   }
-
-	goback() {
-		const { navigation } = this.props;
-		const { state } = navigation;
-		let refresh = state.refresh;
-
-		if(typeof refresh === 'function') {
-			refresh();
-		}
-
-		navigation.goBack();
-	}
 }
 
 const styles = StyleSheet.create({

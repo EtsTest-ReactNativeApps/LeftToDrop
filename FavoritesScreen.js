@@ -5,6 +5,7 @@ import {
 	Alert,
 	AsyncStorage,
 	Button,
+	DeviceEventEmitter,
 	Dimensions,
 	Image,
 	ListView,
@@ -24,7 +25,7 @@ const itemsPerRow = 3;
 export default class FavoritesScreen extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			dataSource: new ListView.DataSource({
 				rowHasChanged: (r1, r2) => r2 !== r2,
@@ -46,6 +47,7 @@ export default class FavoritesScreen extends React.Component {
       this.favorites = JSON.parse(favorites);
     } catch(error) {
       Alert.alert('Load error');
+			throw error
     }
 		return favorites;
 	}
@@ -72,17 +74,16 @@ export default class FavoritesScreen extends React.Component {
 		}
 	}
 
-	async listenForItems(itemsRef) {
-
+	async listenForItems() {
     var favorites = [];
     try {
       favorites = await AsyncStorage.getItem('favorites');
       this.favorites = JSON.parse(favorites);
     } catch(error) {
       Alert.alert('Load error');
+			throw error;
     }
-
-		itemsRef.on('value', (snap) => {
+		this.itemsRef.on('value', (snap) => {
 			var items = [];
 
 			snap.forEach((child) => {
@@ -112,16 +113,13 @@ export default class FavoritesScreen extends React.Component {
 	}
 
 	componentDidMount() {
-		this.listenForItems(this.itemsRef);
-	}
-
-	refresh() {
-		this.listenForItems(this.itemsRef);
+		this.listenForItems();
+		DeviceEventEmitter.addListener('favoriteChanged', this.setState(this.state));
 	}
 
 	_onPressCell(cellID, item) {
 		const { navigate } = this.props.navigation;
-		navigate('Item', { item: item, refresh: this.refresh });
+		navigate('Item', { item: item });
 	}
 
 	_renderCell(item, sectionID, rowID) {
@@ -129,7 +127,7 @@ export default class FavoritesScreen extends React.Component {
 			<View style={styles.cell}>
 				<TouchableOpacity
 					onPress = {this._onPressCell.bind(this, rowID, item)}>
-					<Image 
+					<Image
 						style={styles.cellImage}
 						source={{uri: item.image}} />
 				</TouchableOpacity>
