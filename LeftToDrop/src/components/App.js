@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 
 import HomeScreen from './HomeScreen';
-/*import FavoritesScreen from './FavoritesScreen';
+//import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
-import CategoriesScreen from './CategoriesScreen';
+/*import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
 import ItemScreen from './ItemScreen';*/
 
@@ -30,17 +30,17 @@ const Navigator = StackNavigator(
       navigationOptions: {
         title: 'Left To Drop'
       }
-    }
-    /*Favorites: {
-		screen: FavoritesScreen,
-		navigationOptions: {
-			title: 'Favorites'
-		}
-	},
-	Seasons: {screen: SeasonsScreen},
-	Categories: {screen: CategoriesScreen},
-	Items: {screen: ItemsScreen},
-	Item: {screen: ItemScreen}*/
+    },
+    Favorites: {
+      screen: SeasonsScreen /*FavoritesScreen*/,
+      navigationOptions: {
+        title: 'Favorites'
+      }
+    },
+    Seasons: { screen: SeasonsScreen }
+    /*Categories: { screen: CategoriesScreen },
+    Items: { screen: ItemsScreen },
+    Item: { screen: ItemScreen }*/
   },
   {
     navigationOptions: defaultNavOptions()
