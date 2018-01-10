@@ -23,7 +23,10 @@ class TableViewScreen extends Component {
 
   renderRow(rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight underlayColor="whitesmoke">
+      <TouchableHighlight
+        onPress={this.onPressRow.bind(this, rowID)}
+        underlayColor="whitesmoke"
+      >
         <View style={styles.cell}>
           <Text style={styles.text}>{rowData.text}</Text>
         </View>
@@ -31,10 +34,10 @@ class TableViewScreen extends Component {
     );
   }
 
-  /*onPressRow(rowID) {
+  onPressRow(rowID) {
     const { navigate } = this.props.navigation;
     navigate(destinations[rowID].screen);
-  }*/
+  }
 
   render() {
     return (
