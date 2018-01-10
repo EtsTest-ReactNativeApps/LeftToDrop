@@ -5,9 +5,9 @@ const HomeScreen = () => {
   return (
     <TableViewScreen
       destinations={[
-        { text: 'Left To Drop', screen: 'Seasons' },
-        { text: 'Previous Drops', screen: 'Seasons' },
-        { text: 'Favorites', screen: 'Favorites' }
+        { text: 'Season 1', screen: 'Categories' },
+        { text: 'Season 2', screen: 'Categories' },
+        { text: 'Season 3', screen: 'Categories' }
       ]}
     />
   );
