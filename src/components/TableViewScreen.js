@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   View
 } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 class TableViewScreen extends Component {
   constructor(props) {
@@ -24,8 +25,8 @@ class TableViewScreen extends Component {
   renderRow(rowData, sectionID, rowID) {
     return (
       <TouchableHighlight
-        onPress={this.onPressRow.bind(this, rowID)}
         underlayColor="whitesmoke"
+        onPress={this.onPressRow.bind(this, rowID)}
       >
         <View style={styles.cell}>
           <Text style={styles.text}>{rowData.text}</Text>
@@ -36,7 +37,7 @@ class TableViewScreen extends Component {
 
   onPressRow(rowID) {
     const { navigate } = this.props.navigation;
-    navigate(destinations[rowID].screen);
+    navigate(this.props.destinations[rowID].screen);
   }
 
   render() {
