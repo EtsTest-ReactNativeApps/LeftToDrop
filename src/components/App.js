@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-
+import { createStore, applyMiddleware } from 'redux';
+import Thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
+// Components
 import HomeScreen from './HomeScreen';
 //import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
 /*import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
 import ItemScreen from './ItemScreen';*/
+
+// Reducers
+import reducers from '../reducers';
+
+import firebaseApp from '../helpers/firebase';
 
 var defaultNavOptions = () => {
   return {
@@ -31,16 +39,19 @@ const Navigator = StackNavigator(
         title: 'Left To Drop'
       }
     },
-    Favorites: {
-      screen: SeasonsScreen /*FavoritesScreen*/,
+    /*Favorites: {
+      screen: SeasonsScreen,
       navigationOptions: {
         title: 'Favorites'
       }
-    },
-    Seasons: { screen: SeasonsScreen }
-    /*Categories: { screen: CategoriesScreen },
-    Items: { screen: ItemsScreen },
-    Item: { screen: ItemScreen }*/
+    },*/
+    Seasons: { screen: SeasonsScreen },
+    Categories: {
+      screen: HomeScreen,
+      navigationOptions: {
+        title: 'Categories'
+      }
+    }
   },
   {
     navigationOptions: defaultNavOptions()
@@ -49,7 +60,12 @@ const Navigator = StackNavigator(
 
 class App extends Component {
   render() {
-    return <Navigator />;
+    const store = createStore(reducers, applyMiddleware(Thunk));
+    return (
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
   }
 }
 
