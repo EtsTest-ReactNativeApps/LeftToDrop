@@ -15,7 +15,7 @@ const favoritesReducer = (state = null, action) => {
   }
 };
 
-const seasonsReducer = (state = null, action) => {
+const seasonsReducer = (state = [], action) => {
   switch (action.type) {
     case FETCH_SEASONS:
       return action.payload;

@@ -18,8 +18,19 @@ class TableViewScreen extends Component {
     });
 
     this.state = {
-      dataSource: dataSource.cloneWithRows(this.props.destinations)
+      dataSource: dataSource.cloneWithRows(this.props.cellData)
     };
+  }
+
+  // Required to handle async Firebase load
+  componentWillReceiveProps(newProps) {
+    const dataSource = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
+
+    this.setState({
+      dataSource: dataSource.cloneWithRows(newProps.cellData)
+    });
   }
 
   renderRow(rowData, sectionID, rowID) {
@@ -37,18 +48,19 @@ class TableViewScreen extends Component {
 
   onPressRow(rowID) {
     const { navigate } = this.props.navigation;
-    navigate(this.props.destinations[rowID].screen);
+    navigate(this.props.cellData[rowID].screen);
   }
 
   render() {
     return (
       <ListView
-        style={styles.container}
         dataSource={this.state.dataSource}
+        enableEmptySections={true}
         renderRow={this.renderRow.bind(this)}
         renderSeparator={(sectionID, rowID) => (
           <View key={rowID} style={styles.separator} />
         )}
+        style={styles.container}
       />
     );
   }

@@ -15,8 +15,6 @@ import ItemScreen from './ItemScreen';*/
 // Reducers
 import reducers from '../reducers';
 
-import firebaseApp from '../helpers/firebase';
-
 var defaultNavOptions = () => {
   return {
     headerTitleStyle: {
@@ -45,7 +43,12 @@ const Navigator = StackNavigator(
         title: 'Favorites'
       }
     },*/
-    Seasons: { screen: SeasonsScreen },
+    Seasons: {
+      screen: SeasonsScreen,
+      navigationOptions: {
+        title: 'Seasons'
+      }
+    },
     Categories: {
       screen: HomeScreen,
       navigationOptions: {

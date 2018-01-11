@@ -1,16 +1,43 @@
-import React from 'react';
-import TableViewScreen from './TableViewScreen';
+import React, { Component } from 'react';
+import { View } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-const HomeScreen = () => {
-  return (
-    <TableViewScreen
-      destinations={[
-        { text: 'Season 1', screen: 'Categories' },
-        { text: 'Season 2', screen: 'Categories' },
-        { text: 'Season 3', screen: 'Categories' }
-      ]}
-    />
-  );
+import TableViewScreen from './TableViewScreen';
+import { fetchSeasons } from '../actions';
+
+class SeasonsScreen extends Component {
+  componentDidMount() {
+    this.props.fetchSeasons();
+  }
+
+  render() {
+    return (
+      <TableViewScreen
+        cellData={this.props.cellData}
+        navigation={this.props.navigation}
+      />
+    );
+  }
+}
+
+const mapStateToProps = ({ seasons }) => {
+  if (seasons) {
+    const seasonNames = Object.keys(seasons);
+
+    return {
+      cellData: seasonNames.map(name => {
+        return {
+          text: name,
+          screen: 'Categories'
+        };
+      })
+    };
+  }
 };
 
-export default HomeScreen;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ fetchSeasons }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SeasonsScreen);
