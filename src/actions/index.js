@@ -21,9 +21,7 @@ export const fetchFavorites = userID => {
 
 // From SeasonsRef
 const seasonsRef = rootRef.child('seasons');
-
 export const fetchSeasons = () => dispatch => {
-  console.log('FETCHSEASONS');
   seasonsRef.on('value', snapshot => {
     dispatch({
       type: FETCH_SEASONS,
@@ -32,11 +30,15 @@ export const fetchSeasons = () => dispatch => {
   });
 };
 
-export const fetchCategories = seasonID => {
-  return {
-    type: FETCH_CATEGORIES,
-    payload: []
-  };
+// From CategoriesRef
+const categoriesRef = rootRef.child('categories');
+export const fetchCategories = seasonID => dispatch => {
+  categoriesRef.on('value', snapshot => {
+    dispatch({
+      type: FETCH_CATEGORIES,
+      payload: snapshot.val()
+    });
+  });
 };
 
 // From CategoriesRef
