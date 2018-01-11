@@ -22,7 +22,7 @@ export const fetchFavorites = userID => {
 // From SeasonsRef
 const seasonsRef = rootRef.child('seasons');
 
-export const fetchxSeasons = () => dispatch => {
+export const fetchSeasons = () => dispatch => {
   console.log('FETCHSEASONS');
   seasonsRef.on('value', snapshot => {
     dispatch({
@@ -30,21 +30,6 @@ export const fetchxSeasons = () => dispatch => {
       payload: snapshot.val()
     });
   });
-};
-
-const fetchedFromSeasonsRef = {
-  SEASON_ID_X: {
-    CATEGORY_ID_X: true
-  },
-  FW12: true,
-  SS13: true
-};
-
-export const fetchSeasons = () => {
-  return {
-    type: FETCH_SEASONS,
-    payload: fetchedFromSeasonsRef
-  };
 };
 
 export const fetchCategories = seasonID => {
