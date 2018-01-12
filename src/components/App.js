@@ -9,8 +9,8 @@ import HomeScreen from './HomeScreen';
 //import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
-/*import ItemsScreen from './ItemsScreen';
-import ItemScreen from './ItemScreen';*/
+import ItemsScreen from './ItemsScreen';
+//import ItemScreen from './ItemScreen';
 
 // Reducers
 import reducers from '../reducers';
@@ -50,10 +50,10 @@ const Navigator = StackNavigator(
       }
     },
     Categories: {
-      screen: CategoriesScreen,
-      navigationOptions: {
-        title: 'Categories'
-      }
+      screen: CategoriesScreen
+    },
+    Items: {
+      screen: ItemsScreen
     }
   },
   {
