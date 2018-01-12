@@ -7,9 +7,10 @@ class ItemButton extends Component {
   render() {
     const { label, onPress, color, marginLeft, marginRight } = this.props;
     const style = styleCreator(color, marginLeft, marginRight);
+
     return (
       <TouchableOpacity style={style.button} onPress={onPress}>
-        <Text style={style.text}>{this.props.label}</Text>
+        <Text style={style.text}>{label}</Text>
       </TouchableOpacity>
     );
   }
