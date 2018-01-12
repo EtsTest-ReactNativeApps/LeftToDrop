@@ -17,14 +17,31 @@ export const defaultNavigationOptions = {
   }
 };
 
-export const styles = StyleSheet.create({
-  buttonText: {
-    color: 'white',
-    fontFamily: 'Futura',
-    fontStyle: 'italic',
-    fontSize: 20,
-    textAlign: 'center'
-  },
+export const itemButtonStyleCreator = (
+  color,
+  marginLeft = 0,
+  marginRight = 0
+) => {
+  return StyleSheet.create({
+    button: {
+      backgroundColor: color,
+      borderRadius: 3,
+      flex: 1,
+      justifyContent: 'center',
+      marginLeft: marginLeft,
+      marginRight: marginRight
+    },
+    text: {
+      color: 'white',
+      fontFamily: 'Futura',
+      fontStyle: 'italic',
+      fontSize: 20,
+      textAlign: 'center'
+    }
+  });
+};
+
+export const itemScreenStyle = StyleSheet.create({
   caption: {
     backgroundColor: 'transparent',
     flex: 1,
@@ -40,28 +57,6 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1
-  },
-  copButton: {
-    backgroundColor: 'red',
-    borderRadius: 3,
-    flex: 1,
-    justifyContent: 'center',
-    marginRight: 2.5
-  },
-  dropButton: {
-    backgroundColor: 'black',
-    borderRadius: 3,
-    flex: 1,
-    justifyContent: 'center',
-    marginLeft: 2.5
-  },
-  favoriteButton: {
-    backgroundColor: 'blue',
-    borderRadius: 3,
-    flex: 1,
-    justifyContent: 'center',
-    marginLeft: 2.5,
-    marginRight: 2.5
   },
   image: {
     height: '100%',
