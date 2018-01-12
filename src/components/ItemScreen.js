@@ -11,16 +11,37 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
-import { itemScreenStyle } from '../styles';
+import ItemButton from './ItemButton';
+import fetchItem from '../actions/fetch_item_action';
+import fetchUser from '../actions/fetch_user_action';
+import { itemScreenStyle as styles } from '../styles';
 
 class ItemScreen extends Component {
   constructor(props) {
     super(props);
   }
 
+  componentDidMount() {
+    const itemID = this.props.navigation.state.params.id;
+    const { fetchItem, fetchUser } = this.props;
+    fetchItem(itemID);
+    fetchUser('krlargo'); /// Temp
+  }
+
+  isFavorite() {
+    const { favoriteItemIDs } = this.props.user;
+  }
+
   render() {
     const { navigate } = this.props.navigation;
-    var favoriteLabel = this.state.isFavorite ? 'Unfavorite' : 'Favorite';
+
+    const item = this.props.item;
+
+    var favoriteLabel = false ? 'Unfavorite' : 'Favorite';
+
+    if (!item) {
+      return <View />;
+    }
 
     return (
       <View style={styles.container}>
@@ -32,30 +53,27 @@ class ItemScreen extends Component {
 
         <View style={styles.caption}>
           <View style={styles.ratingContainer}>
-            <TouchableOpacity
-              style={styles.copButton}
-              onPress={() => {
-                Alert.alert('Upvoted');
-              }}
-            >
-              <Text style={styles.buttonText}>Cop</Text>
-            </TouchableOpacity>
+            <ItemButton
+              label="Cop"
+              onPress={console.log('COP')}
+              color="red"
+              marginRight={2.5}
+            />
 
-            <TouchableOpacity
-              style={styles.favoriteButton}
-              onPress={this.setFavorite.bind(this, item._key)}
-            >
-              <Text style={styles.buttonText}>{favoriteLabel}</Text>
-            </TouchableOpacity>
+            <ItemButton
+              label={favoriteLabel}
+              onPress={console.log('FAVORITE')}
+              color="black"
+              marginLeft={2.5}
+              marginRight={2.5}
+            />
 
-            <TouchableOpacity
-              style={styles.dropButton}
-              onPress={() => {
-                Alert.alert('Downvoted');
-              }}
-            >
-              <Text style={styles.buttonText}>Drop</Text>
-            </TouchableOpacity>
+            <ItemButton
+              label="Drop"
+              onPress={console.log('DROP')}
+              color="blue"
+              marginLeft={2.5}
+            />
           </View>
 
           <View style={styles.chat} />
@@ -65,35 +83,12 @@ class ItemScreen extends Component {
   }
 }
 
-mapStateToProps = (_, ownProps) => {
-  // SubComponents can either have loaded 'state' or passed static 'cellData'
-  const state = ownProps.reduxState;
-  const cellData = ownProps.staticCellData;
-  if (state) {
-    // If passed state, construct cellData here
-    return {
-      cellData: state.map(stateData => {
-        const id = Object.keys(stateData)[0];
-        const value = stateData[id];
-        const screen = ownProps.screen;
-        const label = value['name'];
-
-        return { id, screen, label };
-      })
-    };
-  } else if (cellData) {
-    // Static data if no state is passed
-    return { cellData };
-  } else {
-    // Temporary empty array when no cellData is available
-    return {
-      cellData: []
-    };
-  }
+mapStateToProps = ({ item, user }) => {
+  return { item, user };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return bindActionCreators({ fetchAction: ownProps.fetchAction }, dispatch);
+mapDispatchToProps = dispatch => {
+  return bindActionCreators({ fetchItem, fetchUser }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemScreen);
