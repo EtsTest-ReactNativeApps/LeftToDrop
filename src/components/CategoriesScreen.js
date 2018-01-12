@@ -26,20 +26,17 @@ const mapStateToProps = ({ categories }) => {
   if (categories) {
     return {
       cellData: categories.map(category => {
-        return {
-          id: category.name,
-          screen: 'Categories',
-          text: category.name
-        };
+        const id = Object.keys(category)[0];
+        const value = category[id];
+        const screen = 'Items';
+        const text = value['name'];
+
+        return { id, screen, text };
       })
     };
   } else {
     return {
-      cellData: [
-        { id: 'id', text: 'CAT1', screen: 'Categories' },
-        { id: 'id', text: 'CAT2', screen: 'Categories' },
-        { id: 'id', text: 'CAT3', screen: 'Categories' }
-      ]
+      cellData: []
     };
   }
 };
