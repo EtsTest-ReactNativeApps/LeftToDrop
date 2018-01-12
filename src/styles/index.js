@@ -1,4 +1,4 @@
-export const defaultNavOptions = {
+export const defaultNavigationOptions = {
   headerTitleStyle: {
     fontFamily: 'Futura',
     fontSize: 25,
@@ -7,5 +7,10 @@ export const defaultNavOptions = {
   headerStyle: {
     backgroundColor: 'red'
   },
-  headerTintColor: 'white'
+  headerTintColor: 'white',
+  headerBackTitleStyle: {
+    fontFamily: 'Futura',
+    fontSize: 18,
+    fontStyle: 'italic'
+  }
 };
