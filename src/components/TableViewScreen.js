@@ -1,3 +1,34 @@
+/*
+  - Used as generic Component for all Firebase data that should be displayed in a Table/ListView
+
+  - Calling Component will pass as props:
+    - fetchAction: (Optional)
+      - The corresponding ActionCreator responsible for loading Firebase data
+      - Imported inside calling Component
+    - navigation={this.props.navigation}
+      - Used to propagate StackNavigator props to TableViewScreen
+      - Unchanged throughout calling Components
+    - reduxState: (Optional)
+      - The corresponding Redux state associated with data fetch
+      - Acquired via mapStateToProps() which is connected in calling Component
+    - screen:
+      - The name of the screen that all cells will redirect to
+      - e.g. All SeasonsScreen cells should redirect to CategoriesScreen onPress
+    - staticCellData: (Optional)
+      - Static data to be provided when not using dynamic Firebase data
+
+  - When extracting cellData from state:
+    - State should be an array of objects where key = object id
+    - State will be parsed into the following structure:
+        id: { name: 'NAME', ...}
+    - 'name' field which will be used as cell label
+    - 'screen' field is provided via props (noted above),
+
+  - When providing staticCellData, each cell should provide:
+    - destination 'screen' field onPressRow
+    - 'label' field for cell label
+*/
+
 import React, { Component } from 'react';
 import {
   Button,
