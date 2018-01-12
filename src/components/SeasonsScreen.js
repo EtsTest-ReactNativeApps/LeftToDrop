@@ -30,16 +30,19 @@ class SeasonsScreen extends Component {
 */
 const mapStateToProps = ({ seasons }) => {
   if (seasons) {
-    const seasonNames = Object.keys(seasons);
-
     return {
-      cellData: seasonNames.map(name => {
-        return {
-          id: name,
-          screen: 'Categories',
-          text: name
-        };
+      cellData: seasons.map(seasons => {
+        const id = Object.keys(seasons)[0];
+        const value = seasons[id];
+        const screen = 'Categories';
+        const text = value['name'];
+
+        return { id, screen, text };
       })
+    };
+  } else {
+    return {
+      cellData: []
     };
   }
 };
