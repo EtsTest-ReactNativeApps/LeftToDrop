@@ -19,7 +19,6 @@ export const fetchFavorites = userID => {
   };
 };
 
-// From SeasonsRef
 const seasonsRef = rootRef.child('seasons');
 export const fetchSeasons = () => dispatch => {
   seasonsRef.on('value', snapshot => {
@@ -30,14 +29,28 @@ export const fetchSeasons = () => dispatch => {
   });
 };
 
-// From CategoriesRef
 const categoriesRef = rootRef.child('categories');
 export const fetchCategories = seasonID => dispatch => {
-  categoriesRef.on('value', snapshot => {
-    dispatch({
-      type: FETCH_CATEGORIES,
-      payload: snapshot.val()
-    });
+  let categories = [];
+  // Get Season data
+  seasonsRef.child(seasonID).on('value', seasonSnap => {
+    const categoryIDs = Object.keys(seasonSnap.val());
+
+    for (let index in categoryIDs) {
+      let categoryID = categoryIDs[index];
+
+      categoriesRef.child(categoryID).once('value', categorySnap => {
+        categories.push(categorySnap.val());
+
+        // Dispatch after last Category only
+        if (index == categoryIDs.length - 1) {
+          dispatch({
+            type: FETCH_CATEGORIES,
+            payload: categories
+          });
+        }
+      });
+    }
   });
 };
 
