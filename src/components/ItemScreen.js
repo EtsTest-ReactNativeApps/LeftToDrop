@@ -13,7 +13,7 @@ import { StackNavigator } from 'react-navigation';
 
 import { itemScreenStyle } from '../styles';
 
-class ItemScreen extends Comonent {
+class ItemScreen extends Component {
   constructor(props) {
     super(props);
   }
@@ -96,4 +96,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return bindActionCreators({ fetchAction: ownProps.fetchAction }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ItemScreen);
