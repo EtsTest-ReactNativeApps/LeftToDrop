@@ -15,7 +15,7 @@ class ItemsScreen extends Component {
         fetchAction={fetchItems}
         navigation={this.props.navigation}
         reduxState={this.props.items}
-        screen="Items"
+        screen="Item"
       />
     );
   }
