@@ -80,7 +80,7 @@ class TableViewScreen extends Component {
         onPress={this.onPressRow.bind(this, rowID)}
       >
         <View style={styles.cell}>
-          <Text style={styles.text}>{rowData.text}</Text>
+          <Text style={styles.text}>{rowData.label}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -118,9 +118,9 @@ mapStateToProps = (_, ownProps) => {
         const id = Object.keys(stateData)[0];
         const value = stateData[id];
         const screen = ownProps.screen;
-        const text = value['name'];
+        const label = value['name'];
 
-        return { id, screen, text };
+        return { id, screen, label };
       })
     };
   } else if (cellData) {

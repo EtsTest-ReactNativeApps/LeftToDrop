@@ -6,9 +6,9 @@ class HomeScreen extends Component {
     return (
       <TableViewScreen
         staticCellData={[
-          { text: 'Left To Drop', screen: 'Seasons' },
-          { text: 'Previous Drops', screen: 'Seasons' },
-          { text: 'Favorites', screen: 'Seasons' }
+          { label: 'Left To Drop', screen: 'Seasons' },
+          { label: 'Previous Drops', screen: 'Seasons' },
+          { label: 'Favorites', screen: 'Seasons' }
         ]}
         navigation={this.props.navigation}
       />
