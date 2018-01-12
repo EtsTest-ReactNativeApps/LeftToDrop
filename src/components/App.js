@@ -11,23 +11,10 @@ import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
 //import ItemScreen from './ItemScreen';
+import { defaultNavigationOptions } from '../styles';
 
 // Reducers
 import reducers from '../reducers';
-
-var defaultNavOptions = () => {
-  return {
-    headerTitleStyle: {
-      fontFamily: 'Futura',
-      fontSize: 25,
-      fontStyle: 'italic'
-    },
-    headerStyle: {
-      backgroundColor: 'red'
-    },
-    headerTintColor: 'white'
-  };
-};
 
 const Navigator = StackNavigator(
   {
@@ -57,7 +44,7 @@ const Navigator = StackNavigator(
     }
   },
   {
-    navigationOptions: defaultNavOptions()
+    navigationOptions: defaultNavigationOptions
   }
 );
 
