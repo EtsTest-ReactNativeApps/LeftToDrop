@@ -3,6 +3,7 @@ export const FETCH_SEASONS = 'FETCH_SEASONS';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
 export const FETCH_ITEM = 'FETCH_ITEM';
+export const FETCH_USER = 'FETCH_USER';
 
 export const SET_FAVORITE = 'SET_FAVORITE';
 export const UPVOTE_ITEM = 'UPVOTE_ITEM';
