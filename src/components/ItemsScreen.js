@@ -5,6 +5,10 @@ import TableViewScreen from './TableViewScreen';
 import fetchItems from '../actions/fetch_items_action';
 
 class ItemsScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.title
+  });
+
   render() {
     return (
       <TableViewScreen

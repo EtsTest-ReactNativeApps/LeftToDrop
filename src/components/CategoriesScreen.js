@@ -5,6 +5,10 @@ import TableViewScreen from './TableViewScreen';
 import fetchCategories from '../actions/fetch_categories_action';
 
 class CategoriesScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params.title
+  });
+
   render() {
     return (
       <TableViewScreen
