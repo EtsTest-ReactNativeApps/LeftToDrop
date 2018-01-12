@@ -36,15 +36,9 @@ const Navigator = StackNavigator(
         title: 'Seasons'
       }
     },
-    Categories: {
-      screen: CategoriesScreen
-    },
-    Items: {
-      screen: ItemsScreen
-    },
-    Item: {
-      screen: ItemScreen
-    }
+    Categories: { screen: CategoriesScreen },
+    Items: { screen: ItemsScreen },
+    Item: { screen: ItemScreen }
   },
   {
     navigationOptions: defaultNavigationOptions
