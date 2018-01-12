@@ -11,7 +11,7 @@ export default (fetchCategories = seasonID => dispatch => {
       let categoryID = categoryIDs[index];
 
       categoriesRef.child(categoryID).once('value', categorySnap => {
-        categories.push(categorySnap.val());
+        categories.push({ [categorySnap.key]: categorySnap.val() });
 
         // Dispatch after last Category only
         if (index == categoryIDs.length - 1) {
