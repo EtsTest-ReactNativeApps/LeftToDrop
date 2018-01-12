@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import TableViewScreen from './TableViewScreen';
 
 class HomeScreen extends Component {
+  // Parent Component owns the back button
+  static navigationOptions = ({ navigation }) => ({
+    headerBackTitle: 'Back'
+  });
+
   render() {
     return (
       <TableViewScreen
