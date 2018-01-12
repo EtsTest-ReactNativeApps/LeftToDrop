@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import TableViewScreen from './TableViewScreen';
-import { fetchSeasons } from '../actions';
+import fetchSeasons from '../actions/fetch_seasons_action';
 
 class SeasonsScreen extends Component {
   componentDidMount() {
