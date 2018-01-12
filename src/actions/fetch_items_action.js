@@ -3,13 +3,14 @@ import { FETCH_ITEMS } from './types';
 
 export default (fetchItems = categoryID => dispatch => {
   let items = [];
-  // Get Category data
+  // Get ItemIDs from provided Category
   categoriesRef.child(categoryID + '/itemIDs').on('value', categorySnap => {
     const itemIDs = Object.keys(categorySnap.val());
 
     for (let index in itemIDs) {
       let itemID = itemIDs[index];
 
+      // Gather Category's corresponding Item data
       itemsRef.child(itemID).once('value', itemSnap => {
         items.push({ [itemSnap.key]: itemSnap.val() });
 
