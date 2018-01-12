@@ -7,6 +7,8 @@ import {
   TouchableHighlight,
   View
 } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
 class TableViewScreen extends Component {
@@ -20,6 +22,13 @@ class TableViewScreen extends Component {
     this.state = {
       dataSource: dataSource.cloneWithRows(this.props.cellData)
     };
+  }
+
+  componentDidMount() {
+    if (this.props.fetchAction) {
+      const parentID = this.props.navigation.state.params.id;
+      this.props.fetchAction(parentID);
+    }
   }
 
   // Required to handle async Firebase load
@@ -67,7 +76,38 @@ class TableViewScreen extends Component {
   }
 }
 
-export default TableViewScreen;
+mapStateToProps = (_, ownProps) => {
+  // SubComponents can either have loaded 'state' or passed static 'cellData'
+  const state = ownProps.reduxState;
+  const cellData = ownProps.staticCellData;
+  if (state) {
+    // If passed state, construct cellData here
+    return {
+      cellData: state.map(stateData => {
+        const id = Object.keys(stateData)[0];
+        const value = stateData[id];
+        const screen = ownProps.screen;
+        const text = value['name'];
+
+        return { id, screen, text };
+      })
+    };
+  } else if (cellData) {
+    // Static data if no state is passed
+    return { cellData };
+  } else {
+    // Temporary empty array when no cellData is available
+    return {
+      cellData: []
+    };
+  }
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return bindActionCreators({ fetchAction: ownProps.fetchAction }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TableViewScreen);
 
 const styles = StyleSheet.create({
   cell: {
