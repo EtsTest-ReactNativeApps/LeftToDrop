@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { createStore, applyMiddleware } from 'redux';
-import Thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { StatusBar } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import { Provider } from 'react-redux';
+import Thunk from 'redux-thunk';
 
-// Components
 import HomeScreen from './HomeScreen';
 //import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
@@ -50,6 +50,7 @@ const Navigator = StackNavigator(
 
 class App extends Component {
   render() {
+    <StatusBar backgroundColor="transparent" barStyle="light-content" />;
     const store = createStore(reducers, applyMiddleware(Thunk));
     return (
       <Provider store={store}>
