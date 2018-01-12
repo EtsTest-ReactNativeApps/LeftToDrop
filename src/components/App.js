@@ -8,8 +8,8 @@ import { StackNavigator } from 'react-navigation';
 import HomeScreen from './HomeScreen';
 //import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
-/*import CategoriesScreen from './CategoriesScreen';
-import ItemsScreen from './ItemsScreen';
+import CategoriesScreen from './CategoriesScreen';
+/*import ItemsScreen from './ItemsScreen';
 import ItemScreen from './ItemScreen';*/
 
 // Reducers
@@ -50,7 +50,7 @@ const Navigator = StackNavigator(
       }
     },
     Categories: {
-      screen: HomeScreen,
+      screen: CategoriesScreen,
       navigationOptions: {
         title: 'Categories'
       }
