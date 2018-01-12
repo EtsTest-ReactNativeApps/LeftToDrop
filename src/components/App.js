@@ -10,7 +10,7 @@ import HomeScreen from './HomeScreen';
 import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
-//import ItemScreen from './ItemScreen';
+import ItemScreen from './ItemScreen';
 import { defaultNavigationOptions } from '../styles';
 
 // Reducers
@@ -41,6 +41,9 @@ const Navigator = StackNavigator(
     },
     Items: {
       screen: ItemsScreen
+    },
+    Item: {
+      screen: ItemScreen
     }
   },
   {
