@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import Thunk from 'redux-thunk';
 
 import HomeScreen from './HomeScreen';
-//import FavoritesScreen from './FavoritesScreen';
+import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
@@ -24,12 +24,12 @@ const Navigator = StackNavigator(
         title: 'Left To Drop'
       }
     },
-    /*Favorites: {
-      screen: SeasonsScreen,
+    Favorites: {
+      screen: FavoritesScreen,
       navigationOptions: {
         title: 'Favorites'
       }
-    },*/
+    },
     Seasons: {
       screen: SeasonsScreen,
       navigationOptions: {
