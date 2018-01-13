@@ -73,23 +73,22 @@ class TableViewScreen extends Component {
     });
   }
 
-  renderRow(rowData, sectionID, rowID) {
+  onPressRow(cellData, rowID) {
+    const { navigate } = this.props.navigation;
+    navigate(cellData.screen, { id: cellData.id, title: cellData.label });
+  }
+
+  renderRow(cellData, _, rowID) {
     return (
       <TouchableHighlight
         underlayColor="whitesmoke"
-        onPress={this.onPressRow.bind(this, rowID)}
+        onPress={this.onPressRow.bind(this, cellData, rowID)}
       >
         <View style={styles.cell}>
-          <Text style={styles.text}>{rowData.label}</Text>
+          <Text style={styles.text}>{cellData.label}</Text>
         </View>
       </TouchableHighlight>
     );
-  }
-
-  onPressRow(rowID) {
-    const { navigate } = this.props.navigation;
-    const cellData = this.props.cellData[rowID];
-    navigate(cellData.screen, { id: cellData.id, title: cellData.label });
   }
 
   render() {
