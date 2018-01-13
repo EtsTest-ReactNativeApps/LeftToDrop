@@ -13,7 +13,7 @@ class HomeScreen extends Component {
         staticCellData={[
           { label: 'Left To Drop', screen: 'Seasons' },
           { label: 'Previous Drops', screen: 'Seasons' },
-          { label: 'Favorites', screen: 'Seasons' }
+          { label: 'Favorites', screen: 'Favorites' }
         ]}
         navigation={this.props.navigation}
       />
