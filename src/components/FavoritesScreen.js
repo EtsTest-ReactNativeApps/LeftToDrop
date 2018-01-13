@@ -10,7 +10,6 @@ import {
   View
 } from 'react-native';
 import { bindActionCreators } from 'redux';
-import GridView from 'react-native-gridview';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
