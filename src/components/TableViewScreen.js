@@ -62,6 +62,14 @@ class TableViewScreen extends Component {
     }
   }
 
+  // Clear Redux state on exit
+  componentWillUnmount() {
+    // Action Creators are defined to clear state when passed a null parameter
+    if (this.props.fetchAction) {
+      this.props.fetchAction();
+    }
+  }
+
   // Required to handle async Firebase load
   componentWillReceiveProps(newProps) {
     const dataSource = new ListView.DataSource({

@@ -29,6 +29,12 @@ class ItemScreen extends Component {
     fetchUser('krlargo'); /// Temp
   }
 
+  // Clear Redux state on exit
+  componentWillUnmount() {
+    // Action Creators are defined to clear state when passed a null parameter
+    this.props.fetchItem();
+  }
+
   isFavorite() {
     const { favoriteItemIDs } = this.props.user;
   }
