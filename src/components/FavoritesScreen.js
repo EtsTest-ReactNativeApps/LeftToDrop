@@ -30,9 +30,9 @@ class FavoritesScreen extends Component {
     };
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     this.props.fetchFavoriteItems('krlargo');
-  }
+  }*/
 
   onPressCell(item, cellID) {
     const { navigate } = this.props.navigation;
