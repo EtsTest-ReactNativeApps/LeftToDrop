@@ -11,11 +11,11 @@ class LoadingView extends Component {
       text: ['Loading', ' Loading.', '  Loading..', '   Loading...']
     };
 
-    setInterval(() => {
+    /*setInterval(() => {
       this.setState(prevState => {
         return { frame: (prevState.frame + 1) % 4 };
       });
-    }, 500);
+    }, 500);*/
   }
 
   render() {
