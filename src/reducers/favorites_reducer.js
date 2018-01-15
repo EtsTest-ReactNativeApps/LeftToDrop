@@ -9,14 +9,7 @@ import { itemsRef } from '../firebase/references';
 export const favoriteItemIDsReducer = (state = null, action) => {
   switch (action.type) {
     case FETCH_FAVORITES:
-      const itemIDs = action.payload;
-      let itemIDsObject = {};
-
-      itemIDs.forEach(itemID => {
-        itemIDsObject[itemID] = true;
-      });
-
-      return itemIDsObject;
+      return action.payload;
     default:
       return state;
   }
@@ -25,7 +18,7 @@ export const favoriteItemIDsReducer = (state = null, action) => {
 export const favoriteItemsReducer = (state = null, action) => {
   switch (action.type) {
     case FETCH_FAVORITES:
-      const itemIDs = action.payload;
+      const itemIDs = Object.keys(action.payload);
 
       let items = [];
       itemIDs.forEach((itemID, index) => {
