@@ -10,18 +10,16 @@ const getFavoriteItemIDs = (userID, callback) => {
   });
 };
 
-// Passes an array of favorite itemIDs to Redux
 export const fetchFavoriteItemIDs = userID => dispatch => {
+  // Passes an array of favorite itemIDs to Redux
   getFavoriteItemIDs(userID, itemIDs => {
     dispatch({
       type: FETCH_FAVORITE_ITEM_IDS,
       payload: itemIDs
     });
   });
-};
 
-// Passes an object array of User's favorite Items to Redux
-export const fetchFavoriteItems = userID => dispatch => {
+  // Passes an object array of User's favorite Items to Redux
   getFavoriteItemIDs(userID, itemIDs => {
     const items = [];
 
@@ -29,14 +27,9 @@ export const fetchFavoriteItems = userID => dispatch => {
       // Gather corresponding Item data
       itemsRef.child(itemID).once('value', snapshot => {
         items.push({ [snapshot.key]: snapshot.val() });
-        console.log(
-          `\n\nINDEX ${index} => [${snapshot.key}]: ${snapshot.val()} \n`
-        );
 
         // Dispatch after last Item only
         if (index == itemIDs.length - 1) {
-          console.log('INDEX', index, '= ITEMIDSLENGTH', itemIDs.length);
-          console.log('ITEMS:', items);
           dispatch({
             type: FETCH_FAVORITE_ITEMS,
             payload: items
