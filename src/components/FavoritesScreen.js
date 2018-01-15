@@ -72,9 +72,6 @@ class FavoritesScreen extends Component {
 }
 
 mapStateToProps = ({ favoriteItems }) => {
-  console.log(
-    'FAVORITEITEMS_MAPSTATETOPROPS: ' + JSON.stringify(favoriteItems)
-  );
   if (favoriteItems) {
     return {
       favoriteItems: favoriteItems.map(item => {
