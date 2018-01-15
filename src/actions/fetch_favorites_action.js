@@ -1,6 +1,17 @@
 import { favoritesRef, itemsRef } from '../firebase/references';
-import { FETCH_FAVORITE_ITEM_IDS, FETCH_FAVORITE_ITEMS } from './types';
+import { FETCH_FAVORITES } from './types';
 
+export const fetchFavorites = userID => dispatch => {
+  favoritesRef.child(userID).on('value', snapshot => {
+    const itemIDs = Object.keys(snapshot.val());
+    dispatch({
+      type: FETCH_FAVORITES,
+      payload: itemIDs
+    });
+  });
+};
+
+/*
 // Helper function that fetches an array of itemIDs
 // and passes it back to the calling Action Creator
 const getFavoriteItemIDs = (userID, callback) => {
@@ -10,17 +21,22 @@ const getFavoriteItemIDs = (userID, callback) => {
   });
 };
 
-// Passes an array of favorite itemIDs to Redux
+// Passes an object array of favorite itemIDs to Redux
+// [ itemID: true, ...]
 export const fetchFavoriteItemIDs = userID => dispatch => {
   getFavoriteItemIDs(userID, itemIDs => {
+    const itemIDsObject = itemIDs.map(id => {
+      return { [id]: true };
+    });
     dispatch({
       type: FETCH_FAVORITE_ITEM_IDS,
-      payload: itemIDs
+      payload: itemIDsObject
     });
   });
 };
 
 // Passes an object array of User's favorite Items to Redux
+// [ itemID: { ITEMFIELDKEY: ITEMFIELDVALUE, ...}, ...]
 export const fetchFavoriteItems = userID => dispatch => {
   getFavoriteItemIDs(userID, itemIDs => {
     var items = [];
@@ -41,4 +57,4 @@ export const fetchFavoriteItems = userID => dispatch => {
       });
     });
   });
-};
+};*/
