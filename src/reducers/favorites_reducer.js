@@ -6,7 +6,7 @@ import {
 export const favoriteItemIDsReducer = (state = null, action) => {
   switch (action.type) {
     case FETCH_FAVORITE_ITEM_IDS:
-      return action.payload;
+      return action.payload || {};
     default:
       return state;
   }
