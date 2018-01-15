@@ -13,6 +13,7 @@ import { StackNavigator } from 'react-navigation';
 
 import ItemButton from './ItemButton';
 import LoadingView from './LoadingView';
+import { favoriteItem, unfavoriteItem } from '../actions/item_action';
 import fetchItem from '../actions/fetch_item_action';
 import fetchUser from '../actions/fetch_user_action';
 import { itemScreenStyle as styles } from '../styles';
@@ -36,7 +37,19 @@ class ItemScreen extends Component {
   }
 
   isFavorite() {
-    const { favoriteItemIDs } = this.props.user;
+    const itemID = this.props.navigation.state.params.id;
+    return this.props.favoriteItemIDs[itemID] === true;
+  }
+
+  toggleFavorite() {
+    const itemID = this.props.navigation.state.params.id;
+    const { unfavoriteItem, favoriteItem } = this.props;
+
+    if (this.isFavorite()) {
+      this.props.unfavoriteItem(itemID, 'krlargo');
+    } else {
+      this.props.favoriteItem(itemID, 'krlargo');
+    }
   }
 
   render() {
@@ -45,7 +58,7 @@ class ItemScreen extends Component {
     const item = this.props.item;
 
     if (item) {
-      var favoriteLabel = false ? 'Unfavorite' : 'Favorite';
+      var favoriteLabel = this.isFavorite() ? 'Unfavorite' : 'Favorite';
       return (
         <View style={styles.container}>
           <Text style={styles.itemName}>{item.name}</Text>
@@ -58,14 +71,14 @@ class ItemScreen extends Component {
             <View style={styles.ratingContainer}>
               <ItemButton
                 label="Cop"
-                onPress={console.log('COP')}
+                onPress={() => console.log('COP')}
                 color="red"
                 marginRight={2.5}
               />
 
               <ItemButton
                 label={favoriteLabel}
-                onPress={console.log('FAVORITE')}
+                onPress={this.toggleFavorite.bind(this)}
                 color="black"
                 marginLeft={2.5}
                 marginRight={2.5}
@@ -73,7 +86,7 @@ class ItemScreen extends Component {
 
               <ItemButton
                 label="Drop"
-                onPress={console.log('DROP')}
+                onPress={() => console.log('DROP')}
                 color="blue"
                 marginLeft={2.5}
               />
@@ -89,12 +102,20 @@ class ItemScreen extends Component {
   }
 }
 
-mapStateToProps = ({ item, user }) => {
-  return { item, user };
+mapStateToProps = ({ favoriteItemIDs, item, user }) => {
+  return { favoriteItemIDs, item, user };
 };
 
 mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchItem, fetchUser }, dispatch);
+  return bindActionCreators(
+    {
+      fetchItem,
+      fetchUser,
+      favoriteItem,
+      unfavoriteItem
+    },
+    dispatch
+  );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemScreen);
