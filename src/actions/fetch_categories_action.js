@@ -10,7 +10,7 @@ export default (fetchCategories = seasonID => dispatch => {
   }
 
   // Get CategoryIDs from provided Season
-  seasonsRef.child(seasonID).on('value', seasonSnap => {
+  seasonsRef.child(seasonID + '/categoryIDs').on('value', seasonSnap => {
     let categories = [];
     const categoryIDs = Object.keys(seasonSnap.val());
 
