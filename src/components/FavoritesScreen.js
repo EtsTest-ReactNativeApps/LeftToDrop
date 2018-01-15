@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 
 import EmptyView from './EmptyView';
 import LoadingView from './LoadingView';
-import { fetchFavoriteItems } from '../actions/fetch_favorites_action';
 
 class FavoritesScreen extends Component {
   constructor(props) {
@@ -29,10 +28,6 @@ class FavoritesScreen extends Component {
       dataSource: dataSource.cloneWithRows([])
     };
   }
-
-  /*componentDidMount() {
-    this.props.fetchFavoriteItems('krlargo');
-  }*/
 
   onPressCell(item, cellID) {
     const { navigate } = this.props.navigation;
@@ -77,6 +72,9 @@ class FavoritesScreen extends Component {
 }
 
 mapStateToProps = ({ favoriteItems }) => {
+  console.log(
+    'FAVORITEITEMS_MAPSTATETOPROPS: ' + JSON.stringify(favoriteItems)
+  );
   if (favoriteItems) {
     return {
       favoriteItems: favoriteItems.map(item => {
@@ -94,11 +92,7 @@ mapStateToProps = ({ favoriteItems }) => {
   }
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchFavoriteItems }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FavoritesScreen);
+export default connect(mapStateToProps)(FavoritesScreen);
 
 const styles = StyleSheet.create({
   cell: {
