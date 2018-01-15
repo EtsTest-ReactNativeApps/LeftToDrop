@@ -9,9 +9,9 @@ export default (fetchItems = categoryID => dispatch => {
     };
   }
 
-  let items = [];
   // Get ItemIDs from provided Category
   categoriesRef.child(categoryID + '/itemIDs').on('value', categorySnap => {
+    let items = [];
     const itemIDs = Object.keys(categorySnap.val());
 
     //for (let index in itemIDs) {
