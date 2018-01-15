@@ -3,10 +3,9 @@ import { FETCH_FAVORITES } from './types';
 
 export const fetchFavorites = userID => dispatch => {
   favoritesRef.child(userID).on('value', snapshot => {
-    const itemIDs = Object.keys(snapshot.val());
     dispatch({
       type: FETCH_FAVORITES,
-      payload: itemIDs
+      payload: snapshot.val()
     });
   });
 };
