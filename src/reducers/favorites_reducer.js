@@ -1,12 +1,22 @@
+import _ from 'lodash';
 import {
-  FETCH_FAVORITE_ITEM_IDS,
-  FETCH_FAVORITE_ITEMS
+  FETCH_FAVORITES,
+  FAVORITE_ITEM,
+  UNFAVORITE_ITEM
 } from '../actions/types';
+import { itemsRef } from '../firebase/references';
 
 export const favoriteItemIDsReducer = (state = null, action) => {
   switch (action.type) {
-    case FETCH_FAVORITE_ITEM_IDS:
-      return action.payload;
+    case FETCH_FAVORITES:
+      const itemIDs = action.payload;
+      let itemIDsObject = {};
+
+      itemIDs.forEach(itemID => {
+        itemIDsObject[itemID] = true;
+      });
+
+      return itemIDsObject;
     default:
       return state;
   }
@@ -14,8 +24,23 @@ export const favoriteItemIDsReducer = (state = null, action) => {
 
 export const favoriteItemsReducer = (state = null, action) => {
   switch (action.type) {
-    case FETCH_FAVORITE_ITEMS:
-      return action.payload;
+    case FETCH_FAVORITES:
+      const itemIDs = action.payload;
+
+      let items = [];
+      itemIDs.forEach((itemID, index) => {
+        // Gather corresponding Item data
+        itemsRef.child(itemID).once('value', snapshot => {
+          item = { [snapshot.key]: snapshot.val() };
+          items.push(item);
+
+          // Dispatch after last Item only
+          if (index == itemIDs.length - 1) {
+            console.log('ITEMS: ' + JSON.stringify(items));
+            return items;
+          }
+        });
+      });
     default:
       return state;
   }
