@@ -11,21 +11,31 @@ export const fetchFavorites = userID => dispatch => {
     });
 
     // Passes an object array of User's favorite Items to Redux
-    const items = [];
-    const itemIDs = Object.keys(snapshot.val());
+    const items = [],
+      promises = [];
+    const itemIDs = Object.keys(snapshot.val() || []);
 
     itemIDs.forEach((itemID, index) => {
       // Gather corresponding Item data
-      itemsRef.child(itemID).once('value', snapshot => {
+      var promise = itemsRef.child(itemID).once('value', snapshot => {
         items.push({ [snapshot.key]: snapshot.val() });
 
         // Dispatch after last Item only
-        if (index == itemIDs.length - 1) {
+        /*if (index == itemIDs.length - 1) {
           dispatch({
             type: FETCH_FAVORITE_ITEMS,
             payload: items
           });
-        }
+        }*/
+      });
+
+      promises.push(promise);
+    });
+
+    Promise.all(promises).then(values => {
+      dispatch({
+        type: FETCH_FAVORITE_ITEMS,
+        payload: items
       });
     });
   });
