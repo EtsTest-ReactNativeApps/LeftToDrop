@@ -9,13 +9,11 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { bindActionCreators } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import EmptyView from './EmptyView';
 import LoadingView from './LoadingView';
-import { fetchFavoriteItems } from '../actions/fetch_favorites_action';
 
 class FavoritesScreen extends Component {
   constructor(props) {
@@ -28,10 +26,6 @@ class FavoritesScreen extends Component {
     this.state = {
       dataSource: dataSource.cloneWithRows([])
     };
-  }
-
-  componentDidMount() {
-    this.props.fetchFavoriteItems('krlargo');
   }
 
   onPressCell(item, cellID) {
@@ -94,11 +88,7 @@ mapStateToProps = ({ favoriteItems }) => {
   }
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchFavoriteItems }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FavoritesScreen);
+export default connect(mapStateToProps)(FavoritesScreen);
 
 const styles = StyleSheet.create({
   cell: {
