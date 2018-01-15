@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import TableViewScreen from './TableViewScreen';
+import { fetchFavoriteItemIDs } from '../actions/fetch_favorites_action';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
   static navigationOptions = ({ navigation }) => ({
     headerBackTitle: 'Back'
   });
+
+  componentDidMount() {
+    this.props.fetchFavoriteItemIDs('krlargo');
+  }
 
   render() {
     return (
@@ -21,4 +29,8 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ fetchFavoriteItemIDs }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(HomeScreen);
