@@ -4,9 +4,12 @@ import { FETCH_SEASONS } from './types';
 export default (fetchSeasons = () => dispatch => {
   // Get all Seasons
   seasonsRef.on('value', snapshot => {
-    const seasonIDs = Object.keys(snapshot.val());
-    const seasons = seasonIDs.map(seasonID => {
-      return { [seasonID]: { name: seasonID } };
+    let seasons = [];
+
+    snapshot.forEach(childSnapshot => {
+      let season = childSnapshot.val();
+      let key = childSnapshot.key;
+      seasons.push({ [key]: season });
     });
 
     dispatch({
