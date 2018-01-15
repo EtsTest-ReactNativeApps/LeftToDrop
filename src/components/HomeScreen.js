@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import TableViewScreen from './TableViewScreen';
-import { fetchFavoriteItems } from '../actions/fetch_favorites_action';
+import { fetchFavorites } from '../actions/fetch_favorites_action';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
@@ -11,8 +11,7 @@ class HomeScreen extends Component {
   });
 
   componentWillMount() {
-    console.log('COMPONENTWILLMOUNT');
-    this.props.fetchFavoriteItems('krlargo');
+    this.props.fetchFavorites('krlargo');
   }
 
   render() {
@@ -30,7 +29,7 @@ class HomeScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchFavoriteItems }, dispatch);
+  return bindActionCreators({ fetchFavorites }, dispatch);
 };
 
 export default connect(null, mapDispatchToProps)(HomeScreen);
