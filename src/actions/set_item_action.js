@@ -1,15 +1,15 @@
 import { usersRef } from '../firebase/references';
 
-export const upvoteItem = (itemID, userID) => dispatch => {
-  usersRef.child(userID + '/upvotedItemIDs').update({ [itemID]: true });
+// 'value' will either be 'true' or 'null'
+
+export const toggleUpvoteItem = (itemID, userID, value) => dispatch => {
+  usersRef.child(userID + '/upvotedItemIDs').update({ [itemID]: value });
+  // Always remove from downvotedItemIDs just in case
+  usersRef.child(userID + '/downvotedItemIDs').update({ [itemID]: null });
 };
 
-export const downvoteItem = (itemID, userID) => dispatch => {
-  usersRef.child(userID + '/downvotedItemIDs').update({ [itemID]: true });
-};
-
-// Remove itemIDs from both lists
-export const unvoteItem = (itemID, userID) => dispatch => {
-  usersRef.child(userID + '/upvotedItemIDs/' + itemID).remove();
-  usersRef.child(userID + '/downvotedItemIDs/' + itemID).remove();
+export const toggleDownvoteItem = (itemID, userID, value) => dispatch => {
+  usersRef.child(userID + '/downvotedItemIDs').update({ [itemID]: value });
+  // Always remove from upvotedItemIDs just in case
+  usersRef.child(userID + '/upvotedItemIDs').update({ [itemID]: null });
 };
