@@ -62,6 +62,10 @@ export const tableViewScreenStyles = StyleSheet.create({
 });
 
 export const itemScreenStyles = StyleSheet.create({
+  itemNameContainerView: {
+    position: 'absolute',
+    width: '100%'
+  },
   itemNameView: {
     backgroundColor: defaults.contentBackgroundColor,
     height: cellHeight,
@@ -71,11 +75,14 @@ export const itemScreenStyles = StyleSheet.create({
   itemNameText: {
     textAlign: 'left'
   },
+  scrollView: {
+    marginTop: cellHeight
+  },
   imageView: {
     aspectRatio: 1,
     backgroundColor: defaults.contentBackgroundColor,
     borderRadius: 3,
-    //flex: 2,
+    flex: 2,
     justifyContent: 'center',
     padding: 10,
     margin: 15,
@@ -99,7 +106,6 @@ export const itemScreenStyles = StyleSheet.create({
   descriptionView: {
     backgroundColor: defaults.contentBackgroundColor,
     //flex: 1,
-    //marginTop: 1,
     minHeight: 100,
     paddingHorizontal: 15,
     paddingVertical: 10
