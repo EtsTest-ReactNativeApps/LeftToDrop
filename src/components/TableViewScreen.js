@@ -56,12 +56,8 @@ class TableViewScreen extends Component {
   constructor(props) {
     super(props);
 
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
-
     this.state = {
-      dataSource: dataSource.cloneWithRows(this.props.cellData)
+      cellData: this.props.staticCellData
     };
   }
 
@@ -81,13 +77,10 @@ class TableViewScreen extends Component {
   }
 
   // Required to handle async Firebase load
+  // Called by mapStateToProps()
   componentWillReceiveProps(newProps) {
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    });
-
     this.setState({
-      dataSource: dataSource.cloneWithRows(newProps.cellData)
+      cellData: newProps.cellData
     });
   }
 
@@ -113,22 +106,25 @@ class TableViewScreen extends Component {
   }
 
   render() {
-    const { dataSource, isLoading } = this.state;
-    if (isLoading) {
+    if (this.state.cellData == null) {
       return <EmptyView message="Loading..." />;
-    } else if (dataSource.getRowCount() == 0) {
+    }
+
+    const dataSource = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    }).cloneWithRows(this.state.cellData);
+
+    if (dataSource.getRowCount() == 0) {
       return <EmptyView message="Failed to load data." />;
     } else {
       return (
-        <View>
-          <ListView
-            dataSource={this.state.dataSource}
-            enableEmptySections={true}
-            renderRow={this.renderRow.bind(this)}
-            renderSeparator={(_, rowID) => <SeparatorView key={rowID} />}
-            style={defaultStyles.containerView}
-          />
-        </View>
+        <ListView
+          dataSource={dataSource}
+          enableEmptySections={true}
+          renderRow={this.renderRow.bind(this)}
+          renderSeparator={(_, rowID) => <SeparatorView key={rowID} />}
+          style={defaultStyles.containerView}
+        />
       );
     }
   }
@@ -136,12 +132,12 @@ class TableViewScreen extends Component {
 
 mapStateToProps = (_, ownProps) => {
   // SubComponents can either have loaded 'state' or passed static 'cellData'
-  const state = ownProps.reduxState;
-  const cellData = ownProps.staticCellData;
-  if (state) {
+  const { reduxState, staticCellData } = ownProps;
+
+  if (reduxState) {
     // If passed state, construct cellData here
     return {
-      cellData: state.map(stateData => {
+      cellData: reduxState.map(stateData => {
         // When cell is tapped, id is propagated to next screen to fetch cellData
         const id = Object.keys(stateData)[0];
         const value = stateData[id];
@@ -151,13 +147,13 @@ mapStateToProps = (_, ownProps) => {
         return { id, label, screen };
       })
     };
-  } else if (cellData) {
+  } else if (staticCellData) {
     // Static data if no state is passed
-    return { cellData };
+    return { cellData: staticCellData };
   } else {
     // Temporary empty array when no cellData is available
     return {
-      cellData: []
+      cellData: null
     };
   }
 };
