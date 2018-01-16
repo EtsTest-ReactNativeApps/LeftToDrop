@@ -35,7 +35,7 @@
 
   - When extracting cellData from state:
     - State should be an array of objects:
-      [ {id: { KEY: VALUE, ... } }, ... ]
+      [ {id: { KEY: VALUE, ...} }, ...]
     - State will be parsed into cellData:
       [ {id: ID, label: LABEL, screen: SCREEN, title: TITLE}, ...]
     - 'name' field which will be used as cell label
