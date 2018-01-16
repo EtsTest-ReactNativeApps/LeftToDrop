@@ -16,7 +16,7 @@ import LoadingView from './LoadingView';
 import { favoriteItem, unfavoriteItem } from '../actions/item_action';
 import fetchItem from '../actions/fetch_item_action';
 import fetchUser from '../actions/fetch_user_action';
-import { itemScreenStyle as styles } from '../styles';
+import { defaultStyles, itemScreenStyles as styles } from '../styles';
 
 class ItemScreen extends Component {
   constructor(props) {
@@ -60,15 +60,17 @@ class ItemScreen extends Component {
     if (item) {
       var favoriteLabel = this.isFavorite() ? 'Unfavorite' : 'Favorite';
       return (
-        <View style={styles.container}>
-          <Text style={styles.itemName}>{item.name}</Text>
+        <View style={defaultStyles.containerView}>
+          <Text style={[defaultStyles.text, styles.itemNameText]}>
+            {item.name}
+          </Text>
 
           <View style={styles.imageView}>
             <Image style={styles.image} source={{ uri: item.image }} />
           </View>
 
-          <View style={styles.caption}>
-            <View style={styles.ratingContainer}>
+          <View style={styles.bottomContainerView}>
+            <View style={styles.buttonContainerView}>
               <ItemButton
                 label="Cop"
                 onPress={() => console.log('COP')}
@@ -91,8 +93,11 @@ class ItemScreen extends Component {
                 marginLeft={2.5}
               />
             </View>
-
-            <View style={styles.chat} />
+            <View style={styles.descriptionView}>
+              <Text style={[defaultStyles.text, styles.descriptionText]}>
+                {item.description}
+              </Text>
+            </View>
           </View>
         </View>
       );
