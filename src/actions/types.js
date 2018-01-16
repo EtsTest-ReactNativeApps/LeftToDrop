@@ -1,3 +1,4 @@
+export const FETCH_METADATA = 'FETCH_METADATA';
 export const FETCH_SEASONS = 'FETCH_SEASONS';
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 export const FETCH_ITEMS = 'FETCH_ITEMS';
