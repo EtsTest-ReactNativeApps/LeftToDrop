@@ -74,7 +74,7 @@ export const tableViewScreenStyles = StyleSheet.create({
     justifyContent: 'center'
   },
   separator: {
-    backgroundColor: '#EEEEEE',
+    backgroundColor: defaults.containerBackgroundColor, //'#EEEEEE',
     flex: 1,
     height: 1
   },
@@ -91,7 +91,6 @@ export const itemScreenStyles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'center'
   },
-
   imageView: {
     backgroundColor: defaults.contentBackgroundColor,
     borderRadius: 3,
@@ -106,7 +105,6 @@ export const itemScreenStyles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain'
   },
-
   bottomContainerView: {
     flex: 1,
     margin: 15,
