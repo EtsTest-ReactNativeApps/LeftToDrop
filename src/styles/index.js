@@ -8,7 +8,8 @@ const defaults = {
   titleColor: 'white',
   titleStyle: 'italic',
   textFont: 'Courier New',
-  textColor: 'black'
+  textColor: 'black',
+  separatorColor: 'lightgray'
 };
 
 export const defaultNavigationOptions = {
@@ -34,10 +35,78 @@ export const defaultStyles = StyleSheet.create({
     backgroundColor: defaults.containerBackgroundColor,
     flex: 1
   },
+  separator: {
+    backgroundColor: defaults.separatorColor,
+    height: StyleSheet.hairlineWidth
+  },
   text: {
     color: defaults.textColor,
     fontFamily: defaults.textFont,
     fontSize: 20
+  }
+});
+
+const cellHeight = 50;
+export const tableViewScreenStyles = StyleSheet.create({
+  cell: {
+    alignItems: 'flex-start',
+    backgroundColor: defaults.contentBackgroundColor,
+    flex: 1,
+    height: cellHeight,
+    justifyContent: 'center'
+  },
+  text: {
+    marginLeft: 15,
+    textAlign: 'left'
+  }
+});
+
+export const itemScreenStyles = StyleSheet.create({
+  itemNameView: {
+    backgroundColor: defaults.contentBackgroundColor,
+    height: cellHeight,
+    justifyContent: 'center',
+    paddingHorizontal: 15
+  },
+  itemNameText: {
+    textAlign: 'left'
+  },
+  imageView: {
+    aspectRatio: 1,
+    backgroundColor: defaults.contentBackgroundColor,
+    borderRadius: 3,
+    //flex: 2,
+    justifyContent: 'center',
+    padding: 10,
+    margin: 15,
+    overflow: 'hidden',
+    width: '100%'
+  },
+  image: {
+    height: '100%',
+    resizeMode: 'contain'
+  },
+  bottomContainerView: {
+    flex: 1
+  },
+  buttonContainerView: {
+    backgroundColor: defaults.contentBackgroundColor,
+    flexDirection: 'row',
+    height: 50,
+    paddingHorizontal: 15,
+    paddingVertical: 5
+  },
+  descriptionView: {
+    backgroundColor: defaults.contentBackgroundColor,
+    //flex: 1,
+    //marginTop: 1,
+    minHeight: 100,
+    paddingHorizontal: 15,
+    paddingVertical: 10
+  },
+  descriptionText: {
+    fontSize: 18,
+    textAlign: 'justify'
   }
 });
 
@@ -64,68 +133,6 @@ export const itemButtonStylesCreator = (
     }
   });
 };
-
-export const tableViewScreenStyles = StyleSheet.create({
-  cell: {
-    alignItems: 'flex-start',
-    backgroundColor: defaults.contentBackgroundColor,
-    flex: 1,
-    height: 50,
-    justifyContent: 'center'
-  },
-  separator: {
-    backgroundColor: defaults.containerBackgroundColor, //'#EEEEEE',
-    flex: 1,
-    height: 1
-  },
-  text: {
-    marginLeft: 15,
-    textAlign: 'left'
-  }
-});
-
-export const itemScreenStyles = StyleSheet.create({
-  itemNameText: {
-    margin: 15,
-    marginBottom: 0,
-    textAlign: 'left',
-    textAlignVertical: 'center'
-  },
-  imageView: {
-    backgroundColor: defaults.contentBackgroundColor,
-    borderRadius: 3,
-    flex: 2,
-    justifyContent: 'center',
-    padding: 10,
-    margin: 15,
-    marginBottom: 5,
-    overflow: 'hidden'
-  },
-  image: {
-    height: '100%',
-    resizeMode: 'contain'
-  },
-  bottomContainerView: {
-    flex: 1,
-    margin: 15,
-    marginTop: 0
-  },
-  buttonContainerView: {
-    flexDirection: 'row',
-    height: 40
-  },
-  descriptionView: {
-    backgroundColor: defaults.contentBackgroundColor,
-    borderRadius: 3,
-    flex: 1,
-    marginTop: 5,
-    padding: 5
-  },
-  descriptionText: {
-    fontSize: 18,
-    textAlign: 'justify'
-  }
-});
 
 /*
   Cell width calculation:
