@@ -18,34 +18,31 @@ class HomeScreen extends Component {
   }
 
   render() {
-    const { isLoading, metadata, navigation } = this.props;
-    if (!metadata) {
-      return <EmptyView message="Failed to load from database" />;
-    } else {
-      return (
-        <TableViewScreen
-          staticCellData={[
-            // Shows currentSeason's remainingItems
-            {
-              label: 'Left To Drop',
-              screen: 'Categories',
-              id: metadata.currentSeasonID
-            },
-            // Show's currentSeason's droppedItems
-            {
-              label: 'Previous Drops',
-              screen: 'Categories',
-              id: metadata.currentSeasonID
-            },
-            // Shows previousSeasons
-            { label: 'Seasons', screen: 'Seasons' },
-            // Shows favorites
-            { label: 'Favorites', screen: 'Favorites' }
-          ]}
-          navigation={navigation}
-        />
-      );
-    }
+    const { metadata, navigation } = this.props;
+    const id = metadata ? metadata.currentSeasonID : null;
+    return (
+      <TableViewScreen
+        staticCellData={[
+          // Shows currentSeason's remainingItems
+          {
+            label: 'Left To Drop',
+            screen: 'Categories',
+            id
+          },
+          // Show's currentSeason's droppedItems
+          {
+            label: 'Previous Drops',
+            screen: 'Categories',
+            id
+          },
+          // Shows previousSeasons
+          { label: 'Seasons', screen: 'Seasons' },
+          // Shows favorites
+          { label: 'Favorites', screen: 'Favorites' }
+        ]}
+        navigation={navigation}
+      />
+    );
   }
 }
 
