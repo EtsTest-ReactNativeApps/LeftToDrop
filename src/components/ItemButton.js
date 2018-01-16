@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
-import { itemButtonStyleCreator as styleCreator } from '../styles';
+import { itemButtonStylesCreator as stylesCreator } from '../styles';
 
 class ItemButton extends Component {
   render() {
     const { label, onPress, color, marginLeft, marginRight } = this.props;
-    const style = styleCreator(color, marginLeft, marginRight);
+    const styles = stylesCreator(color, marginLeft, marginRight);
 
     return (
-      <TouchableOpacity style={style.button} onPress={onPress}>
-        <Text style={style.text}>{label}</Text>
+      <TouchableOpacity style={styles.button} onPress={onPress}>
+        <Text style={styles.text}>{label}</Text>
       </TouchableOpacity>
     );
   }
