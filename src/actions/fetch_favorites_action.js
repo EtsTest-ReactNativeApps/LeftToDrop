@@ -19,16 +19,7 @@ export const fetchFavorites = userID => dispatch => {
       // Gather corresponding Item data
       var promise = itemsRef.child(itemID).once('value', snapshot => {
         items.push({ [snapshot.key]: snapshot.val() });
-
-        // Dispatch after last Item only
-        /*if (index == itemIDs.length - 1) {
-          dispatch({
-            type: FETCH_FAVORITE_ITEMS,
-            payload: items
-          });
-        }*/
       });
-
       promises.push(promise);
     });
 
