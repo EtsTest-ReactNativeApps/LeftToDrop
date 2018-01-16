@@ -12,7 +12,6 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import EmptyView from './EmptyView';
-import LoadingView from './LoadingView';
 import { defaultStyles, favoritesScreenStyles as styles } from '../styles';
 
 class FavoritesScreen extends Component {
@@ -44,13 +43,13 @@ class FavoritesScreen extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
-      return <LoadingScreen />;
+    if (this.props.favoriteItems === null) {
+      return <EmptyView message="Loading" />;
     }
 
     const dataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
-    }).cloneWithRows(this.props.favoriteItems || []);
+    }).cloneWithRows(this.props.favoriteItems);
 
     if (dataSource.getRowCount() == 0) {
       return <EmptyView message="No favorited items." />;
@@ -68,7 +67,9 @@ class FavoritesScreen extends Component {
   }
 }
 
-mapStateToProps = ({ favoriteItems }) => {
+// Don't deconstruct state since we need to return it in case of null favoriteItems
+mapStateToProps = state => {
+  const { favoriteItems } = state;
   if (favoriteItems) {
     return {
       favoriteItems: favoriteItems.map(item => {
@@ -80,9 +81,7 @@ mapStateToProps = ({ favoriteItems }) => {
       })
     };
   } else {
-    return {
-      favoriteItems: []
-    };
+    return state;
   }
 };
 
