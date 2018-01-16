@@ -2,31 +2,41 @@ import React, { Component } from 'react';
 import {
   Alert,
   Button,
+  ScrollView,
   Image,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
 import ItemButton from './ItemButton';
-import LoadingView from './LoadingView';
-import { favoriteItem, unfavoriteItem } from '../actions/item_action';
+import EmptyView from './EmptyView';
+import SeparatorView from './SeparatorView';
+
 import fetchItem from '../actions/fetch_item_action';
 import fetchUser from '../actions/fetch_user_action';
+import { toggleFavoriteItem } from '../actions/set_favorite_action';
+import {
+  toggleUpvoteItem,
+  toggleDownvoteItem
+} from '../actions/set_item_action';
 import { defaultStyles, itemScreenStyles as styles } from '../styles';
+import { capitalize } from '../utility';
 
 class ItemScreen extends Component {
+  itemID = this.props.navigation.state.params.id;
+
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    const itemID = this.props.navigation.state.params.id;
     const { fetchItem, fetchUser } = this.props;
-    fetchItem(itemID);
+    fetchItem(this.itemID);
     fetchUser('krlargo'); /// Temp
   }
 
@@ -36,82 +46,128 @@ class ItemScreen extends Component {
     this.props.fetchItem();
   }
 
-  isFavorite() {
-    const itemID = this.props.navigation.state.params.id;
-    return this.props.favoriteItemIDs[itemID] === true;
-  }
+  renderButtons() {
+    const {
+      item,
+      favoriteItemIDs,
+      upvotedItemIDs,
+      downvotedItemIDs,
+      toggleFavoriteItem,
+      toggleUpvoteItem,
+      toggleDownvoteItem
+    } = this.props;
 
-  toggleFavorite() {
-    const itemID = this.props.navigation.state.params.id;
-    const { unfavoriteItem, favoriteItem } = this.props;
+    const buttonData = [
+      {
+        objectArray: upvotedItemIDs,
+        action: toggleUpvoteItem,
+        label: 'Cop',
+        color: 'red',
+        marginRight: 2.5
+      },
+      {
+        objectArray: favoriteItemIDs,
+        action: toggleFavoriteItem,
+        label: 'Favorite',
+        color: 'black',
+        marginLeft: 2.5,
+        marginRight: 2.5
+      },
+      {
+        objectArray: downvotedItemIDs,
+        action: toggleDownvoteItem,
+        label: 'Drop',
+        color: 'blue',
+        marginLeft: 2.5
+      }
+    ];
 
-    if (this.isFavorite()) {
-      this.props.unfavoriteItem(itemID, 'krlargo');
-    } else {
-      this.props.favoriteItem(itemID, 'krlargo');
-    }
+    return buttonData.map(
+      ({ objectArray, action, label, color, marginLeft, marginRight }) => {
+        const value = objectArray[this.itemID] || null;
+        return (
+          <ItemButton
+            key={label}
+            onPress={action.bind(item.id, 'krlargo', value)}
+            label={value ? capitalize('Un' + label) : label}
+            color={color}
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+          />
+        );
+      }
+    );
   }
 
   render() {
-    const { navigate } = this.props.navigation;
+    const {
+      navigation,
+      item,
+      favoriteItemIDs,
+      upvotedItemIDs,
+      downvotedItemIDs,
+      toggleFavoriteItem,
+      toggleUpvoteItem,
+      toggleDownvoteItem
+    } = this.props;
+    const { navigate } = navigation;
 
-    const item = this.props.item;
+    console.log('FAVORITEITEMIDS: ' + JSON.stringify(favoriteItemIDs));
+    console.log('UPVOTEDITEMIDS: ' + JSON.stringify(upvotedItemIDs));
+    console.log('DOWNVOTEDITEMIDS: ' + JSON.stringify(downvotedItemIDs));
 
-    if (item) {
-      var favoriteLabel = this.isFavorite() ? 'Unfavorite' : 'Favorite';
+    if (
+      item == null ||
+      favoriteItemIDs == null ||
+      upvotedItemIDs == null ||
+      downvotedItemIDs == null
+    ) {
+      return <EmptyView message="Loading" />;
+    } else {
       return (
         <View style={defaultStyles.containerView}>
-          <View style={styles.itemNameView}>
-            <Text style={[defaultStyles.text, styles.itemNameText]}>
-              {item.name}
-            </Text>
-          </View>
-
-          <View style={styles.imageView}>
-            <Image style={styles.image} source={{ uri: item.image }} />
-          </View>
-
-          <View style={styles.bottomContainerView}>
-            <View style={styles.buttonContainerView}>
-              <ItemButton
-                label="Cop"
-                onPress={() => console.log('COP')}
-                color="red"
-                marginRight={2.5}
-              />
-
-              <ItemButton
-                label={favoriteLabel}
-                onPress={this.toggleFavorite.bind(this)}
-                color="black"
-                marginLeft={2.5}
-                marginRight={2.5}
-              />
-
-              <ItemButton
-                label="Drop"
-                onPress={() => console.log('DROP')}
-                color="blue"
-                marginLeft={2.5}
-              />
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.imageView}>
+              <Image style={styles.image} source={{ uri: item.image }} />
             </View>
-            <View style={defaultStyles.separator} />
-            <View style={styles.descriptionView}>
-              <Text style={[defaultStyles.text, styles.descriptionText]}>
-                {item.description || 'No description provided.'}
+
+            <View style={styles.bottomContainerView}>
+              <SeparatorView />
+              <View style={styles.buttonContainerView}>
+                {this.renderButtons.bind(this)()}
+              </View>
+              <SeparatorView />
+              <View style={styles.descriptionView}>
+                <Text style={[defaultStyles.text, styles.descriptionText]}>
+                  {item.description || 'No description provided.'}
+                </Text>
+              </View>
+              <SeparatorView />
+            </View>
+          </ScrollView>
+
+          <View style={styles.itemNameContainerView}>
+            <View style={styles.itemNameView}>
+              <Text style={[defaultStyles.text, styles.itemNameText]}>
+                {item.name}
               </Text>
             </View>
+            <SeparatorView />
           </View>
         </View>
       );
-    } else {
-      return <LoadingView />;
     }
   }
 }
 
-mapStateToProps = ({ favoriteItemIDs, item, user }) => {
-  return { favoriteItemIDs, item, user };
+mapStateToProps = ({
+  item,
+  user,
+  favoriteItemIDs,
+  upvotedItemIDs,
+  downvotedItemIDs
+}) => {
+  return { item, user, favoriteItemIDs, upvotedItemIDs, downvotedItemIDs };
 };
 
 mapDispatchToProps = dispatch => {
@@ -119,8 +175,9 @@ mapDispatchToProps = dispatch => {
     {
       fetchItem,
       fetchUser,
-      favoriteItem,
-      unfavoriteItem
+      toggleFavoriteItem,
+      toggleUpvoteItem,
+      toggleDownvoteItem
     },
     dispatch
   );
