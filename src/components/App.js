@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { createStore, applyMiddleware } from 'redux';
-import { StatusBar } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import Thunk from 'redux-thunk';
@@ -47,7 +46,6 @@ const Navigator = StackNavigator(
 
 class App extends Component {
   render() {
-    <StatusBar backgroundColor="transparent" barStyle="light-content" />;
     const store = createStore(reducers, applyMiddleware(Thunk));
     return (
       <Provider store={store}>
