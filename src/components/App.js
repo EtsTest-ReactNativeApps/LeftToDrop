@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware } from 'redux';
-import { View, StatusBar } from 'react-native';
+import { applyMiddleware, createStore } from 'redux';
+import { StatusBar, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import Thunk from 'redux-thunk';
@@ -11,6 +11,7 @@ import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
 import ItemScreen from './ItemScreen';
+
 import { defaultNavigationOptions } from '../styles';
 
 // Reducers
