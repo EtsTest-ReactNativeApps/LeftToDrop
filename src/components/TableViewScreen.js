@@ -2,31 +2,45 @@
   - Used as generic Component for all Firebase data that should be displayed in a Table/ListView
 
   - Calling Component will pass as props:
-    - fetchAction: (Optional)
-      - The corresponding ActionCreator responsible for loading Firebase data
-      - Imported inside calling Component
-    - navigation={this.props.navigation}
+    REQUIRED
+    - navigation = {this.props.navigation}
       - Used to propagate StackNavigator props to TableViewScreen
       - Unchanged throughout calling Components
-    - reduxState: (Optional)
-      - The corresponding Redux state associated with data fetch
-      - Acquired via mapStateToProps() which is connected in calling Component
-    - screen:
+    - 'screen':
       - The name of the screen that all cells will redirect to
       - e.g. All SeasonsScreen cells should redirect to CategoriesScreen onPress
-    - staticCellData: (Optional)
-      - Static data to be provided when not using dynamic Firebase data
+
+    WHEN USING DYNAMIC TABLE DATA
+    - 'fetchAction':
+      - The corresponding ActionCreator responsible for fetching data for particular screen
+      - Imported inside calling Component
+    - 'reduxState':
+      - The corresponding Redux state associated with data fetch
+      - Acquired via mapStateToProps() which is connected in calling Component
+
+    WHEN USING STATIC TABLE DATA
+    - staticCellData:
+      - A static array of cellData objects, containing the following properties:
+        REQUIRED
+        - 'screen': Destination screen for cell to navigate to onPress
+        - 'label': Text for cell's label
+
+        CONDITIONAL
+        - 'id':
+          - Used to specify parentID if required for data fetching
+          - e.g. Navigating directly to CategoriesScreen for 'Previous Drops' requires a SeasonID to load
+
+        OPTIONAL
+        - 'title': Destination screen's NavBar title; label is used by default
 
   - When extracting cellData from state:
-    - State should be an array of objects where key = object id
-    - State will be parsed into the following structure:
-        id: { name: 'NAME', ...}
+    - State should be an array of objects:
+      [ {id: { KEY: VALUE, ... } }, ... ]
+    - State will be parsed into cellData:
+      [ {id: ID, label: LABEL, screen: SCREEN, title: TITLE}, ...]
     - 'name' field which will be used as cell label
     - 'screen' field is provided via props (noted above),
 
-  - When providing staticCellData, each cell should provide:
-    - destination 'screen' field onPressRow
-    - 'label' field for cell label
 */
 
 import React, { Component } from 'react';
@@ -78,7 +92,8 @@ class TableViewScreen extends Component {
 
   onPressRow(cellData, rowID) {
     const { navigate } = this.props.navigation;
-    navigate(cellData.screen, { id: cellData.id, title: cellData.label });
+    const { id, label, screen, title } = cellData;
+    navigate(screen, { id, title: title || label });
   }
 
   renderRow(cellData, _, rowID) {
@@ -129,16 +144,32 @@ mapStateToProps = (_, ownProps) => {
   const state = ownProps.reduxState;
   const cellData = ownProps.staticCellData;
   if (state) {
+    console.log('STATE: ' + JSON.stringify(state));
+    console.log(
+      'CELLDATA: ' +
+        JSON.stringify(
+          state.map(stateData => {
+            // When cell is tapped, id is propagated to next screen to fetch cellData
+            const id = Object.keys(stateData)[0];
+            const value = stateData[id];
+            const label = value['name'];
+            const screen = ownProps.screen;
+
+            return { id, label, screen };
+          })
+        )
+    );
+
     // If passed state, construct cellData here
     return {
       cellData: state.map(stateData => {
         // When cell is tapped, id is propagated to next screen to fetch cellData
         const id = Object.keys(stateData)[0];
         const value = stateData[id];
-        const screen = ownProps.screen;
         const label = value['name'];
+        const screen = ownProps.screen;
 
-        return { id, screen, label };
+        return { id, label, screen };
       })
     };
   } else if (cellData) {

@@ -19,21 +19,22 @@ class HomeScreen extends Component {
 
   render() {
     const { metadata, navigation } = this.props;
-    const id = metadata ? metadata.currentSeasonID : null;
+    // ID is passed to TableViewScreen's cellData, then passed to CallingScreen from there
+    const currentSeasonID = metadata ? metadata.currentSeasonID : null;
     return (
       <TableViewScreen
         staticCellData={[
           // Shows currentSeason's remainingItems
           {
+            id: currentSeasonID,
             label: 'Left To Drop',
-            screen: 'Categories',
-            id
+            screen: 'Categories'
           },
           // Show's currentSeason's droppedItems
           {
+            id: currentSeasonID,
             label: 'Previous Drops',
-            screen: 'Categories',
-            id
+            screen: 'Categories'
           },
           // Shows previousSeasons
           { label: 'Seasons', screen: 'Seasons' },
