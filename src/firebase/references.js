@@ -4,6 +4,7 @@ import { firebaseConfig } from '../config/dev';
 const firebaseApp = Firebase.initializeApp(firebaseConfig);
 
 const rootRef = Firebase.database().ref();
+export const metadataRef = rootRef.child('_metadata');
 export const favoritesRef = rootRef.child('favorites');
 export const seasonsRef = rootRef.child('seasons');
 export const categoriesRef = rootRef.child('categories');
