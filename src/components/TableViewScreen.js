@@ -49,6 +49,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 import EmptyView from './EmptyView';
+import SeparatorView from './SeparatorView';
 import { defaultStyles, tableViewScreenStyles as styles } from '../styles';
 
 class TableViewScreen extends Component {
@@ -111,12 +112,6 @@ class TableViewScreen extends Component {
     );
   }
 
-  renderSeparator(sectionID, rowID, lastRow) {
-    return rowID == lastRow ? null : (
-      <View key={rowID} style={defaultStyles.separator} />
-    );
-  }
-
   render() {
     const { dataSource, isLoading } = this.state;
     if (isLoading) {
@@ -125,15 +120,15 @@ class TableViewScreen extends Component {
       return <EmptyView message="Failed to load data." />;
     } else {
       return (
-        <ListView
-          dataSource={this.state.dataSource}
-          enableEmptySections={true}
-          renderRow={this.renderRow.bind(this)}
-          renderSeparator={(sectionID, rowID) =>
-            this.renderSeparator(sectionID, rowID, dataSource.getRowCount() - 1)
-          }
-          style={defaultStyles.containerView}
-        />
+        <View>
+          <ListView
+            dataSource={this.state.dataSource}
+            enableEmptySections={true}
+            renderRow={this.renderRow.bind(this)}
+            renderSeparator={(_, rowID) => <SeparatorView key={rowID} />}
+            style={defaultStyles.containerView}
+          />
+        </View>
       );
     }
   }
@@ -144,22 +139,6 @@ mapStateToProps = (_, ownProps) => {
   const state = ownProps.reduxState;
   const cellData = ownProps.staticCellData;
   if (state) {
-    console.log('STATE: ' + JSON.stringify(state));
-    console.log(
-      'CELLDATA: ' +
-        JSON.stringify(
-          state.map(stateData => {
-            // When cell is tapped, id is propagated to next screen to fetch cellData
-            const id = Object.keys(stateData)[0];
-            const value = stateData[id];
-            const label = value['name'];
-            const screen = ownProps.screen;
-
-            return { id, label, screen };
-          })
-        )
-    );
-
     // If passed state, construct cellData here
     return {
       cellData: state.map(stateData => {
