@@ -30,10 +30,6 @@ import { capitalize } from '../utility';
 class ItemScreen extends Component {
   itemID = this.props.navigation.state.params.id;
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { fetchItem, fetchUser } = this.props;
     fetchItem(this.itemID);
@@ -84,12 +80,12 @@ class ItemScreen extends Component {
 
     return buttonData.map(
       ({ objectArray, action, label, color, marginLeft, marginRight }) => {
-        const value = objectArray[this.itemID] || null;
+        const value = objectArray[this.itemID] ? null : true;
         return (
           <ItemButton
             key={label}
-            onPress={action.bind(item.id, 'krlargo', value)}
-            label={value ? capitalize('Un' + label) : label}
+            onPress={action.bind(this, this.itemID, 'krlargo', value)}
+            label={value ? label : 'Un' + label.toLowerCase()}
             color={color}
             marginLeft={marginLeft}
             marginRight={marginRight}
@@ -101,7 +97,6 @@ class ItemScreen extends Component {
 
   render() {
     const {
-      navigation,
       item,
       favoriteItemIDs,
       upvotedItemIDs,
@@ -110,7 +105,6 @@ class ItemScreen extends Component {
       toggleUpvoteItem,
       toggleDownvoteItem
     } = this.props;
-    const { navigate } = navigation;
 
     if (
       item == null ||
