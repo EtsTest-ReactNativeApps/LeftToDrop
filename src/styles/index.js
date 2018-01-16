@@ -148,8 +148,7 @@ export const itemScreenStyles = StyleSheet.create({
   M: listViewMargin
   m: cellMargin
 
-  window.width =
-    M + m + cell.width + 2m + cell.width + 2m + cell.width + m + M
+  window.width = M + m + cell.width + 2m + cell.width + 2m + cell.width + m + M
   window.width = 2M + 6m + 3cell.width
   window.width - 2M = 3cell.width + 6m
   (window.width - 2M) / 3 = cell.width + 2m
