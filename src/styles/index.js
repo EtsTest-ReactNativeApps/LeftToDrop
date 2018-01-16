@@ -129,21 +129,62 @@ export const itemScreenStyles = StyleSheet.create({
   }
 });
 
+/*
+  Cell width calculation:
+  ,-------- window.width --------,
+  | ,--- window.width - 2M ----, |
+  | |                          | |
+  | |            ,-------------+-+- (window.width - 2M) / 3
+  | |        ,---'----,        | |
+  | |        |   ,----|--------+-+- (window.width - 2M) / 3 - 2m
+  | |        | ,-'--, |        | |
+  | |        | |    | |        | |
+       ____     ____     ____
+  |M|m|cell|m|m|cell|m|m|cell|m|M|
+  | | |____|   |____|   |____| | |
+  | '--------------------------' |
+  '------------------------------'
+
+  M: listViewMargin
+  m: cellMargin
+
+  window.width =
+    M + m + cell.width + 2m + cell.width + 2m + cell.width + m + M
+  window.width = 2M + 6m + 3cell.width
+  window.width - 2M = 3cell.width + 6m
+  (window.width - 2M) / 3 = cell.width + 2m
+  cell.width = (window.width - 2M) / 3 - 2m
+
+  if(M == m)
+    cell.width = (window.width-8m)/3
+*/
+
+// Dynamically calculate cellWidth
+const grid = {
+  windowWidth: Dimensions.get('window').width,
+  margin: 5,
+  cellMargin: 5
+};
+
+const cellWidth = () => {
+  return (grid.windowWidth - 2 * grid.margin) / 3 - 2 * grid.cellMargin;
+};
+
 export const favoritesScreenStyles = StyleSheet.create({
   listView: {
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    margin: 5
+    margin: grid.margin
   },
   cell: {
     aspectRatio: 1,
     backgroundColor: defaults.contentBackgroundColor,
     borderRadius: 3,
     justifyContent: 'center',
-    margin: 5,
+    margin: grid.cellMargin,
     overflow: 'hidden',
-    width: Dimensions.get('window').width / 3 - 5 * 2.7
+    width: cellWidth()
   },
   cellImage: {
     height: 100,
