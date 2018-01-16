@@ -95,7 +95,7 @@ class ItemScreen extends Component {
             </View>
             <View style={styles.descriptionView}>
               <Text style={[defaultStyles.text, styles.descriptionText]}>
-                {item.description}
+                {item.description || 'No description provided.'}
               </Text>
             </View>
           </View>
