@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Dimensions,
   Image,
   ListView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View
@@ -15,6 +13,7 @@ import { connect } from 'react-redux';
 
 import EmptyView from './EmptyView';
 import LoadingView from './LoadingView';
+import { defaultStyles, favoritesScreenStyles as styles } from '../styles';
 
 class FavoritesScreen extends Component {
   constructor(props) {
@@ -45,21 +44,19 @@ class FavoritesScreen extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    if (this.state.isLoading) {
+      return <LoadingScreen />;
+    }
 
     const dataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     }).cloneWithRows(this.props.favoriteItems || []);
 
-    if (isLoading) {
-      return <LoadingScreen />;
-    }
-
     if (dataSource.getRowCount() == 0) {
       return <EmptyView message="No favorited items." />;
     } else {
       return (
-        <View style={styles.container}>
+        <View style={defaultStyles.containerView}>
           <ListView
             contentContainerStyle={styles.listView}
             dataSource={dataSource}
@@ -90,41 +87,3 @@ mapStateToProps = ({ favoriteItems }) => {
 };
 
 export default connect(mapStateToProps)(FavoritesScreen);
-
-const styles = StyleSheet.create({
-  cell: {
-    aspectRatio: 1,
-    backgroundColor: 'white',
-    borderRadius: 3,
-    justifyContent: 'center',
-    margin: 5,
-    overflow: 'hidden',
-    width: Dimensions.get('window').width / 3 - 5 * 2.7
-  },
-  cellImage: {
-    height: 100,
-    resizeMode: 'contain'
-  },
-  container: {
-    alignItems: 'center',
-    backgroundColor: 'whitesmoke',
-    flex: 1
-  },
-  listView: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    margin: 5
-  },
-  text: {
-    color: 'black',
-    fontFamily: 'Courier New',
-    fontSize: 15,
-    textAlign: 'center',
-    textAlignVertical: 'center'
-  },
-  view: {
-    backgroundColor: 'white',
-    flex: 1
-  }
-});
