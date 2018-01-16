@@ -112,17 +112,13 @@ class ItemScreen extends Component {
     } = this.props;
     const { navigate } = navigation;
 
-    console.log('FAVORITEITEMIDS: ' + JSON.stringify(favoriteItemIDs));
-    console.log('UPVOTEDITEMIDS: ' + JSON.stringify(upvotedItemIDs));
-    console.log('DOWNVOTEDITEMIDS: ' + JSON.stringify(downvotedItemIDs));
-
     if (
       item == null ||
       favoriteItemIDs == null ||
       upvotedItemIDs == null ||
       downvotedItemIDs == null
     ) {
-      return <EmptyView message="Loading" />;
+      return <EmptyView message="Loading..." />;
     } else {
       return (
         <View style={defaultStyles.containerView}>
