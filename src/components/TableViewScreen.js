@@ -126,6 +126,7 @@ mapStateToProps = (_, ownProps) => {
     // If passed state, construct cellData here
     return {
       cellData: state.map(stateData => {
+        // When cell is tapped, id is propagated to next screen to fetch cellData
         const id = Object.keys(stateData)[0];
         const value = stateData[id];
         const screen = ownProps.screen;
