@@ -13,8 +13,8 @@ class HomeScreen extends Component {
   });
 
   componentWillMount() {
-    this.props.fetchMetadata();
     this.props.fetchFavorites('krlargo');
+    this.props.fetchMetadata();
   }
 
   render() {
@@ -52,7 +52,7 @@ const mapStateToProps = ({ metadata }) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchMetadata, fetchFavorites }, dispatch);
+  return bindActionCreators({ fetchFavorites, fetchMetadata }, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
