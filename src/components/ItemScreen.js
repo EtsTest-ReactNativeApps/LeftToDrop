@@ -61,9 +61,11 @@ class ItemScreen extends Component {
       var favoriteLabel = this.isFavorite() ? 'Unfavorite' : 'Favorite';
       return (
         <View style={defaultStyles.containerView}>
-          <Text style={[defaultStyles.text, styles.itemNameText]}>
-            {item.name}
-          </Text>
+          <View style={styles.itemNameView}>
+            <Text style={[defaultStyles.text, styles.itemNameText]}>
+              {item.name}
+            </Text>
+          </View>
 
           <View style={styles.imageView}>
             <Image style={styles.image} source={{ uri: item.image }} />
@@ -93,6 +95,7 @@ class ItemScreen extends Component {
                 marginLeft={2.5}
               />
             </View>
+            <View style={defaultStyles.separator} />
             <View style={styles.descriptionView}>
               <Text style={[defaultStyles.text, styles.descriptionText]}>
                 {item.description || 'No description provided.'}
