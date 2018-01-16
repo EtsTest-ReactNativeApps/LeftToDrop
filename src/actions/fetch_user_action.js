@@ -14,14 +14,13 @@ export default (fetchUser = userID => dispatch => {
     });
 
     // If snapshot[*votedItemIDs] doesn't exist, return empty object array
-
-    const upvotedItemIDsObjectArray = snapshot['upvotedItemIDs'] || {};
+    const upvotedItemIDsObjectArray = userObject['upvotedItemIDs'] || {};
     dispatch({
       type: FETCH_UPVOTED_ITEM_IDS,
       payload: upvotedItemIDsObjectArray
     });
 
-    const downvotedItemIDsObjectArray = snapshot['downvotedItemIDs'] || {};
+    const downvotedItemIDsObjectArray = userObject['downvotedItemIDs'] || {};
     dispatch({
       type: FETCH_DOWNVOTED_ITEM_IDS,
       payload: downvotedItemIDsObjectArray
