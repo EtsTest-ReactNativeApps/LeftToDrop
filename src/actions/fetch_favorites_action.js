@@ -4,16 +4,17 @@ import { FETCH_FAVORITE_ITEM_IDS, FETCH_FAVORITE_ITEMS } from './types';
 // Single function that dispatches to separate Action Creators
 export const fetchFavorites = userID => dispatch => {
   favoritesRef.child(userID).on('value', snapshot => {
-    // Passes an object array of favorite itemIDs to Redux
+    // Passes an object array of favorite itemIDs
+    // If snapshot.val() deosn't exist, return empty array
+    const favoriteItemIDsObjectArray = snapshot.val() || {};
     dispatch({
       type: FETCH_FAVORITE_ITEM_IDS,
-      payload: snapshot.val()
+      payload: favoriteItemIDsObjectArray
     });
 
-    // Passes an object array of User's favorite Items to Redux
     const items = [],
       promises = [];
-    const itemIDs = Object.keys(snapshot.val() || []);
+    const itemIDs = Object.keys(snapshot.val() || {});
 
     itemIDs.forEach((itemID, index) => {
       // Gather corresponding Item data
@@ -24,6 +25,7 @@ export const fetchFavorites = userID => dispatch => {
     });
 
     Promise.all(promises).then(values => {
+      // Passes an array of item objects [ { [item.id]: item.object }, ...]
       dispatch({
         type: FETCH_FAVORITE_ITEMS,
         payload: items
