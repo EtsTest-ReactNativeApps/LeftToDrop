@@ -81,7 +81,9 @@ export const itemScreenStyles = StyleSheet.create({
   imageView: {
     aspectRatio: 1,
     backgroundColor: defaults.contentBackgroundColor,
+    borderColor: defaults.separatorColor,
     borderRadius: 3,
+    borderWidth: StyleSheet.hairlineWidth,
     flex: 2,
     justifyContent: 'center',
     padding: 10,
@@ -190,7 +192,9 @@ export const favoritesScreenStyles = StyleSheet.create({
   cell: {
     aspectRatio: 1,
     backgroundColor: defaults.contentBackgroundColor,
+    borderColor: defaults.separatorColor,
     borderRadius: 3,
+    borderWidth: StyleSheet.hairlineWidth,
     justifyContent: 'center',
     margin: grid.cellMargin,
     overflow: 'hidden',
