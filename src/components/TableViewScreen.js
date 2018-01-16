@@ -30,17 +30,12 @@
 */
 
 import React, { Component } from 'react';
-import {
-  Button,
-  ListView,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View
-} from 'react-native';
+import { Button, ListView, Text, TouchableHighlight, View } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
+import EmptyView from './EmptyView';
+import { defaultStyles, tableViewScreenStyles as styles } from '../styles';
 
 class TableViewScreen extends Component {
   constructor(props) {
@@ -55,7 +50,7 @@ class TableViewScreen extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.fetchAction) {
       const parentID = this.props.navigation.state.params.id;
       this.props.fetchAction(parentID);
@@ -93,24 +88,33 @@ class TableViewScreen extends Component {
         onPress={this.onPressRow.bind(this, cellData, rowID)}
       >
         <View style={styles.cell}>
-          <Text style={styles.text}>{cellData.label}</Text>
+          <Text style={[defaultStyles.text, styles.text]}>
+            {cellData.label}
+          </Text>
         </View>
       </TouchableHighlight>
     );
   }
 
   render() {
-    return (
-      <ListView
-        dataSource={this.state.dataSource}
-        enableEmptySections={true}
-        renderRow={this.renderRow.bind(this)}
-        renderSeparator={(sectionID, rowID) => (
-          <View key={rowID} style={styles.separator} />
-        )}
-        style={styles.container}
-      />
-    );
+    const { dataSource, isLoading } = this.state;
+    if (isLoading) {
+      return <EmptyView message="Loading..." />;
+    } else if (dataSource.getRowCount() == 0) {
+      return <EmptyView message="Failed to load data." />;
+    } else {
+      return (
+        <ListView
+          dataSource={this.state.dataSource}
+          enableEmptySections={true}
+          renderRow={this.renderRow.bind(this)}
+          renderSeparator={(sectionID, rowID) => (
+            <View key={rowID} style={styles.separator} />
+          )}
+          style={defaultStyles.containerView}
+        />
+      );
+    }
   }
 }
 
@@ -146,27 +150,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TableViewScreen);
-
-const styles = StyleSheet.create({
-  cell: {
-    alignItems: 'flex-start',
-    flex: 1,
-    height: 50,
-    justifyContent: 'center'
-  },
-  container: {
-    backgroundColor: 'white'
-  },
-  separator: {
-    backgroundColor: '#EEEEEE',
-    flex: 1,
-    height: 1
-  },
-  text: {
-    color: 'black',
-    fontFamily: 'Courier New',
-    fontSize: 20,
-    marginLeft: 15,
-    textAlign: 'left'
-  }
-});
