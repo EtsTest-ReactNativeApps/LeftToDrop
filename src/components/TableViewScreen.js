@@ -96,6 +96,12 @@ class TableViewScreen extends Component {
     );
   }
 
+  renderSeparator(sectionID, rowID, lastRow) {
+    return rowID == lastRow ? null : (
+      <View key={rowID} style={defaultStyles.separator} />
+    );
+  }
+
   render() {
     const { dataSource, isLoading } = this.state;
     if (isLoading) {
@@ -108,9 +114,9 @@ class TableViewScreen extends Component {
           dataSource={this.state.dataSource}
           enableEmptySections={true}
           renderRow={this.renderRow.bind(this)}
-          renderSeparator={(sectionID, rowID) => (
-            <View key={rowID} style={styles.separator} />
-          )}
+          renderSeparator={(sectionID, rowID) =>
+            this.renderSeparator(sectionID, rowID, dataSource.getRowCount() - 1)
+          }
           style={defaultStyles.containerView}
         />
       );
