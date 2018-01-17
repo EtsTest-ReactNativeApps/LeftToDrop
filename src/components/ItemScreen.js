@@ -1,3 +1,4 @@
+// Modules
 import React, { Component } from 'react';
 import {
   Alert,
@@ -13,17 +14,20 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
+// Components
 import ItemButton from './ItemButton';
 import EmptyView from './EmptyView';
 import SeparatorView from './SeparatorView';
 
+// Actions
 import fetchItem from '../actions/fetch_item_action';
-import fetchUser from '../actions/fetch_user_action';
 import { toggleFavoriteItem } from '../actions/set_favorite_action';
 import {
   toggleUpvoteItem,
   toggleDownvoteItem
 } from '../actions/set_item_action';
+
+// Misc.
 import { defaultStyles, itemScreenStyles as styles } from '../styles';
 import { capitalize } from '../utility';
 
@@ -31,9 +35,8 @@ class ItemScreen extends Component {
   itemID = this.props.navigation.state.params.id;
 
   componentDidMount() {
-    const { fetchItem, fetchUser } = this.props;
+    const { fetchItem } = this.props;
     fetchItem(this.itemID);
-    fetchUser('krlargo'); /// Temp
   }
 
   // Clear Redux state on exit
@@ -42,21 +45,42 @@ class ItemScreen extends Component {
     this.props.fetchItem();
   }
 
-  renderButtons() {
+  upvoteItem(itemID, userID, value) {
     const {
-      item,
-      favoriteItemIDs,
-      upvotedItemIDs,
       downvotedItemIDs,
-      toggleFavoriteItem,
       toggleUpvoteItem,
       toggleDownvoteItem
+    } = this.props;
+
+    toggleUpvoteItem(itemID, userID, value);
+    // If previously downvoted, remove downvote
+    if (downvotedItemIDs[itemID]) {
+      toggleDownvoteItem(itemID, userID, null);
+    }
+  }
+
+  downvoteItem(itemID, userID, value) {
+    const { upvotedItemIDs, toggleUpvoteItem, toggleDownvoteItem } = this.props;
+
+    toggleDownvoteItem(itemID, userID, value);
+    // If previously upvoted, remove upvote
+    if (upvotedItemIDs[itemID]) {
+      toggleUpvoteItem(itemID, userID, null);
+    }
+  }
+
+  renderButtons() {
+    const {
+      upvotedItemIDs,
+      favoriteItemIDs,
+      downvotedItemIDs,
+      toggleFavoriteItem
     } = this.props;
 
     const buttonData = [
       {
         objectArray: upvotedItemIDs,
-        action: toggleUpvoteItem,
+        action: this.upvoteItem,
         label: 'Cop',
         color: 'red',
         marginRight: 2.5
@@ -71,7 +95,7 @@ class ItemScreen extends Component {
       },
       {
         objectArray: downvotedItemIDs,
-        action: toggleDownvoteItem,
+        action: this.downvoteItem,
         label: 'Drop',
         color: 'blue',
         marginLeft: 2.5
@@ -100,10 +124,7 @@ class ItemScreen extends Component {
       item,
       favoriteItemIDs,
       upvotedItemIDs,
-      downvotedItemIDs,
-      toggleFavoriteItem,
-      toggleUpvoteItem,
-      toggleDownvoteItem
+      downvotedItemIDs
     } = this.props;
 
     if (
@@ -164,7 +185,6 @@ mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       fetchItem,
-      fetchUser,
       toggleFavoriteItem,
       toggleUpvoteItem,
       toggleDownvoteItem
