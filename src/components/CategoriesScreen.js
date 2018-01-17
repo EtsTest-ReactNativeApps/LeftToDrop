@@ -32,11 +32,15 @@ class CategoriesScreen extends Component {
   };
 
   render() {
+    const { navigation, categories } = this.props;
+    const { title } = navigation.state.params;
+
     return (
       <TableViewScreen
         fetchAction={fetchCategories}
-        navigation={this.props.navigation}
-        reduxState={this.props.categories}
+        navigation={navigation}
+        reduxState={categories}
+        prevScreenTitle={title}
         nextScreen="Items"
         nextFilter={this.getFilterFunction()}
       />
