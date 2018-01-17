@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import EmptyView from './EmptyView';
 import TableViewScreen from './TableViewScreen';
 import { fetchFavorites } from '../actions/fetch_favorites_action';
+import {
+  fetchUpvotedItemIDs,
+  fetchDownvotedItemIDs
+} from '../actions/fetch_voted_items_action';
 import { fetchMetadata } from '../actions/fetch_metadata_action';
 
 class HomeScreen extends Component {
@@ -13,8 +17,16 @@ class HomeScreen extends Component {
   });
 
   componentWillMount() {
-    this.props.fetchFavorites('krlargo');
-    this.props.fetchMetadata();
+    const {
+      fetchMetadata,
+      fetchFavorites,
+      fetchUpvotedItemIDs,
+      fetchDownvotedItemIDs
+    } = this.props;
+    fetchMetadata();
+    fetchFavorites('krlargo');
+    fetchUpvotedItemIDs('krlargo');
+    fetchDownvotedItemIDs('krlargo');
   }
 
   render() {
@@ -52,7 +64,15 @@ const mapStateToProps = ({ metadata }) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchFavorites, fetchMetadata }, dispatch);
+  return bindActionCreators(
+    {
+      fetchMetadata,
+      fetchFavorites,
+      fetchUpvotedItemIDs,
+      fetchDownvotedItemIDs
+    },
+    dispatch
+  );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
