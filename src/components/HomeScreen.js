@@ -40,18 +40,18 @@ class HomeScreen extends Component {
           {
             id: currentSeasonID,
             label: 'Left To Drop',
-            screen: 'Categories'
+            nextScreen: 'Categories'
           },
           // Show's currentSeason's droppedItems
           {
             id: currentSeasonID,
             label: 'Previous Drops',
-            screen: 'Categories'
+            nextScreen: 'Categories'
           },
           // Shows previousSeasons
-          { label: 'Seasons', screen: 'Seasons' },
+          { label: 'Seasons', nextScreen: 'Seasons' },
           // Shows favorites
-          { label: 'Favorites', screen: 'Favorites' }
+          { label: 'Favorites', nextScreen: 'Favorites' }
         ]}
         navigation={navigation}
       />

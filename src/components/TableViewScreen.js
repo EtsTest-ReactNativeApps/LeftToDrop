@@ -6,7 +6,7 @@
     - navigation = {this.props.navigation}
       - Used to propagate StackNavigator props to TableViewScreen
       - Unchanged throughout calling Components
-    - 'screen':
+    - 'nextScreen':
       - The name of the screen that all cells will redirect to
       - e.g. All SeasonsScreen cells should redirect to CategoriesScreen onPress
 
@@ -22,7 +22,7 @@
     - staticCellData:
       - A static array of cellData objects, containing the following properties:
         REQUIRED
-        - 'screen': Destination screen for cell to navigate to onPress
+        - 'nextScreen': Destination screen for cell to navigate to onPress
         - 'label': Text for cell's label
 
         CONDITIONAL
@@ -37,9 +37,9 @@
     - State should be an array of objects:
       [ {id: { KEY: VALUE, ...} }, ...]
     - State will be parsed into cellData:
-      [ {id: ID, label: LABEL, screen: SCREEN, title: TITLE}, ...]
+      [ {id: ID, label: LABEL, nextScreen: SCREEN, title: TITLE}, ...]
     - 'name' field which will be used as cell label
-    - 'screen' field is provided via props (noted above),
+    - 'nextScreen' field is provided via props (noted above),
 
 */
 
@@ -86,8 +86,8 @@ class TableViewScreen extends Component {
 
   onPressRow(cellData, rowID) {
     const { navigate } = this.props.navigation;
-    const { id, label, screen, title } = cellData;
-    navigate(screen, { id, title: title || label });
+    const { id, label, nextScreen, title } = cellData;
+    navigate(nextScreen, { id, title: title || label });
   }
 
   renderRow(cellData, _, rowID) {
@@ -142,9 +142,9 @@ mapStateToProps = (_, ownProps) => {
         const id = Object.keys(stateData)[0];
         const value = stateData[id];
         const label = value['name'];
-        const screen = ownProps.screen;
+        const nextScreen = ownProps.nextScreen;
 
-        return { id, label, screen };
+        return { id, label, nextScreen };
       })
     };
   } else if (staticCellData) {

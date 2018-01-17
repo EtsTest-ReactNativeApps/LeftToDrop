@@ -15,7 +15,7 @@ class CategoriesScreen extends Component {
         fetchAction={fetchCategories}
         navigation={this.props.navigation}
         reduxState={this.props.categories}
-        screen="Items"
+        nextScreen="Items"
       />
     );
   }

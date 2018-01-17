@@ -11,7 +11,7 @@ class SeasonsScreen extends Component {
         fetchAction={fetchSeasons}
         navigation={this.props.navigation}
         reduxState={this.props.seasons}
-        screen="Categories"
+        nextScreen="Categories"
       />
     );
   }
