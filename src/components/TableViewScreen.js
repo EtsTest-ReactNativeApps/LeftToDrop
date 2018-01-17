@@ -85,9 +85,10 @@ class TableViewScreen extends Component {
   }
 
   onPressRow(cellData, rowID) {
+    const filter = this.props.nextFilter;
     const { navigate } = this.props.navigation;
     const { id, label, nextScreen, title } = cellData;
-    navigate(nextScreen, { id, title: title || label });
+    navigate(nextScreen, { id, title: title || label, filter });
   }
 
   renderRow(cellData, _, rowID) {
