@@ -55,9 +55,11 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
-import EmptyView from './EmptyView';
-import SeparatorView from './SeparatorView';
-import { defaultStyles, tableViewScreenStyles as styles } from '../styles';
+
+import EmptyView from '../subcomponents/EmptyView';
+import SeparatorView from '../subcomponents/SeparatorView';
+
+import { defaultStyles, tableViewScreenStyles as styles } from '../../styles';
 
 class TableViewScreen extends Component {
   constructor(props) {

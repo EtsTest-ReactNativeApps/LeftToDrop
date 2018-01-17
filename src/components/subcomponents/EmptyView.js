@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import { defaultStyles } from '../styles';
+import { defaultStyles } from '../../styles';
 
 class EmptyView extends Component {
   render() {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-
-import { itemButtonStylesCreator as stylesCreator } from '../styles';
+import { itemButtonStylesCreator as stylesCreator } from '../../styles';
 
 class ItemButton extends Component {
   render() {

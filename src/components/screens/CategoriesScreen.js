@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import TableViewScreen from './TableViewScreen';
-import fetchCategories from '../actions/fetch_categories_action';
+import fetchCategories from '../../actions/fetch_categories_action';
 
 class CategoriesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({

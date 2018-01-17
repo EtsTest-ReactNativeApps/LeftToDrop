@@ -157,6 +157,25 @@ export const itemButtonStylesCreator = (
   });
 };
 
+export const ratingBarStylesCreator = (upvoteCount, downvoteCount) => {
+  return StyleSheet.create({
+    containerView: {
+      flexDirection: 'row',
+      height: 5
+    },
+    upvoteView: {
+      backgroundColor: 'red',
+      flex: upvoteCount,
+      height: '100%'
+    },
+    downvoteView: {
+      backgroundColor: 'blue',
+      flex: downvoteCount,
+      height: '100%'
+    }
+  });
+};
+
 /*
   Cell width calculation:
   ,-------- window.width --------,

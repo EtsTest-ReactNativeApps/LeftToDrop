@@ -12,10 +12,8 @@ import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
 import ItemScreen from './ItemScreen';
 
-import { defaultNavigationOptions } from '../styles';
-
-// Reducers
-import reducers from '../reducers';
+import reducers from '../../reducers';
+import { defaultNavigationOptions } from '../../styles';
 
 const Navigator = StackNavigator(
   {

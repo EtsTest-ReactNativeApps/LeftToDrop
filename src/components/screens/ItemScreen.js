@@ -1,4 +1,3 @@
-// Modules
 import React, { Component } from 'react';
 import {
   Alert,
@@ -14,23 +13,19 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 
-// Components
-import ItemButton from './ItemButton';
-import EmptyView from './EmptyView';
-import RatingBarView from './RatingBarView';
-import SeparatorView from './SeparatorView';
+import ItemButton from '../subcomponents/ItemButton';
+import EmptyView from '../subcomponents/EmptyView';
+import RatingBarView from '../subcomponents/RatingBarView';
+import SeparatorView from '../subcomponents/SeparatorView';
 
-// Actions
-import fetchItem from '../actions/fetch_item_action';
-import { toggleFavoriteItem } from '../actions/set_favorite_action';
+import fetchItem from '../../actions/fetch_item_action';
+import { toggleFavoriteItem } from '../../actions/set_favorite_action';
 import {
   toggleUpvoteItem,
   toggleDownvoteItem
-} from '../actions/set_item_action';
+} from '../../actions/set_item_action';
 
-// Misc.
-import { defaultStyles, itemScreenStyles as styles } from '../styles';
-import { capitalize } from '../utility';
+import { defaultStyles, itemScreenStyles as styles } from '../../styles';
 
 class ItemScreen extends Component {
   itemID = this.props.navigation.state.params.id;

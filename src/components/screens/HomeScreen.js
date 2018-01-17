@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import EmptyView from './EmptyView';
+
 import TableViewScreen from './TableViewScreen';
-import { fetchFavorites } from '../actions/fetch_favorites_action';
+import EmptyView from '../subcomponents/EmptyView';
+
+import { fetchFavorites } from '../../actions/fetch_favorites_action';
 import {
   fetchUpvotedItemIDs,
   fetchDownvotedItemIDs
-} from '../actions/fetch_voted_items_action';
-import { fetchMetadata } from '../actions/fetch_metadata_action';
+} from '../../actions/fetch_voted_items_action';
+import { fetchMetadata } from '../../actions/fetch_metadata_action';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
