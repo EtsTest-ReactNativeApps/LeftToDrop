@@ -61,11 +61,7 @@ export const tableViewScreenStyles = StyleSheet.create({
     aspectRatio: 1,
     backgroundColor: defaults.contentBackgroundColor,
     borderColor: defaults.separatorColor,
-    //borderRadius: 3,
-    //borderWidth: StyleSheet.hairlineWidth,
     justifyContent: 'center',
-    //padding: 10,
-    //margin: 15,
     marginRight: 10,
     overflow: 'hidden',
     height: '90%'
@@ -75,6 +71,7 @@ export const tableViewScreenStyles = StyleSheet.create({
     resizeMode: 'contain'
   },
   text: {
+    flex: 1,
     textAlign: 'left'
   }
 });
