@@ -11,23 +11,25 @@ export default (fetchCategories = seasonID => dispatch => {
 
   // Get CategoryIDs from provided Season
   seasonsRef.child(seasonID + '/categoryIDs').on('value', seasonSnap => {
-    let categories = [];
+    let categories = [],
+      promises = [];
     const categoryIDs = Object.keys(seasonSnap.val());
 
-    //for (let index in categoryIDs) {
-    //  let categoryID = categoryIDs[index];
     categoryIDs.forEach((categoryID, index) => {
       // Gather Season's corresponding Category data
-      categoriesRef.child(categoryID).once('value', categorySnap => {
-        categories.push({ [categorySnap.key]: categorySnap.val() });
+      const promise = categoriesRef
+        .child(categoryID)
+        .once('value', categorySnap => {
+          categories.push({ [categorySnap.key]: categorySnap.val() });
+        });
+      promises.push(promise);
+    });
 
-        // Dispatch after last Category only
-        if (index == categoryIDs.length - 1) {
-          dispatch({
-            type: FETCH_CATEGORIES,
-            payload: categories
-          });
-        }
+    Promise.all(promises).then(values => {
+      // Passes an array of category objects [ { [category.id]: category.object }, ...]
+      dispatch({
+        type: FETCH_CATEGORIES,
+        payload: categories
       });
     });
   });

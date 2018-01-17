@@ -11,23 +11,23 @@ export default (fetchItems = categoryID => dispatch => {
 
   // Get ItemIDs from provided Category
   categoriesRef.child(categoryID + '/itemIDs').on('value', categorySnap => {
-    let items = [];
+    let items = [],
+      promises = [];
     const itemIDs = Object.keys(categorySnap.val());
 
-    //for (let index in itemIDs) {
-    //  let itemID = itemIDs[index];
     itemIDs.forEach((itemID, index) => {
       // Gather Category's corresponding Item data
-      itemsRef.child(itemID).once('value', itemSnap => {
+      const promise = itemsRef.child(itemID).once('value', itemSnap => {
         items.push({ [itemSnap.key]: itemSnap.val() });
+      });
+      promises.push(promise);
+    });
 
-        // Dispatch after last Item only
-        if (index == itemIDs.length - 1) {
-          dispatch({
-            type: FETCH_ITEMS,
-            payload: items
-          });
-        }
+    Promise.all(promises).then(values => {
+      // Passes an array of item objects [ { [item.id]: item.object }, ...]
+      dispatch({
+        type: FETCH_ITEMS,
+        payload: items
       });
     });
   });
