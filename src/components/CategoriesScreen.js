@@ -9,6 +9,28 @@ class CategoriesScreen extends Component {
     title: navigation.state.params.title
   });
 
+  // Determines how ItemScreen should be filtered
+  getFilterFunction = () => {
+    const { title } = this.props.navigation.state.params;
+    switch (title) {
+      case 'Left To Drop':
+        return array =>
+          array.filter(object => {
+            const key = Object.keys(object)[0];
+            return !object[key].hasOwnProperty('dropDate');
+          });
+      case 'Previous Drops':
+        return array =>
+          array.filter(object => {
+            const key = Object.keys(object)[0];
+            return object[key].hasOwnProperty('dropDate');
+          });
+      // Unfiltered
+      default:
+        return array => array;
+    }
+  };
+
   render() {
     return (
       <TableViewScreen
@@ -16,6 +38,7 @@ class CategoriesScreen extends Component {
         navigation={this.props.navigation}
         reduxState={this.props.categories}
         nextScreen="Items"
+        nextFilter={this.getFilterFunction()}
       />
     );
   }
