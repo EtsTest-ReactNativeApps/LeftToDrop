@@ -17,6 +17,7 @@ import { StackNavigator } from 'react-navigation';
 // Components
 import ItemButton from './ItemButton';
 import EmptyView from './EmptyView';
+import RatingBarView from './RatingBarView';
 import SeparatorView from './SeparatorView';
 
 // Actions
@@ -143,6 +144,11 @@ class ItemScreen extends Component {
             </View>
 
             <View style={styles.bottomContainerView}>
+              <SeparatorView />
+              <RatingBarView
+                upvoteCount={item.upvotes || 0}
+                downvoteCount={item.downvotes || 0}
+              />
               <SeparatorView />
               <View style={styles.buttonContainerView}>
                 {this.renderButtons.bind(this)()}
