@@ -21,8 +21,14 @@ class ItemsScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ items }) => {
-  return { items };
+const mapStateToProps = (state, ownProps) => {
+  const { items } = state;
+  const { filter } = ownProps.navigation.state.params;
+
+  if (!items) {
+    return state;
+  }
+  return { items: filter(items) };
 };
 
 export default connect(mapStateToProps)(ItemsScreen);
