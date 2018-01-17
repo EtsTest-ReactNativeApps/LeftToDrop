@@ -44,7 +44,7 @@ class FavoritesScreen extends Component {
 
   render() {
     if (this.props.favoriteItems === null) {
-      return <EmptyView message="Loading" />;
+      return <EmptyView message="Loading..." />;
     }
 
     const dataSource = new ListView.DataSource({
