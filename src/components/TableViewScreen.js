@@ -93,9 +93,15 @@ class TableViewScreen extends Component {
 
   onPressRow(cellData, rowID) {
     const filter = this.props.nextFilter;
+    const { prevScreenTitle } = this.props;
     const { navigate } = this.props.navigation;
     const { id, label, nextScreen, title } = cellData;
-    navigate(nextScreen, { id, title: title || label, filter });
+    navigate(nextScreen, {
+      id,
+      title: title || label,
+      filter,
+      prevScreenTitle
+    });
   }
 
   renderRow(cellData, _, rowID) {
@@ -137,7 +143,16 @@ class TableViewScreen extends Component {
     }).cloneWithRows(this.state.cellData);
 
     if (dataSource.getRowCount() == 0) {
-      return <EmptyView message="Failed to load data." />;
+      const { prevScreenTitle, title } = this.props.navigation.state.params;
+      let message = 'No data loaded.';
+
+      if (prevScreenTitle === 'Left To Drop') {
+        message = `No ${title.toLowerCase()} left to drop.`;
+      } else if (prevScreenTitle === 'Previous Drops') {
+        message = `No ${title.toLowerCase()} have dropped yet.`;
+      }
+
+      return <EmptyView message={message} />;
     } else {
       return (
         <ListView
