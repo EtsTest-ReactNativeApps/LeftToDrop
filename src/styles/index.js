@@ -49,14 +49,32 @@ export const defaultStyles = StyleSheet.create({
 const cellHeight = 50;
 export const tableViewScreenStyles = StyleSheet.create({
   cell: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: defaults.contentBackgroundColor,
     flex: 1,
+    flexDirection: 'row',
     height: cellHeight,
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
+    paddingHorizontal: 15
+  },
+  imageView: {
+    aspectRatio: 1,
+    backgroundColor: defaults.contentBackgroundColor,
+    borderColor: defaults.separatorColor,
+    //borderRadius: 3,
+    //borderWidth: StyleSheet.hairlineWidth,
+    justifyContent: 'center',
+    //padding: 10,
+    //margin: 15,
+    marginRight: 10,
+    overflow: 'hidden',
+    height: '90%'
+  },
+  image: {
+    height: '100%',
+    resizeMode: 'contain'
   },
   text: {
-    marginLeft: 15,
     textAlign: 'left'
   }
 });

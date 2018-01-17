@@ -44,7 +44,14 @@
 */
 
 import React, { Component } from 'react';
-import { Button, ListView, Text, TouchableHighlight, View } from 'react-native';
+import {
+  Button,
+  Image,
+  ListView,
+  Text,
+  TouchableHighlight,
+  View
+} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
@@ -98,6 +105,20 @@ class TableViewScreen extends Component {
         onPress={this.onPressRow.bind(this, cellData, rowID)}
       >
         <View style={styles.cell}>
+          {(() => {
+            if (cellData.image) {
+              return (
+                <View style={styles.imageView}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: cellData.image
+                    }}
+                  />
+                </View>
+              );
+            }
+          })()}
           <Text style={[defaultStyles.text, styles.text]}>
             {cellData.label}
           </Text>
@@ -143,9 +164,10 @@ mapStateToProps = (_, ownProps) => {
         const id = Object.keys(stateData)[0];
         const value = stateData[id];
         const label = value['name'];
+        const image = value['image'];
         const nextScreen = ownProps.nextScreen;
 
-        return { id, label, nextScreen };
+        return { id, label, image, nextScreen };
       })
     };
   } else if (staticCellData) {
