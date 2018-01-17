@@ -10,12 +10,15 @@ class CategoriesScreen extends Component {
   });
 
   render() {
+    const { navigation, categories } = this.props;
+    const { customProps } = navigation.state.params;
     return (
       <TableViewScreen
         fetchAction={fetchCategories}
-        navigation={this.props.navigation}
-        reduxState={this.props.categories}
+        navigation={navigation}
+        reduxState={categories}
         screen="Items"
+        customProps={customProps}
       />
     );
   }

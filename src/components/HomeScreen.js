@@ -9,6 +9,7 @@ import {
   fetchDownvotedItemIDs
 } from '../actions/fetch_voted_items_action';
 import { fetchMetadata } from '../actions/fetch_metadata_action';
+import { filterObjectArray } from '../utility';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
@@ -29,6 +30,20 @@ class HomeScreen extends Component {
     fetchDownvotedItemIDs('krlargo');
   }
 
+  filterLeftToDrop = array => {
+    return array.filter(object => {
+      const id = Object.keys(object)[0];
+      return object[id].hasOwnProperty('dropDate');
+    });
+  };
+
+  filterPreviousDrops = array => {
+    return array.filter(object => {
+      const id = Object.keys(object)[0];
+      return object[id].hasOwnProperty('dropDate');
+    });
+  };
+
   render() {
     const { metadata, navigation } = this.props;
     // ID is passed to TableViewScreen's cellData, then passed to CallingScreen from there
@@ -40,13 +55,23 @@ class HomeScreen extends Component {
           {
             id: currentSeasonID,
             label: 'Left To Drop',
-            screen: 'Categories'
+            screen: 'Categories',
+            customProps: {
+              items: {
+                filter: this.filterLeftToDrop
+              }
+            }
           },
           // Show's currentSeason's droppedItems
           {
             id: currentSeasonID,
             label: 'Previous Drops',
-            screen: 'Categories'
+            screen: 'Categories',
+            customProps: {
+              items: {
+                filter: this.filterPreviousDrops
+              }
+            }
           },
           // Shows previousSeasons
           { label: 'Seasons', screen: 'Seasons' },

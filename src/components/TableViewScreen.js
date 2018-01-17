@@ -87,7 +87,9 @@ class TableViewScreen extends Component {
   onPressRow(cellData, rowID) {
     const { navigate } = this.props.navigation;
     const { id, label, screen, title } = cellData;
-    navigate(screen, { id, title: title || label });
+    // customProps start at cellData, then are propagated to this.props
+    const customProps = cellData.customProps || this.props.customProps;
+    navigate(screen, { id, title: title || label, customProps });
   }
 
   renderRow(cellData, _, rowID) {
