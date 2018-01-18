@@ -7,7 +7,7 @@ class EmptyView extends Component {
     return (
       <View style={defaultStyles.containerView}>
         <Text
-          style={[defaultStyles.text, { marginTop: 10, textAlign: 'center' }]}
+          style={[defaultStyles.text, { marginTop: 15, textAlign: 'center' }]}
         >
           {this.props.message}
         </Text>
