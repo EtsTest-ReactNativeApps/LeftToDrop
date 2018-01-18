@@ -9,6 +9,8 @@ const defaults = {
   titleStyle: 'italic',
   textFont: 'Courier New',
   textColor: 'black',
+  fontSize: 20,
+  cellHeight: 50,
   separatorColor: 'lightgray'
 };
 
@@ -32,7 +34,7 @@ export const defaultNavigationOptions = {
 // Default styles theme
 export const defaultStyles = StyleSheet.create({
   containerView: {
-    backgroundColor: defaults.containerBackgroundColor,
+    //backgroundColor: defaults.containerBackgroundColor,
     flex: 1
   },
   separator: {
@@ -42,18 +44,19 @@ export const defaultStyles = StyleSheet.create({
   text: {
     color: defaults.textColor,
     fontFamily: defaults.textFont,
-    fontSize: 20
+    fontSize: defaults.fontSize
   }
 });
 
-const cellHeight = 50;
-export const tableViewScreenStyles = StyleSheet.create({
+export const listViewStyles = StyleSheet.create({
   cell: {
     alignItems: 'center',
     backgroundColor: defaults.contentBackgroundColor,
+    borderColor: defaults.separatorColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     flex: 1,
     flexDirection: 'row',
-    height: cellHeight,
+    height: defaults.cellHeight,
     justifyContent: 'flex-start',
     paddingHorizontal: 15
   },
@@ -73,6 +76,16 @@ export const tableViewScreenStyles = StyleSheet.create({
   text: {
     flex: 1,
     textAlign: 'left'
+  },
+  sectionHeader: {
+    borderColor: defaults.separatorColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    height: defaults.cellHeight * 4 / 5
+  },
+  spacer: {
+    borderColor: defaults.separatorColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    height: defaults.cellHeight * 3 / 5
   }
 });
 
@@ -83,7 +96,7 @@ export const itemScreenStyles = StyleSheet.create({
   },
   itemNameView: {
     backgroundColor: defaults.contentBackgroundColor,
-    height: cellHeight,
+    height: defaults.cellHeight,
     justifyContent: 'center',
     paddingHorizontal: 15
   },
@@ -91,7 +104,7 @@ export const itemScreenStyles = StyleSheet.create({
     textAlign: 'left'
   },
   scrollView: {
-    marginTop: cellHeight
+    marginTop: defaults.cellHeight
   },
   imageView: {
     aspectRatio: 1,
