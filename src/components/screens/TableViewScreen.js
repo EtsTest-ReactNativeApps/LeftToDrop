@@ -59,7 +59,7 @@ import { StackNavigator } from 'react-navigation';
 import EmptyView from '../subcomponents/EmptyView';
 import SeparatorView from '../subcomponents/SeparatorView';
 
-import { defaultStyles, tableViewScreenStyles as styles } from '../../styles';
+import { defaultStyles, listViewStyles } from '../../styles';
 
 class TableViewScreen extends Component {
   constructor(props) {
@@ -112,13 +112,13 @@ class TableViewScreen extends Component {
         underlayColor="whitesmoke"
         onPress={this.onPressRow.bind(this, cellData, rowID)}
       >
-        <View style={styles.cell}>
+        <View style={listViewStyles.cell}>
           {(() => {
             if (cellData.image) {
               return (
-                <View style={styles.imageView}>
+                <View style={listViewStyles.imageView}>
                   <Image
-                    style={styles.image}
+                    style={listViewStyles.image}
                     source={{
                       uri: cellData.image
                     }}
@@ -127,7 +127,7 @@ class TableViewScreen extends Component {
               );
             }
           })()}
-          <Text style={[defaultStyles.text, styles.text]}>
+          <Text style={[defaultStyles.text, listViewStyles.text]}>
             {cellData.label}
           </Text>
         </View>
@@ -156,12 +156,12 @@ class TableViewScreen extends Component {
 
       return <EmptyView message={message} />;
     } else {
+      // renderSeparator={(_, rowID) => <SeparatorView key={rowID} />}
       return (
         <ListView
           dataSource={dataSource}
           enableEmptySections={true}
           renderRow={this.renderRow.bind(this)}
-          renderSeparator={(_, rowID) => <SeparatorView key={rowID} />}
           style={defaultStyles.containerView}
         />
       );
