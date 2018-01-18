@@ -11,6 +11,7 @@ import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
 import ItemsScreen from './ItemsScreen';
 import ItemScreen from './ItemScreen';
+import SettingsScreen from './SettingsScreen';
 
 import reducers from '../../reducers';
 import { defaultNavigationOptions } from '../../styles';
@@ -37,7 +38,11 @@ const Navigator = StackNavigator(
     },
     Categories: { screen: CategoriesScreen },
     Items: { screen: ItemsScreen },
-    Item: { screen: ItemScreen }
+    Item: { screen: ItemScreen },
+    Settings: {
+      screen: SettingsScreen,
+      navigationOptions: { title: 'Settings' }
+    }
   },
   {
     navigationOptions: defaultNavigationOptions
