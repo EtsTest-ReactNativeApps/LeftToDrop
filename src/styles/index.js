@@ -212,9 +212,8 @@ const grid = {
   cellMargin: 5
 };
 
-const cellWidth = () => {
-  return (grid.windowWidth - 2 * grid.margin) / 3 - 2 * grid.cellMargin;
-};
+const cellWidth =
+  (grid.windowWidth - 2 * grid.margin) / 3 - 2 * grid.cellMargin;
 
 export const favoritesScreenStyles = StyleSheet.create({
   listView: {
@@ -232,10 +231,20 @@ export const favoritesScreenStyles = StyleSheet.create({
     justifyContent: 'center',
     margin: grid.cellMargin,
     overflow: 'hidden',
-    width: cellWidth()
+    width: cellWidth
   },
   cellImage: {
     height: 100,
     resizeMode: 'contain'
+  }
+});
+
+export const settingsScreenStyles = StyleSheet.create({
+  valueStyle: {
+    flex: 1,
+    textAlign: 'right'
+  },
+  deleteLabel: {
+    color: 'red'
   }
 });
