@@ -12,7 +12,7 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import EmptyView from '../subcomponents/EmptyView';
-import { defaultStyles, favoritesScreenStyles as styles } from '../../styles';
+import { defaultStyles, gridViewStyles as styles } from '../../styles';
 
 class FavoritesScreen extends Component {
   constructor(props) {

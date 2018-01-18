@@ -8,20 +8,16 @@ import {
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  defaultStyles,
-  settingsScreenStyles as styles,
-  listViewStyles
-} from '../../styles';
+import { defaultStyles, listViewStyles as styles } from '../../styles';
 
 class StaticRow extends Component {
   render() {
     const { label, value, onPressRow, labelStyle } = this.props;
     return (
       <TouchableHighlight underlayColor="whitesmoke" onPress={onPressRow}>
-        <View style={listViewStyles.cell}>
+        <View style={styles.cell}>
           <Text style={[defaultStyles.text, labelStyle]}>{label}</Text>
-          <Text style={[defaultStyles.text, styles.valueStyle]}>{value}</Text>
+          <Text style={[defaultStyles.text, styles.textDetail]}>{value}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -29,7 +25,7 @@ class StaticRow extends Component {
 }
 
 const SpacerView = () => {
-  return <View style={listViewStyles.spacer} />;
+  return <View style={styles.spacer} />;
 };
 
 class SettingsScreen extends Component {
@@ -77,7 +73,7 @@ class SettingsScreen extends Component {
         <StaticRow
           label="Delete Account"
           onPressRow={this.deleteAccountPopup}
-          labelStyle={styles.deleteLabel}
+          labelStyle={styles.textDelete}
         />
       </ScrollView>
     );

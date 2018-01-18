@@ -30,11 +30,11 @@ export const listViewStyles = StyleSheet.create({
     flex: 1,
     textAlign: 'left'
   },
-  detailText: {
+  textDetail: {
     flex: 1,
     textAlign: 'right'
   },
-  deleteText: {
+  textDelete: {
     color: 'red',
     flex: 1,
     textAlign: 'left'
