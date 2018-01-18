@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import TableViewScreen from './TableViewScreen';
-import { fetchSeasons } from '../../actions/fetch_seasons_action';
+import { fetchSeasons } from '../../actions';
 
 class SeasonsScreen extends Component {
   render() {

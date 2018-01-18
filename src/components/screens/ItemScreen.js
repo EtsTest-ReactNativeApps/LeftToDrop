@@ -18,12 +18,12 @@ import EmptyView from '../subcomponents/EmptyView';
 import RatingBarView from '../subcomponents/RatingBarView';
 import SeparatorView from '../subcomponents/SeparatorView';
 
-import { fetchItem } from '../../actions/fetch_item_action';
-import { toggleFavoriteItem } from '../../actions/set_favorite_action';
 import {
+  fetchItem,
+  toggleFavoriteItem,
   toggleUpvoteItem,
   toggleDownvoteItem
-} from '../../actions/set_item_action';
+} from '../../actions';
 
 import { defaultStyles, itemScreenStyles as styles } from '../../styles';
 

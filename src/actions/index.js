@@ -9,5 +9,5 @@ export {
   fetchUpvotedItemIDs,
   fetchDownvotedItemIDs
 } from './fetch_voted_items_action';
-export { setFavorite } from './set_favorite_action';
-export { setItemUpvote, setItemDownvote } from './set_item_action';
+export { toggleFavoriteItem } from './set_favorite_action';
+export { toggleUpvoteItem, toggleDownvoteItem } from './set_item_action';

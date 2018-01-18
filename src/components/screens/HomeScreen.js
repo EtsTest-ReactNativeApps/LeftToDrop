@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import TableViewScreen from './TableViewScreen';
 import EmptyView from '../subcomponents/EmptyView';
 
-import { fetchMetadata } from '../../actions/fetch_metadata_action';
-import { fetchUser } from '../../actions/fetch_user_action';
+import { fetchMetadata, fetchUser } from '../../actions';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
