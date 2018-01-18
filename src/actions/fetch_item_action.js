@@ -1,7 +1,7 @@
 import { itemsRef } from '../firebase/references';
 import { FETCH_ITEM } from './types';
 
-export default (fetchItem = itemID => dispatch => {
+export const fetchItem = itemID => dispatch => {
   if (!itemID) {
     return {
       type: FETCH_ITEM,
@@ -15,4 +15,4 @@ export default (fetchItem = itemID => dispatch => {
       payload: snapshot.val()
     });
   });
-});
+};

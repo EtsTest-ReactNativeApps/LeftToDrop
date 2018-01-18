@@ -1,7 +1,7 @@
 import { seasonsRef, categoriesRef } from '../firebase/references';
 import { FETCH_CATEGORIES } from './types';
 
-export default (fetchCategories = seasonID => dispatch => {
+export const fetchCategories = seasonID => dispatch => {
   if (!seasonID) {
     return {
       type: FETCH_CATEGORIES,
@@ -33,4 +33,4 @@ export default (fetchCategories = seasonID => dispatch => {
       });
     });
   });
-});
+};

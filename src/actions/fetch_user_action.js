@@ -7,7 +7,7 @@ import {
 } from './fetch_voted_items_action';
 import { FETCH_USER } from './types';
 
-export default (fetchUser = userID => dispatch => {
+export const fetchUser = userID => dispatch => {
   usersRef.child(userID).on('value', snapshot => {
     const userObject = snapshot.val() || {};
     userObject['id'] = snapshot.key;
@@ -27,4 +27,4 @@ export default (fetchUser = userID => dispatch => {
   for (action in chainedActions) {
     chainedActions[action](userID);
   }
-});
+};

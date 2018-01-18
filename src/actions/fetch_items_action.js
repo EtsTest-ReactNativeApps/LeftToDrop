@@ -1,7 +1,7 @@
 import { categoriesRef, itemsRef } from '../firebase/references';
 import { FETCH_ITEMS } from './types';
 
-export default (fetchItems = categoryID => dispatch => {
+export const fetchItems = categoryID => dispatch => {
   if (!categoryID) {
     return {
       type: FETCH_ITEMS,
@@ -31,4 +31,4 @@ export default (fetchItems = categoryID => dispatch => {
       });
     });
   });
-});
+};

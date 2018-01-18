@@ -18,7 +18,7 @@ import EmptyView from '../subcomponents/EmptyView';
 import RatingBarView from '../subcomponents/RatingBarView';
 import SeparatorView from '../subcomponents/SeparatorView';
 
-import fetchItem from '../../actions/fetch_item_action';
+import { fetchItem } from '../../actions/fetch_item_action';
 import { toggleFavoriteItem } from '../../actions/set_favorite_action';
 import {
   toggleUpvoteItem,
