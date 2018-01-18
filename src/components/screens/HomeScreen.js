@@ -5,12 +5,8 @@ import { connect } from 'react-redux';
 import TableViewScreen from './TableViewScreen';
 import EmptyView from '../subcomponents/EmptyView';
 
-import { fetchFavorites } from '../../actions/fetch_favorites_action';
-import {
-  fetchUpvotedItemIDs,
-  fetchDownvotedItemIDs
-} from '../../actions/fetch_voted_items_action';
 import { fetchMetadata } from '../../actions/fetch_metadata_action';
+import fetchUser from '../../actions/fetch_user_action';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
@@ -19,16 +15,9 @@ class HomeScreen extends Component {
   });
 
   componentWillMount() {
-    const {
-      fetchMetadata,
-      fetchFavorites,
-      fetchUpvotedItemIDs,
-      fetchDownvotedItemIDs
-    } = this.props;
+    const { fetchMetadata, fetchUser } = this.props;
     fetchMetadata();
-    fetchFavorites('krlargo');
-    fetchUpvotedItemIDs('krlargo');
-    fetchDownvotedItemIDs('krlargo');
+    fetchUser('krlargo');
   }
 
   render() {
@@ -38,22 +27,19 @@ class HomeScreen extends Component {
     return (
       <TableViewScreen
         staticCellData={[
-          // Shows currentSeason's remainingItems
           {
             id: currentSeasonID,
             label: 'Left To Drop',
             nextScreen: 'Categories'
           },
-          // Show's currentSeason's droppedItems
           {
             id: currentSeasonID,
             label: 'Previous Drops',
             nextScreen: 'Categories'
           },
-          // Shows previousSeasons
           { label: 'Seasons', nextScreen: 'Seasons' },
-          // Shows favorites
-          { label: 'Favorites', nextScreen: 'Favorites' }
+          { label: 'Favorites', nextScreen: 'Favorites' },
+          { label: 'Settings', nextScreen: 'Settings' }
         ]}
         navigation={navigation}
       />
@@ -69,9 +55,7 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       fetchMetadata,
-      fetchFavorites,
-      fetchUpvotedItemIDs,
-      fetchDownvotedItemIDs
+      fetchUser
     },
     dispatch
   );
