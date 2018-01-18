@@ -104,7 +104,7 @@ class ItemScreen extends Component {
         return (
           <ItemButton
             key={label}
-            onPress={action.bind(this, this.itemID, 'krlargo', value)}
+            onPress={action.bind(this, this.itemID, this.props.user.id, value)}
             label={value ? label : 'Un' + label.toLowerCase()}
             color={color}
             marginLeft={marginLeft}
