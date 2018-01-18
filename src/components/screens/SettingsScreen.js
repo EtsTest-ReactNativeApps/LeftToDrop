@@ -9,6 +9,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SeparatorView from '../subcomponents/SeparatorView';
+import { defaultStyles, settingsScreenStyles as styles } from '../../styles';
 
 class StaticRow extends Component {
   render() {
@@ -94,9 +95,3 @@ mapDispatchToProps => dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);
-
-const styles = StyleSheet.create({
-  deleteLabel: {
-    color: 'red'
-  }
-});
