@@ -1,4 +1,19 @@
-import { rootRef, itemsRef } from '../firebase/references';
+import {
+  rootRef,
+  itemsRef,
+  upvotedItemsRef,
+  donwvotedItemsRef
+} from '../firebase/references';
+
+export const toggleUpvoteItem = (itemID, userID, value) => dispatch => {
+  upvotedItemsRef.child(userID).update({ [itemID]: value });
+  //toggleItemVote(itemID, userID, value, 'upvotes', 'upvotedItems');
+};
+
+export const toggleDownvoteItem = (itemID, userID, value) => dispatch => {
+  downvotedItemsRef.child(userID).update({ [itemID]: value });
+  //toggleItemVote(itemID, userID, value, 'downvotes', 'downvotedItems');
+};
 
 const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
   itemsRef.child(itemID + '/' + itemSubpath).transaction(oldCount => {
@@ -17,12 +32,4 @@ const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
       }
     });
   });
-};
-
-export const toggleUpvoteItem = (itemID, userID, value) => dispatch => {
-  toggleItemVote(itemID, userID, value, 'upvotes', 'upvotedItems');
-};
-
-export const toggleDownvoteItem = (itemID, userID, value) => dispatch => {
-  toggleItemVote(itemID, userID, value, 'downvotes', 'downvotedItems');
 };
