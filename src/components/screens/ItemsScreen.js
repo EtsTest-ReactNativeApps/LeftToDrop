@@ -10,12 +10,14 @@ class ItemsScreen extends Component {
   });
 
   render() {
+    const { navigation, items, emptyTableMessageFunction } = this.props;
     return (
       <TableViewScreen
         fetchAction={fetchItems}
-        navigation={this.props.navigation}
-        reduxState={this.props.items}
+        navigation={navigation}
+        reduxState={items}
         nextScreen="Item"
+        emptyTableMessageFunction={emptyTableMessageFunction}
       />
     );
   }
@@ -23,12 +25,20 @@ class ItemsScreen extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { items } = state;
-  const { filter } = ownProps.navigation.state.params;
+  const { nextScreenProps } = ownProps.navigation.state.params;
 
   if (!items) {
     return state;
+  } else if (nextScreenProps) {
+    const { filter, emptyTableMessageFunction } = nextScreenProps;
+
+    return {
+      items: filter ? filter(items) : items,
+      emptyTableMessageFunction: emptyTableMessageFunction
+    };
+  } else {
+    return { items };
   }
-  return { items: filter(items) };
 };
 
 export default connect(mapStateToProps)(ItemsScreen);
