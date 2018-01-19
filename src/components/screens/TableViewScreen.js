@@ -13,10 +13,10 @@
     WHEN USING DYNAMIC TABLE DATA
     - 'fetchAction':
       - The corresponding ActionCreator responsible for fetching data for particular screen
-      - Imported inside calling Component
+      - Imported inside calling Component's mapDispatchToProps()
     - 'reduxState':
       - The corresponding Redux state associated with data fetch
-      - Acquired via mapStateToProps() which is connected in calling Component
+      - Propagated from calling Component's mapStateToProps()
 
     WHEN USING STATIC TABLE DATA
     - staticCellData:
@@ -66,7 +66,6 @@ class TableViewScreen extends Component {
     super(props);
 
     this.state = {
-      //cellData: this.props.staticCellData
       cellData: this.extractStateFromProps(props)
     };
   }
@@ -78,7 +77,7 @@ class TableViewScreen extends Component {
     }
   }
 
-  // Clear Redux state on exit
+  // Clear Redux state on exit; this might not even be doing anything
   componentWillUnmount() {
     // Action Creators are defined to clear state when passed a null parameter
     if (this.props.fetchAction) {
@@ -86,11 +85,9 @@ class TableViewScreen extends Component {
     }
   }
 
-  // Required to handle async Firebase load
-  // Called by mapStateToProps()
+  // Required to handle async data fetching
   componentWillReceiveProps(props) {
     this.setState({
-      //cellData: newProps.cellData
       cellData: this.extractStateFromProps(props)
     });
   }
