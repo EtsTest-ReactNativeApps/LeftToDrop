@@ -17,13 +17,13 @@ class CategoriesScreen extends Component {
         return array =>
           array.filter(object => {
             const key = Object.keys(object)[0];
-            return !object[key].hasOwnProperty('dropDate');
+            return !object[key].hasOwnProperty('dropdate');
           });
       case 'Previous Drops':
         return array =>
           array.filter(object => {
             const key = Object.keys(object)[0];
-            return object[key].hasOwnProperty('dropDate');
+            return object[key].hasOwnProperty('dropdate');
           });
       // Unfiltered
       default:
