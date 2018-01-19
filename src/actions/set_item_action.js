@@ -2,7 +2,7 @@ import {
   rootRef,
   itemsRef,
   upvotedItemsRef,
-  donwvotedItemsRef
+  downvotedItemsRef
 } from '../firebase/references';
 
 export const toggleUpvoteItem = (itemID, userID, value) => dispatch => {
@@ -15,7 +15,7 @@ export const toggleDownvoteItem = (itemID, userID, value) => dispatch => {
   //toggleItemVote(itemID, userID, value, 'downvotes', 'downvotedItems');
 };
 
-const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
+/*const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
   itemsRef.child(itemID + '/' + itemSubpath).transaction(oldCount => {
     // Generate incremented/decremented value
     const newCount = (oldCount || 0) + (value ? 1 : -1);
@@ -33,3 +33,4 @@ const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
     });
   });
 };
+*/
