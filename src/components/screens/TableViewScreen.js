@@ -66,7 +66,7 @@ class TableViewScreen extends Component {
     super(props);
 
     this.state = {
-      cellData: this.extractStateFromProps(props)
+      cellData: this.extractCellDataFromProps(props)
     };
   }
 
@@ -88,11 +88,11 @@ class TableViewScreen extends Component {
   // Required to handle async data fetching
   componentWillReceiveProps(props) {
     this.setState({
-      cellData: this.extractStateFromProps(props)
+      cellData: this.extractCellDataFromProps(props)
     });
   }
 
-  extractStateFromProps(props) {
+  extractCellDataFromProps(props) {
     const { reduxState, staticCellData } = props;
 
     if (reduxState) {
@@ -110,21 +110,19 @@ class TableViewScreen extends Component {
 
       return dynamicCellData;
     } else if (staticCellData) {
-      // Static data if no state is passed
       return staticCellData;
+    } else {
+      return [];
     }
   }
 
   onPressRow(cellData, rowID) {
-    const filter = this.props.nextFilter;
-    const { prevScreenTitle } = this.props;
-    const { navigate } = this.props.navigation;
+    const { nextScreenProps, navigation } = this.props;
     const { id, label, nextScreen, title } = cellData;
-    navigate(nextScreen, {
+    navigation.navigate(nextScreen, {
       id,
       title: title || label,
-      filter,
-      prevScreenTitle
+      nextScreenProps
     });
   }
 
@@ -167,18 +165,14 @@ class TableViewScreen extends Component {
     }).cloneWithRows(this.state.cellData);
 
     if (dataSource.getRowCount() == 0) {
-      const { prevScreenTitle, title } = this.props.navigation.state.params;
-      let message = 'No data loaded.';
-
-      if (prevScreenTitle === 'Left To Drop') {
-        message = `No ${title.toLowerCase()} left to drop.`;
-      } else if (prevScreenTitle === 'Previous Drops') {
-        message = `No ${title.toLowerCase()} have dropped yet.`;
-      }
+      const { navigation, emptyTableMessageFunction } = this.props;
+      const { title } = navigation.state.params;
+      const message = emptyTableMessageFunction
+        ? emptyTableMessageFunction(title)
+        : 'No data loaded.';
 
       return <EmptyView message={message} />;
     } else {
-      // renderSeparator={(_, rowID) => <SeparatorView key={rowID} />}
       return (
         <ListView
           dataSource={dataSource}
