@@ -9,25 +9,36 @@ class CategoriesScreen extends Component {
     title: navigation.state.params.title
   });
 
-  // Determines how ItemScreen should be filtered
-  getFilterFunction = () => {
-    const { title } = this.props.navigation.state.params;
+  emptyTableMessageFunction = () => {
+    return this.props.navigation.state.params.id
+      ? null
+      : 'Supreme is currently off-season. Check back later.';
+  };
+
+  // Propagated in TableViewScreen's onPress()
+  nextScreenProps = title => {
+    // Pass nextScreenProps based on currentScreen
     switch (title) {
       case 'Left To Drop':
-        return array =>
-          array.filter(object => {
-            const key = Object.keys(object)[0];
-            return !object[key].hasOwnProperty('dropdate');
-          });
+        return {
+          filter: array =>
+            array.filter(object => {
+              const key = Object.keys(object)[0];
+              return !object[key].hasOwnProperty('dropdate');
+            }),
+          emptyTableMessageFunction: nextTitle =>
+            `No ${nextTitle.toLowerCase()} left to drop.`
+        };
       case 'Previous Drops':
-        return array =>
-          array.filter(object => {
-            const key = Object.keys(object)[0];
-            return object[key].hasOwnProperty('dropdate');
-          });
-      // Unfiltered
-      default:
-        return array => array;
+        return {
+          filter: array =>
+            array.filter(object => {
+              const key = Object.keys(object)[0];
+              return object[key].hasOwnProperty('dropdate');
+            }),
+          emptyTableMessageFunction: nextTitle =>
+            `No ${nextTitle.toLowerCase()} have dropped.`
+        };
     }
   };
 
@@ -40,9 +51,9 @@ class CategoriesScreen extends Component {
         fetchAction={fetchCategories}
         navigation={navigation}
         reduxState={categories}
-        prevScreenTitle={title}
         nextScreen="Items"
-        nextFilter={this.getFilterFunction()}
+        emptyTableMessageFunction={this.emptyTableMessageFunction}
+        nextScreenProps={this.nextScreenProps(title)}
       />
     );
   }
