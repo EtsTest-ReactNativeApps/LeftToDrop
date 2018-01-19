@@ -66,7 +66,8 @@ class TableViewScreen extends Component {
     super(props);
 
     this.state = {
-      cellData: this.props.staticCellData
+      //cellData: this.props.staticCellData
+      cellData: this.extractStateFromProps(props)
     };
   }
 
@@ -87,10 +88,34 @@ class TableViewScreen extends Component {
 
   // Required to handle async Firebase load
   // Called by mapStateToProps()
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(props) {
     this.setState({
-      cellData: newProps.cellData
+      //cellData: newProps.cellData
+      cellData: this.extractStateFromProps(props)
     });
+  }
+
+  extractStateFromProps(props) {
+    const { reduxState, staticCellData } = props;
+
+    if (reduxState) {
+      // If passed state, construct cellData here
+      const dynamicCellData = reduxState.map(stateData => {
+        // When cell is tapped, id is propagated to next screen to fetch cellData
+        const id = Object.keys(stateData)[0];
+        const value = stateData[id];
+        const label = value['name'];
+        const image = value['image'];
+        const nextScreen = props.nextScreen;
+
+        return { id, label, image, nextScreen };
+      });
+
+      return dynamicCellData;
+    } else if (staticCellData) {
+      // Static data if no state is passed
+      return staticCellData;
+    }
   }
 
   onPressRow(cellData, rowID) {
@@ -169,37 +194,8 @@ class TableViewScreen extends Component {
   }
 }
 
-mapStateToProps = (_, ownProps) => {
-  // SubComponents can either have loaded 'state' or passed static 'cellData'
-  const { reduxState, staticCellData } = ownProps;
-
-  if (reduxState) {
-    // If passed state, construct cellData here
-    return {
-      cellData: reduxState.map(stateData => {
-        // When cell is tapped, id is propagated to next screen to fetch cellData
-        const id = Object.keys(stateData)[0];
-        const value = stateData[id];
-        const label = value['name'];
-        const image = value['image'];
-        const nextScreen = ownProps.nextScreen;
-
-        return { id, label, image, nextScreen };
-      })
-    };
-  } else if (staticCellData) {
-    // Static data if no state is passed
-    return { cellData: staticCellData };
-  } else {
-    // Temporary empty array when no cellData is available
-    return {
-      cellData: null
-    };
-  }
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => {
   return bindActionCreators({ fetchAction: ownProps.fetchAction }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableViewScreen);
+export default connect(null, mapDispatchToProps)(TableViewScreen);
