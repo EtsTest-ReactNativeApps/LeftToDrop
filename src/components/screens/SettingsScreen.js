@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,12 +9,8 @@ import {
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ModalView } from '../subcomponents/ModalView';
-import {
-  defaultStyles,
-  listViewStyles as styles,
-  modalViewStyles
-} from '../../styles';
+import ModalView from '../subcomponents/ModalView';
+import { defaultStyles, listViewStyles as styles } from '../../styles';
 
 class StaticRow extends Component {
   render() {
@@ -39,106 +34,110 @@ class SettingsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalVisible: false,
-      text: ''
+      contents: {
+        description: 'DESCRIPTION',
+        value: 'VALUE',
+        submitLabel: 'LABEL'
+      },
+      modalVisibility: false
     };
   }
 
-  changeUsernamePopup() {
+  presentModalAlert(description, value, cancelLabel, submitLabel = 'Save') {
+    const contents = {
+      description,
+      value,
+      cancelLabel,
+      submitLabel
+    };
     this.setState({
-      modalVisible: true,
-      text: 'CHANGEUSERNAMEPOPUP'
-    });
-  }
-
-  changeEmailPopup() {
-    this.setState({
-      modalVisible: true,
-      text: 'CHANGEEMAILPOPUP'
-    });
-  }
-
-  changePasswordPopup() {
-    this.setState({
-      modalVisible: true,
-      text: 'CHANGEPASSWORDPOPUP'
+      contents,
+      modalVisibility: true
     });
   }
 
   aboutPopup() {
-    this.setState({
-      modalVisible: true,
-      text: 'ABOUTPOPUP'
-    });
-  }
-
-  deleteAccountPopup() {
-    this.setState({
-      modalVisible: true,
-      text: 'DELETEACCOUNTPOPUP'
-    });
+    console.log('PRESENTABOUTPOPOUP');
   }
 
   closeModal() {
     this.setState({
-      modalVisible: false
+      modalVisibility: false
     });
   }
 
   render() {
+    const { contents, modalVisibility } = this.state;
+
     return (
       <ScrollView style={defaultStyles.containerView}>
-        <Modal
-          animationType={'fade'}
-          onRequestClose={() => this.closeModal()}
-          transparent={true}
-          visible={this.state.modalVisible}
-        >
-          <TouchableHighlight
-            style={modalViewStyles.modalContainerView}
-            onPress={() => this.closeModal()}
-          >
-            <View>
-              <View style={{ flex: 1 }} />
-              <TouchableHighlight
-                style={modalViewStyles.modalView}
-                onPress={null}
-              >
-                <View>
-                  <Text>{this.state.text}</Text>
-                  <Button
-                    onPress={() => this.closeModal()}
-                    title="Close modal"
-                  />
-                </View>
-              </TouchableHighlight>
-              <View style={{ flex: 2 }} />
-            </View>
-          </TouchableHighlight>
-        </Modal>
+        <ModalView
+          closeModal={() => this.closeModal.bind(this)()}
+          contents={contents}
+          visibility={modalVisibility}
+        />
 
         <StaticRow
           label="Username"
-          value={this.props.user.username || ''}
-          onPressRow={() => this.changeUsernamePopup()}
+          value={this.props.user.username}
+          onPressRow={() =>
+            this.presentModalAlert(
+              'Edit your username.',
+              this.props.user.username,
+              'Cancel',
+              'Save'
+            )
+          }
         />
         <StaticRow
           label="Email"
-          value={this.props.user.email || ''}
-          onPressRow={() => this.changeEmailPopup()}
+          value={this.props.user.email}
+          onPressRow={() =>
+            this.presentModalAlert(
+              'Edit your email address.',
+              this.props.user.email,
+              'Cancel',
+              'Save'
+            )
+          }
         />
         <StaticRow
           label="Password"
           value="*******"
-          onPressRow={() => this.changePasswordPopup()}
+          onPressRow={() =>
+            this.presentModalAlert(
+              'Edit your password',
+              '*******',
+              'Cancel',
+              'Save'
+            )
+          }
         />
         <SpacerView />
-        <StaticRow label="About" onPressRow={() => this.navigateToAbout()} />
+        <StaticRow
+          label="Contact"
+          onPressRow={() =>
+            this.presentModalAlert(
+              "If you've got any questions, run into any bugs, or have any suggestions, please send an email to kevinlargoapps@gmail.com",
+              null,
+              null,
+              'Dismiss'
+            )
+          }
+        />
         <SpacerView />
         <StaticRow
           label="Delete Account"
           onPressRow={() => this.deleteAccountPopup()}
           labelStyle={styles.textDelete}
+          onPressRow={() =>
+            this.presentModalAlert(
+              "Are you sure you'd like to permanently delete your account?",
+              null,
+              'Cancel',
+              'Delete'
+            )
+          }
         />
       </ScrollView>
     );
