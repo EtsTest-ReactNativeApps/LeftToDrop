@@ -41,7 +41,7 @@ export const itemScreenStyles = StyleSheet.create({
   buttonContainerView: {
     backgroundColor: defaults.contentBackgroundColor,
     flexDirection: 'row',
-    height: 50,
+    //    height: 50,
     paddingHorizontal: 15,
     paddingVertical: 5
   },
@@ -57,30 +57,6 @@ export const itemScreenStyles = StyleSheet.create({
     textAlign: 'justify'
   }
 });
-
-export const itemButtonStylesCreator = (
-  color,
-  marginLeft = 0,
-  marginRight = 0
-) => {
-  return StyleSheet.create({
-    button: {
-      backgroundColor: color,
-      borderRadius: 3,
-      flex: 1,
-      justifyContent: 'center',
-      marginLeft: marginLeft,
-      marginRight: marginRight
-    },
-    text: {
-      color: defaults.titleColor,
-      fontFamily: defaults.titleFont,
-      fontStyle: defaults.titleStyle,
-      fontSize: 20,
-      textAlign: 'center'
-    }
-  });
-};
 
 export const ratingBarStylesCreator = (upvoteCount, downvoteCount) => {
   return StyleSheet.create({
