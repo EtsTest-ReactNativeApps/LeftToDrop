@@ -94,17 +94,27 @@ class SettingsScreen extends Component {
           transparent={true}
           visible={this.state.modalVisible}
         >
-          <View
+          <TouchableHighlight
             style={modalViewStyles.modalContainerView}
             onPress={() => this.closeModal()}
           >
-            <View style={{ flex: 1, flexDirection: 'column' }} />
-            <View style={modalViewStyles.modalView}>
-              <Text>{this.state.text}</Text>
-              <Button onPress={() => this.closeModal()} title="Close modal" />
+            <View>
+              <View style={{ flex: 1 }} />
+              <TouchableHighlight
+                style={modalViewStyles.modalView}
+                onPress={null}
+              >
+                <View>
+                  <Text>{this.state.text}</Text>
+                  <Button
+                    onPress={() => this.closeModal()}
+                    title="Close modal"
+                  />
+                </View>
+              </TouchableHighlight>
+              <View style={{ flex: 2 }} />
             </View>
-            <View style={{ flex: 2, flexDirection: 'column' }} />
-          </View>
+          </TouchableHighlight>
         </Modal>
 
         <StaticRow
@@ -115,7 +125,7 @@ class SettingsScreen extends Component {
         <StaticRow
           label="Email"
           value={this.props.user.email || ''}
-          onPressRow={() => this.changeUsernamePopup()}
+          onPressRow={() => this.changeEmailPopup()}
         />
         <StaticRow
           label="Password"
