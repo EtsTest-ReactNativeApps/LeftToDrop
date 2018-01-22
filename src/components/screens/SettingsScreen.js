@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {
+  Button,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,7 +10,12 @@ import {
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { defaultStyles, listViewStyles as styles } from '../../styles';
+import { ModalView } from '../subcomponents/ModalView';
+import {
+  defaultStyles,
+  listViewStyles as styles,
+  modalViewStyles
+} from '../../styles';
 
 class StaticRow extends Component {
   render() {
@@ -29,50 +36,98 @@ const SpacerView = () => {
 };
 
 class SettingsScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      text: ''
+    };
+  }
+
   changeUsernamePopup() {
-    console.log('Present change username popup');
+    this.setState({
+      modalVisible: true,
+      text: 'CHANGEUSERNAMEPOPUP'
+    });
   }
 
   changeEmailPopup() {
-    console.log('Present change email popup');
+    this.setState({
+      modalVisible: true,
+      text: 'CHANGEEMAILPOPUP'
+    });
   }
 
   changePasswordPopup() {
-    console.log('Present change password popup');
+    this.setState({
+      modalVisible: true,
+      text: 'CHANGEPASSWORDPOPUP'
+    });
   }
 
   aboutPopup() {
-    console.log('Present About popup');
+    this.setState({
+      modalVisible: true,
+      text: 'ABOUTPOPUP'
+    });
   }
 
   deleteAccountPopup() {
-    console.log('Present delete account popup');
+    this.setState({
+      modalVisible: true,
+      text: 'DELETEACCOUNTPOPUP'
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      modalVisible: false
+    });
   }
 
   render() {
     return (
       <ScrollView style={defaultStyles.containerView}>
+        <Modal
+          animationType={'fade'}
+          onRequestClose={() => this.closeModal()}
+          transparent={true}
+          visible={this.state.modalVisible}
+        >
+          <View
+            style={modalViewStyles.modalContainerView}
+            onPress={() => this.closeModal()}
+          >
+            <View style={{ flex: 1, flexDirection: 'column' }} />
+            <View style={modalViewStyles.modalView}>
+              <Text>{this.state.text}</Text>
+              <Button onPress={() => this.closeModal()} title="Close modal" />
+            </View>
+            <View style={{ flex: 2, flexDirection: 'column' }} />
+          </View>
+        </Modal>
+
         <StaticRow
           label="Username"
-          value={this.props.user.username}
-          onPressRow={this.changeUsernamePopup}
+          value={this.props.user.username || ''}
+          onPressRow={() => this.changeUsernamePopup()}
         />
         <StaticRow
           label="Email"
-          value={this.props.user.email}
-          onPressRow={this.changeUsernamePopup}
+          value={this.props.user.email || ''}
+          onPressRow={() => this.changeUsernamePopup()}
         />
         <StaticRow
           label="Password"
           value="*******"
-          onPressRow={this.changePasswordPopup}
+          onPressRow={() => this.changePasswordPopup()}
         />
         <SpacerView />
-        <StaticRow label="About" onPressRow={this.navigateToAbout} />
+        <StaticRow label="About" onPressRow={() => this.navigateToAbout()} />
         <SpacerView />
         <StaticRow
           label="Delete Account"
-          onPressRow={this.deleteAccountPopup}
+          onPressRow={() => this.deleteAccountPopup()}
           labelStyle={styles.textDelete}
         />
       </ScrollView>
