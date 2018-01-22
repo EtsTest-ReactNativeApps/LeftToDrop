@@ -7,3 +7,4 @@ export {
   ratingBarStylesCreator
 } from './item_screen_styles';
 export { gridViewStyles } from './grid_view_styles';
+export { modalViewStyles } from './modal_view_styles';
