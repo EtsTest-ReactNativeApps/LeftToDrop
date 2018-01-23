@@ -8,12 +8,18 @@ import {
   View
 } from 'react-native';
 import ItemButton from '../subcomponents/ItemButton';
-import { defaultStyles, modalViewStyles as styles } from '../../styles';
+import {
+  defaults,
+  defaultStyles,
+  modalViewStyles as styles
+} from '../../styles';
 
 class ModalView extends Component {
   render() {
     const { closeModal, contents, visibility } = this.props;
     const { description, value, cancelLabel, submitLabel } = contents;
+
+    console.log('CONTENTS: ' + JSON.stringify(contents));
 
     return (
       <Modal
@@ -26,53 +32,59 @@ class ModalView extends Component {
           style={styles.modalContainerView}
           onPress={closeModal}
         >
-          <View>
-            <View style={{ flex: 1 }} />
-            <TouchableHighlight style={styles.modalView} onPress={null}>
-              <View style={styles.content}>
-                <View style={[styles.description, { flex: value ? 1 : 2 }]}>
-                  <Text style={[defaultStyles.text, { textAlign: 'center' }]}>
-                    {description}
-                  </Text>
-                </View>
+          <TouchableHighlight style={styles.modalView} onPress={null}>
+            <View style={styles.content}>
+              <View
+                style={[
+                  styles.description,
+                  (() => {
+                    // Double desription height if there are no textFields
+                    if (!value) {
+                      return { height: defaults.cellContentHeight * 2 };
+                    }
+                  })()
+                ]}
+              >
+                <Text style={[defaultStyles.text, { textAlign: 'center' }]}>
+                  {description}
+                </Text>
+              </View>
+              {(() => {
+                if (value) {
+                  return (
+                    <View style={styles.inputRow}>
+                      <TextInput
+                        style={[defaultStyles.text, styles.textInput]}
+                        value={value}
+                      />
+                    </View>
+                  );
+                }
+              })()}
+              <View style={styles.buttonRow}>
                 {(() => {
-                  if (value) {
+                  if (cancelLabel) {
                     return (
-                      <View style={styles.textField /* TextInput row */}>
-                        <TextInput
-                          style={[defaultStyles.text, styles.textInput]}
-                          value={value}
-                        />
-                      </View>
+                      <ItemButton
+                        onPress={closeModal}
+                        label={cancelLabel}
+                        color={'black'}
+                        marginLeft={0}
+                        marginRight={5}
+                      />
                     );
                   }
                 })()}
-                <View style={styles.buttonRow /* Button row */}>
-                  {(() => {
-                    if (cancelLabel) {
-                      return (
-                        <ItemButton
-                          onPress={closeModal}
-                          label={cancelLabel}
-                          color={'black'}
-                          marginLeft={0}
-                          marginRight={5}
-                        />
-                      );
-                    }
-                  })()}
-                  <ItemButton
-                    onPress={closeModal}
-                    label={submitLabel}
-                    color={'red'}
-                    marginLeft={cancelLabel ? 5 : 0}
-                    marginRight={0}
-                  />
-                </View>
+                <ItemButton
+                  onPress={closeModal}
+                  label={submitLabel}
+                  color={'red'}
+                  marginLeft={cancelLabel ? 5 : 0}
+                  marginRight={0}
+                />
               </View>
-            </TouchableHighlight>
-            <View style={{ flex: 2 }} />
-          </View>
+            </View>
+          </TouchableHighlight>
         </TouchableHighlight>
       </Modal>
     );
