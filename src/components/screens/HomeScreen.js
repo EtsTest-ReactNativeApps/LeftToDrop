@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { Text, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import TableViewScreen from './TableViewScreen';
 import EmptyView from '../subcomponents/EmptyView';
@@ -11,19 +12,43 @@ import { defaultStyles } from '../../styles';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
-  static navigationOptions = ({ navigation }) => {
-    const { params } = navigation;
+  static navigationOptions = state => {
     return {
       headerBackTitle: 'Back',
-      headerRight: (
-        <TouchableHighlight
-          style={{ margin: 20 }}
-          onPress={() => navigation.navigate('Login')}
-          underlayColor="red"
-        >
-          <Text style={defaultStyles.titleText}>Login</Text>
-        </TouchableHighlight>
-      )
+      headerRight: (() => {
+        const { navigation } = state;
+        let user;
+        if (navigation) {
+          if (navigation.state) {
+            if (navigation.state.params) {
+              user = navigation.state.params.user;
+            }
+          }
+        }
+
+        // undefined user = user is still loading
+        if (user != undefined) {
+          if (_.isEmpty(user)) {
+            // empty user = no user to load
+            var label = 'Login';
+            var onPress = () => navigation.navigate('Login');
+          } else {
+            // otherwise, user is loaded
+            var label = 'Logout';
+            var onPress = () => console.log('LOGOUT');
+          }
+
+          return (
+            <TouchableHighlight
+              style={{ margin: 20 }}
+              onPress={onPress}
+              underlayColor="red"
+            >
+              <Text style={defaultStyles.titleText}>{label}</Text>
+            </TouchableHighlight>
+          );
+        }
+      })()
     };
   };
 
@@ -32,6 +57,18 @@ class HomeScreen extends Component {
     fetchMetadata();
     fetchUser('krlargo');
   }
+
+  componentWillReceiveProps(newProps) {
+    const { user } = newProps;
+    if (user !== this.props.user) {
+      this.props.navigation.setParams({ user });
+    }
+  }
+
+  /*componentDidMount() {
+    const { user } = this.props;
+    this.props.navigation.setParams({ user });
+  }*/
 
   render() {
     const { metadata, navigation } = this.props;
@@ -60,8 +97,8 @@ class HomeScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ metadata }) => {
-  return { metadata };
+const mapStateToProps = ({ metadata, user }, ownProps) => {
+  return { metadata, user };
 };
 
 const mapDispatchToProps = dispatch => {
