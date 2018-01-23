@@ -4,8 +4,16 @@ import ItemButton from '../subcomponents/ItemButton.js';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 const login = props => {
+  const { state, setState, firebaseLogin } = props;
+  const { email, password } = state;
+
+  console.log('EMAIL: ' + email + ', PASSWORD: ' + password);
+
   if (validateLogin.bind(this)()) {
-    console.log('VALDISIGNUP: ' + JSON.stringify(props));
+    const error = firebaseLogin(email, password);
+    if (!error) {
+      props.navigation.goBack();
+    }
   } else {
     Keyboard.dismiss();
   }

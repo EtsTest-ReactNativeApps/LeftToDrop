@@ -14,16 +14,17 @@ import LoginView from './LoginView';
 import SignupView from './SignupView';
 import ItemButton from '../subcomponents/ItemButton.js';
 import { isAlphaNumeric, isValidEmail } from '../../utility';
+import { firebaseLogin } from '../../actions';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 class LoginScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       username: '',
-      email: '',
-      password: '',
+      email: 'xkevlar@live.com',
+      password: 'abc123',
       verifyPassword: '',
       view: 'login',
       fadeAnim: new Animated.Value(1),
@@ -83,6 +84,7 @@ class LoginScreen extends Component {
   }
 
   render() {
+    console.log('LOGINSCREENPROPS: ' + JSON.stringify(this.props));
     const { fadeAnim, keyboardHeight, view } = this.state;
 
     Animated.timing(fadeAnim, {
@@ -96,6 +98,7 @@ class LoginScreen extends Component {
           contentContainerStyle={{ alignItems: 'center' }}
           style={{ marginBottom: keyboardHeight }}
           scrollEnabled={keyboardHeight ? true : false}
+          keyboardShouldPersistTaps="always"
         >
           {(() => {
             if (view == 'login') {
@@ -103,6 +106,8 @@ class LoginScreen extends Component {
                 <LoginView
                   state={this.state}
                   setState={this.setState.bind(this)}
+                  navigation={this.props.navigation}
+                  firebaseLogin={this.props.firebaseLogin}
                   presentErrorMessage={this.presentErrorMessage}
                   dissolveAnimate={this.dissolveAnimate.bind(this)}
                 />
@@ -124,4 +129,8 @@ class LoginScreen extends Component {
   }
 }
 
-export default LoginScreen;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ firebaseLogin }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(LoginScreen);
