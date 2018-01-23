@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import { TouchableHighlight, Text } from 'react-native';
+import { Text, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 
 import TableViewScreen from './TableViewScreen';
@@ -11,18 +11,21 @@ import { defaultStyles } from '../../styles';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
-  static navigationOptions = ({ navigation }) => ({
-    headerBackTitle: 'Back',
-    headerRight: (
-      <TouchableHighlight
-        style={{ margin: 15 }}
-        onPress={() => console.log('LOGIN')}
-        underlayColor="red"
-      >
-        <Text style={defaultStyles.titleText}>Login</Text>
-      </TouchableHighlight>
-    )
-  });
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation;
+    return {
+      headerBackTitle: 'Back',
+      headerRight: (
+        <TouchableHighlight
+          style={{ margin: 20 }}
+          onPress={() => navigation.navigate('Login')}
+          underlayColor="red"
+        >
+          <Text style={defaultStyles.titleText}>Login</Text>
+        </TouchableHighlight>
+      )
+    };
+  };
 
   componentWillMount() {
     const { fetchMetadata, fetchUser } = this.props;
