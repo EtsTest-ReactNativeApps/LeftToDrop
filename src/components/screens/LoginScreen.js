@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import ItemButton from '../subcomponents/ItemButton.js';
-import { isAlphaNumeric } from '../../utility';
+import { isAlphaNumeric, isValidEmail } from '../../utility';
 import { defaultStyles } from '../../styles';
 
 class LoginScreen extends Component {
@@ -26,7 +26,8 @@ class LoginScreen extends Component {
       inputFocus: 'username',
       view: 'login',
       fadeAnim: new Animated.Value(1),
-      keyboardHeight: 0
+      keyboardHeight: 0,
+      errorMessage: ''
     };
   }
 
@@ -61,8 +62,91 @@ class LoginScreen extends Component {
   }
 
   signup() {
-    console.log('SIGNUP');
-    Keyboard.dismiss();
+    if (this.validateSignup.bind(this)()) {
+      console.log('VALID FORM, SIGN UP');
+    } else {
+      Keyboard.dismiss();
+    }
+  }
+
+  validateSignup() {
+    const { username, email, password, verifyPassword } = this.state;
+
+    console.log(
+      'VALIDATE, USERNAME: ' +
+        username +
+        ', EMAIL: ' +
+        email +
+        ', PASSWORD: ' +
+        password +
+        ', VERIFYPASSWORD: ' +
+        verifyPassword
+    );
+
+    let signupUsernameError = null;
+    let signupEmailError = null;
+    let signupPasswordError = null;
+    let signupVerifyPasswordError = null;
+
+    // Validate username
+    if (username.length < 3) {
+      signupUsernameError = 'Username must be at least 3 characters.';
+    } else if (false) {
+      signupUsernameError = 'Username is already in use.';
+    }
+
+    // Validate email
+    if (!isValidEmail(email)) {
+      signupEmailError = 'Email format is not valid.';
+    } else if (false) {
+      signupEmailError = 'Email is already in use.';
+    }
+
+    // Validate password
+    if (password.length < 8) {
+      signupPasswordError = 'Password must be at least 8 characters.';
+    }
+    // Validate verifyPassword
+    if (password != verifyPassword) {
+      signupVerifyPasswordError = "Passwords don't match.";
+    }
+
+    this.setState({
+      signupUsernameError,
+      signupEmailError,
+      signupPasswordError,
+      signupVerifyPasswordError
+    });
+
+    console.log(
+      'ERRORS, USERNAME: ' +
+        signupUsernameError +
+        ', EMAIL: ' +
+        signupEmailError +
+        ', PASSWORD: ' +
+        signupPasswordError +
+        ', VPASSWORD: ' +
+        signupVerifyPasswordError
+    );
+
+    // Return true if all errors are null
+    return !(
+      signupUsernameError ||
+      signupEmailError ||
+      signupPasswordError ||
+      signupVerifyPasswordError
+    );
+  }
+
+  presentErrorMessage(errorMessage) {
+    if (errorMessage) {
+      return (
+        <Text style={[defaultStyles.text, styles.errorText]}>
+          {' '}
+          {errorMessage}{' '}
+        </Text>
+      );
+    }
   }
 
   dissolveAnimate() {
@@ -81,7 +165,7 @@ class LoginScreen extends Component {
   }
 
   loginView() {
-    const { username, email, password, fadeAnim, inputFocus } = this.state;
+    const { username, email, password, fadeAnim } = this.state;
 
     return (
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
@@ -149,6 +233,13 @@ class LoginScreen extends Component {
   signupView() {
     const { username, email, password, verifyPassword, fadeAnim } = this.state;
 
+    const {
+      signupUsernameError,
+      signupEmailError,
+      signupPasswordError,
+      signupVerifyPasswordError
+    } = this.state;
+
     return (
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
         <View style={styles.inputDescription}>
@@ -164,10 +255,12 @@ class LoginScreen extends Component {
               if (isAlphaNumeric(username)) {
                 this.setState({
                   username,
-                  error: ''
+                  signupUsernameError: null
                 });
               } else {
-                this.setState({ error: 'Username must be alphanumeric.' });
+                this.setState({
+                  signupUsernameError: 'Username must be alphanumeric.'
+                });
               }
             }}
             onSubmitEditing={() => this.signupEmailRef.focus()}
@@ -179,6 +272,7 @@ class LoginScreen extends Component {
             secureTextEntry={false}
           />
         </View>
+        {this.presentErrorMessage(signupUsernameError)}
         <View style={styles.inputDescription}>
           <Text style={defaultStyles.text}>Email</Text>
         </View>
@@ -188,7 +282,9 @@ class LoginScreen extends Component {
             style={[defaultStyles.text, defaultStyles.textInput]}
             value={email}
             ref={signupEmailRef => (this.signupEmailRef = signupEmailRef)}
-            onChangeText={email => this.setState({ email })}
+            onChangeText={email =>
+              this.setState({ email, signupEmailError: null })
+            }
             onSubmitEditing={() => this.signupPasswordRef.focus()}
             // Configuration
             autoCapitalize="none"
@@ -197,6 +293,7 @@ class LoginScreen extends Component {
             secureTextEntry={false}
           />
         </View>
+        {this.presentErrorMessage(signupEmailError)}
         <View style={styles.inputDescription}>
           <Text style={defaultStyles.text}>Password</Text>
         </View>
@@ -208,7 +305,9 @@ class LoginScreen extends Component {
             ref={signupPasswordRef =>
               (this.signupPasswordRef = signupPasswordRef)
             }
-            onChangeText={password => this.setState({ password })}
+            onChangeText={password =>
+              this.setState({ password, signupPasswordError: null })
+            }
             onSubmitEditing={() => this.signupVerifyPasswordRef.focus()}
             // Configuration
             autoCapitalize="none"
@@ -216,6 +315,7 @@ class LoginScreen extends Component {
             secureTextEntry
           />
         </View>
+        {this.presentErrorMessage(signupPasswordError)}
         <View style={styles.inputDescription}>
           <Text style={defaultStyles.text}>Verify Password</Text>
         </View>
@@ -227,7 +327,9 @@ class LoginScreen extends Component {
             ref={signupVerifyPasswordRef =>
               (this.signupVerifyPasswordRef = signupVerifyPasswordRef)
             }
-            onChangeText={verifyPassword => this.setState({ verifyPassword })}
+            onChangeText={verifyPassword =>
+              this.setState({ verifyPassword, signupVerifyPasswordError: null })
+            }
             onSubmitEditing={this.signup.bind(this)}
             // Configuration
             autoCapitalize="none"
@@ -235,6 +337,7 @@ class LoginScreen extends Component {
             secureTextEntry
           />
         </View>
+        {this.presentErrorMessage(signupVerifyPasswordError)}
         <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
           <ItemButton
             onPress={this.signup.bind(this)}
@@ -295,5 +398,6 @@ styles = StyleSheet.create({
   inputDescription: {
     justifyContent: 'flex-end',
     height: defaults.cellContentHeight * 0.6
-  }
+  },
+  errorText: { color: 'red', fontSize: 15 }
 });
