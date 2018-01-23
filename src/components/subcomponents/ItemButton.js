@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { buttonStylesCreator as stylesCreator } from '../../styles';
+import {
+  defaultStyles,
+  buttonStylesCreator as stylesCreator
+} from '../../styles';
 
 class ItemButton extends Component {
   render() {
@@ -9,7 +12,7 @@ class ItemButton extends Component {
 
     return (
       <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={styles.text}>{label}</Text>
+        <Text style={defaultStyles.titleText}>{label}</Text>
       </TouchableOpacity>
     );
   }
