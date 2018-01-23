@@ -22,44 +22,6 @@ export const modalViewStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'space-between', //'center'
-    padding: 2.5
-  },
-  contentRow: {
-    alignItems: 'center',
-    borderColor: 'blue',
-    borderWidth: 1,
-    height: defaults.cellContentHeight,
-    margin: 2.5,
-    width: '100%'
-  },
-  // Field styling; top row of modal
-  description: {
-    alignItems: 'center',
-    height: defaults.cellContentHeight,
-    justifyContent: 'center',
-    marginBottom: 2.5,
-    width: '100%'
-  },
-  // View containing TextInput
-  inputRow: {
-    alignItems: 'center',
-    height: defaults.cellContentHeight,
-    justifyContent: 'center',
-    marginVertical: 5,
-    width: '100%'
-  },
-  // TextInput styling; middle rows of modal
-  textInput: {
-    borderWidth: 1,
-    height: '100%',
-    paddingHorizontal: 5,
-    width: '100%'
-  },
-  // Row containing horizontally aligned buttons; bottom row of modal
-  buttonRow: {
-    flexDirection: 'row',
-    height: defaults.cellContentHeight,
-    justifyContent: 'center',
-    marginTop: 2.5
+    paddingHorizontal: 2.5
   }
 });

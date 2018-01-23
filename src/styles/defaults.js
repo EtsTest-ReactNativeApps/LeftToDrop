@@ -35,5 +35,19 @@ export const defaultStyles = StyleSheet.create({
     color: defaults.textColor,
     fontFamily: defaults.textFont,
     fontSize: defaults.fontSize
+  },
+  formRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: defaults.cellContentHeight,
+    justifyContent: 'center',
+    marginVertical: 5,
+    width: '100%'
+  },
+  textInput: {
+    borderWidth: 1,
+    height: '100%',
+    paddingHorizontal: 5,
+    width: '100%'
   }
 });
