@@ -19,8 +19,6 @@ class ModalView extends Component {
     const { closeModal, contents, visibility } = this.props;
     const { description, value, cancelLabel, submitLabel } = contents;
 
-    console.log('CONTENTS: ' + JSON.stringify(contents));
-
     return (
       <Modal
         animationType={'fade'}
@@ -36,7 +34,7 @@ class ModalView extends Component {
             <View style={styles.content}>
               <View
                 style={[
-                  styles.description,
+                  defaultStyles.formRow,
                   (() => {
                     // Double desription height if there are no textFields
                     if (!value) {
@@ -52,16 +50,16 @@ class ModalView extends Component {
               {(() => {
                 if (value) {
                   return (
-                    <View style={styles.inputRow}>
+                    <View style={defaultStyles.formRow}>
                       <TextInput
-                        style={[defaultStyles.text, styles.textInput]}
+                        style={[defaultStyles.text, defaultStyles.textInput]}
                         value={value}
                       />
                     </View>
                   );
                 }
               })()}
-              <View style={styles.buttonRow}>
+              <View style={defaultStyles.formRow}>
                 {(() => {
                   if (cancelLabel) {
                     return (
