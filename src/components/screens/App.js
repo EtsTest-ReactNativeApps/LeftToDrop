@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import Thunk from 'redux-thunk';
 
 import HomeScreen from './HomeScreen';
+import LoginScreen from './LoginScreen';
 import FavoritesScreen from './FavoritesScreen';
 import SeasonsScreen from './SeasonsScreen';
 import CategoriesScreen from './CategoriesScreen';
@@ -22,6 +23,12 @@ const Navigator = StackNavigator(
       screen: HomeScreen,
       navigationOptions: {
         title: 'Left To Drop'
+      }
+    },
+    Login: {
+      screen: LoginScreen,
+      navigationOptions: {
+        title: 'Login'
       }
     },
     Favorites: {
