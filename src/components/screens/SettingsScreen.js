@@ -118,7 +118,7 @@ class SettingsScreen extends Component {
           label="Contact"
           onPressRow={() =>
             this.presentModalAlert(
-              "If you've got any questions, run into any bugs, or have any suggestions, please send an email to kevinlargoapps@gmail.com",
+              "If you've got any questions or have any suggestions, please send an email to kevinlargoapps@gmail.com",
               null,
               null,
               'Dismiss'
