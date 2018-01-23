@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import TableViewScreen from './TableViewScreen';
 import EmptyView from '../subcomponents/EmptyView';
-
 import { fetchMetadata, fetchUser } from '../../actions';
 import { defaultStyles } from '../../styles';
 
@@ -27,27 +26,27 @@ class HomeScreen extends Component {
         }
 
         // undefined user = user is still loading
-        if (user != undefined) {
-          if (_.isEmpty(user)) {
-            // empty user = no user to load
-            var label = 'Login';
-            var onPress = () => navigation.navigate('Login');
-          } else {
-            // otherwise, user is loaded
-            var label = 'Logout';
-            var onPress = () => console.log('LOGOUT');
-          }
-
-          return (
-            <TouchableHighlight
-              style={{ margin: 20 }}
-              onPress={onPress}
-              underlayColor="red"
-            >
-              <Text style={defaultStyles.titleText}>{label}</Text>
-            </TouchableHighlight>
-          );
+        //if (user != undefined) {
+        if (_.isEmpty(user)) {
+          // empty user = no user to load
+          var label = 'Login';
+          var onPress = () => navigation.navigate('Login');
+        } else {
+          // otherwise, user is loaded
+          var label = 'Logout';
+          var onPress = () => console.log('LOGOUT');
         }
+
+        return (
+          <TouchableHighlight
+            style={{ margin: 20 }}
+            onPress={onPress}
+            underlayColor="red"
+          >
+            <Text style={defaultStyles.titleText}>{label}</Text>
+          </TouchableHighlight>
+        );
+        //}
       })()
     };
   };
@@ -55,7 +54,7 @@ class HomeScreen extends Component {
   componentWillMount() {
     const { fetchMetadata, fetchUser } = this.props;
     fetchMetadata();
-    fetchUser('krlargo');
+    //fetchUser('krlargo');
   }
 
   componentWillReceiveProps(newProps) {
@@ -64,11 +63,6 @@ class HomeScreen extends Component {
       this.props.navigation.setParams({ user });
     }
   }
-
-  /*componentDidMount() {
-    const { user } = this.props;
-    this.props.navigation.setParams({ user });
-  }*/
 
   render() {
     const { metadata, navigation } = this.props;
