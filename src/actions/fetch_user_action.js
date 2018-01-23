@@ -8,9 +8,18 @@ import {
 import { FETCH_USER } from './types';
 
 export const fetchUser = userID => dispatch => {
+  if (!userID) {
+    return dispatch({
+      type: FETCH_USER,
+      payload: null
+    });
+  }
+
   usersRef.child(userID).on('value', snapshot => {
-    const userObject = snapshot.val() || {};
-    userObject['id'] = snapshot.key;
+    const userObject = snapshot.val() || null;
+    if (userObject) {
+      userObject['id'] = snapshot.key;
+    }
 
     dispatch({
       type: FETCH_USER,
