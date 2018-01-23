@@ -34,7 +34,7 @@ class SettingsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contents: {
+      modalContents: {
         description: 'DESCRIPTION',
         value: 'VALUE',
         submitLabel: 'LABEL'
@@ -43,15 +43,20 @@ class SettingsScreen extends Component {
     };
   }
 
-  presentModalAlert(description, value, cancelLabel, submitLabel = 'Save') {
-    const contents = {
+  presentModalAlert(
+    description,
+    value,
+    cancelLabel = 'Cancel',
+    submitLabel = 'Save'
+  ) {
+    const modalContents = {
       description,
       value,
       cancelLabel,
       submitLabel
     };
     this.setState({
-      contents,
+      modalContents,
       modalVisibility: true
     });
   }
@@ -67,13 +72,13 @@ class SettingsScreen extends Component {
   }
 
   render() {
-    const { contents, modalVisibility } = this.state;
+    const { modalContents, modalVisibility } = this.state;
 
     return (
       <ScrollView style={defaultStyles.containerView}>
         <ModalView
           closeModal={() => this.closeModal.bind(this)()}
-          contents={contents}
+          contents={modalContents}
           visibility={modalVisibility}
         />
 
@@ -83,9 +88,7 @@ class SettingsScreen extends Component {
           onPressRow={() =>
             this.presentModalAlert(
               'Edit your username.',
-              this.props.user.username,
-              'Cancel',
-              'Save'
+              this.props.user.username
             )
           }
         />
@@ -95,9 +98,7 @@ class SettingsScreen extends Component {
           onPressRow={() =>
             this.presentModalAlert(
               'Edit your email address.',
-              this.props.user.email,
-              'Cancel',
-              'Save'
+              this.props.user.email
             )
           }
         />
@@ -105,12 +106,7 @@ class SettingsScreen extends Component {
           label="Password"
           value="*******"
           onPressRow={() =>
-            this.presentModalAlert(
-              'Edit your password',
-              '*******',
-              'Cancel',
-              'Save'
-            )
+            this.presentModalAlert('Edit your password', '*******')
           }
         />
         <SpacerView />
@@ -134,7 +130,7 @@ class SettingsScreen extends Component {
             this.presentModalAlert(
               "Are you sure you'd like to permanently delete your account?",
               null,
-              'Cancel',
+              undefined,
               'Delete'
             )
           }
