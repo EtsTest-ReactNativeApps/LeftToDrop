@@ -23,7 +23,6 @@ class LoginScreen extends Component {
       email: '',
       password: '',
       verifyPassword: '',
-      inputFocus: 'username',
       view: 'login',
       fadeAnim: new Animated.Value(1),
       keyboardHeight: 0,
@@ -53,17 +52,15 @@ class LoginScreen extends Component {
   }
 
   keyboardDidHide() {
-    this.setState({ keyboardHeight: 0, inputFocus: null });
+    this.setState({ keyboardHeight: 0 });
   }
 
   login() {
-    console.log('LOGIN');
     Keyboard.dismiss();
   }
 
   signup() {
     if (this.validateSignup.bind(this)()) {
-      console.log('VALID FORM, SIGN UP');
     } else {
       Keyboard.dismiss();
     }
@@ -71,17 +68,6 @@ class LoginScreen extends Component {
 
   validateSignup() {
     const { username, email, password, verifyPassword } = this.state;
-
-    console.log(
-      'VALIDATE, USERNAME: ' +
-        username +
-        ', EMAIL: ' +
-        email +
-        ', PASSWORD: ' +
-        password +
-        ', VERIFYPASSWORD: ' +
-        verifyPassword
-    );
 
     let signupUsernameError = null;
     let signupEmailError = null;
@@ -117,17 +103,6 @@ class LoginScreen extends Component {
       signupPasswordError,
       signupVerifyPasswordError
     });
-
-    console.log(
-      'ERRORS, USERNAME: ' +
-        signupUsernameError +
-        ', EMAIL: ' +
-        signupEmailError +
-        ', PASSWORD: ' +
-        signupPasswordError +
-        ', VPASSWORD: ' +
-        signupVerifyPasswordError
-    );
 
     // Return true if all errors are null
     return !(
