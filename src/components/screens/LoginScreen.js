@@ -23,6 +23,7 @@ class LoginScreen extends Component {
       email: '',
       password: '',
       verifyPassword: '',
+      inputFocus: 'username',
       view: 'login',
       fadeAnim: new Animated.Value(1),
       keyboardHeight: 0
@@ -51,15 +52,17 @@ class LoginScreen extends Component {
   }
 
   keyboardDidHide() {
-    this.setState({ keyboardHeight: 0 });
+    this.setState({ keyboardHeight: 0, inputFocus: null });
   }
 
   login() {
     console.log('LOGIN');
+    Keyboard.dismiss();
   }
 
   signup() {
     console.log('SIGNUP');
+    Keyboard.dismiss();
   }
 
   dissolveAnimate() {
@@ -78,7 +81,7 @@ class LoginScreen extends Component {
   }
 
   loginView() {
-    const { username, email, password, fadeAnim } = this.state;
+    const { username, email, password, fadeAnim, inputFocus } = this.state;
 
     return (
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
@@ -87,8 +90,9 @@ class LoginScreen extends Component {
         </View>
         <View style={defaultStyles.formRow}>
           <TextInput
+            // Values
             style={[defaultStyles.text, defaultStyles.textInput]}
-            value={username || email || ''}
+            value={username || email}
             onChangeText={text => {
               if (text.includes('@')) {
                 var key = 'email';
@@ -97,9 +101,14 @@ class LoginScreen extends Component {
                 var key = 'username';
                 var otherKey = 'email';
               }
-
               this.setState({ [key]: text, [otherKey]: null });
             }}
+            onSubmitEditing={() => this.loginPasswordRef.focus()}
+            // Configuration
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoFocus
+            secureTextEntry={false}
           />
         </View>
         <View style={styles.inputDescription}>
@@ -107,13 +116,24 @@ class LoginScreen extends Component {
         </View>
         <View style={defaultStyles.formRow}>
           <TextInput
+            // Values
             style={[defaultStyles.text, defaultStyles.textInput]}
             value={password}
-            onChange={password => this.setState({ password })}
+            ref={loginPasswordRef => (this.loginPasswordRef = loginPasswordRef)}
+            onSubmitEditing={this.login.bind(this)}
+            onChangeText={password => this.setState({ password })}
+            // Configuration
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry
           />
         </View>
         <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
-          <ItemButton onPress={this.login} label={'Login'} color={'red'} />
+          <ItemButton
+            onPress={this.login.bind(this)}
+            label={'Login'}
+            color={'red'}
+          />
         </View>
         <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
           <ItemButton
@@ -136,9 +156,10 @@ class LoginScreen extends Component {
         </View>
         <View style={defaultStyles.formRow}>
           <TextInput
+            // Values
             style={[defaultStyles.text, defaultStyles.textInput]}
             value={username}
-            onChange={username => {
+            onChangeText={username => {
               // Don't change username unless alphanumeric
               if (isAlphaNumeric(username)) {
                 this.setState({
@@ -149,6 +170,13 @@ class LoginScreen extends Component {
                 this.setState({ error: 'Username must be alphanumeric.' });
               }
             }}
+            onSubmitEditing={() => this.signupEmailRef.focus()}
+            // Configuration
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoFocus
+            maxLength={20}
+            secureTextEntry={false}
           />
         </View>
         <View style={styles.inputDescription}>
@@ -156,9 +184,17 @@ class LoginScreen extends Component {
         </View>
         <View style={defaultStyles.formRow}>
           <TextInput
+            // Values
             style={[defaultStyles.text, defaultStyles.textInput]}
             value={email}
-            onChange={email => this.setState({ email })}
+            ref={signupEmailRef => (this.signupEmailRef = signupEmailRef)}
+            onChangeText={email => this.setState({ email })}
+            onSubmitEditing={() => this.signupPasswordRef.focus()}
+            // Configuration
+            autoCapitalize="none"
+            autoCorrect={false}
+            maxLength={40}
+            secureTextEntry={false}
           />
         </View>
         <View style={styles.inputDescription}>
@@ -166,9 +202,18 @@ class LoginScreen extends Component {
         </View>
         <View style={defaultStyles.formRow}>
           <TextInput
+            // Values
             style={[defaultStyles.text, defaultStyles.textInput]}
             value={password}
-            onChange={password => this.setState({ password })}
+            ref={signupPasswordRef =>
+              (this.signupPasswordRef = signupPasswordRef)
+            }
+            onChangeText={password => this.setState({ password })}
+            onSubmitEditing={() => this.signupVerifyPasswordRef.focus()}
+            // Configuration
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry
           />
         </View>
         <View style={styles.inputDescription}>
@@ -176,20 +221,33 @@ class LoginScreen extends Component {
         </View>
         <View style={defaultStyles.formRow}>
           <TextInput
+            // Values
             style={[defaultStyles.text, defaultStyles.textInput]}
             value={verifyPassword}
-            onChange={verifyPassword => this.setState({ verifyPassword })}
+            ref={signupVerifyPasswordRef =>
+              (this.signupVerifyPasswordRef = signupVerifyPasswordRef)
+            }
+            onChangeText={verifyPassword => this.setState({ verifyPassword })}
+            onSubmitEditing={this.signup.bind(this)}
+            // Configuration
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry
+          />
+        </View>
+        <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
+          <ItemButton
+            onPress={this.signup.bind(this)}
+            label={'Signup'}
+            color={'red'}
           />
         </View>
         <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
           <ItemButton
             onPress={this.dissolveAnimate.bind(this)}
             label={'Login'}
-            color={'red'}
+            color={'black'}
           />
-        </View>
-        <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
-          <ItemButton onPress={this.signup} label={'Signup'} color={'black'} />
         </View>
       </Animated.View>
     );
