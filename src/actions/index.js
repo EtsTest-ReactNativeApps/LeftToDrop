@@ -11,3 +11,4 @@ export {
 } from './fetch_voted_items_action';
 export { toggleFavoriteItem } from './set_favorite_action';
 export { toggleUpvoteItem, toggleDownvoteItem } from './set_item_action';
+export { firebaseLogin, firebaseSignup } from './set_user_action';
