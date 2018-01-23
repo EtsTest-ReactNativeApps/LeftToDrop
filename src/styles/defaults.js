@@ -24,6 +24,13 @@ export const defaultStyles = StyleSheet.create({
     backgroundColor: defaults.separatorColor,
     height: StyleSheet.hairlineWidth
   },
+  titleText: {
+    color: defaults.titleColor,
+    fontFamily: defaults.titleFont,
+    fontSize: defaults.fontSize,
+    fontStyle: defaults.titleStyle,
+    textAlign: 'center'
+  },
   text: {
     color: defaults.textColor,
     fontFamily: defaults.textFont,
