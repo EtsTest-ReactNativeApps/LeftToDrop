@@ -35,9 +35,9 @@ const LoginView = props => {
         <TextInput
           // Values
           style={[defaultStyles.text, defaultStyles.textInput]}
-          value={username || email}
+          value={username || email} // Check username first, then email if username is null
           onChangeText={text => {
-            // Either email or username must be null since login uses either
+            // Either email or username must be null since login uses one or the other
             if (text.includes('@')) {
               var key = 'email';
               var otherKey = 'username';
