@@ -84,7 +84,6 @@ class LoginScreen extends Component {
   }
 
   render() {
-    console.log('LOGINSCREENPROPS: ' + JSON.stringify(this.props));
     const { fadeAnim, keyboardHeight, view } = this.state;
 
     Animated.timing(fadeAnim, {
