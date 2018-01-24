@@ -13,19 +13,25 @@ import { connect } from 'react-redux';
 import LoginView from './LoginView';
 import SignupView from './SignupView';
 import ItemButton from '../subcomponents/ItemButton.js';
-import { isAlphaNumeric, isValidEmail } from '../../utility';
-import { firebaseLogin } from '../../actions';
+import { capitalize } from '../../utility';
+import { firebaseLogin, firebaseSignup } from '../../actions';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 class LoginScreen extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const { params } = navigation.state;
+    const title = params ? params.title : 'Login';
+    return { title };
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      username: '',
-      email: 'xkevlar@live.com',
-      password: 'abc123',
-      verifyPassword: '',
+      username: 'xkevlar',
+      email: 'xkv@live.com',
+      password: 'abc12345',
+      verifyPassword: 'abc12345',
       view: 'login',
       fadeAnim: new Animated.Value(1),
       keyboardHeight: 0,
@@ -72,6 +78,10 @@ class LoginScreen extends Component {
     const { fadeAnim, view } = this.state;
     const newView = view == 'login' ? 'signup' : 'login';
 
+    // Update navBar title
+    const title = capitalize(newView);
+    this.props.navigation.setParams({ title });
+
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 50
@@ -116,6 +126,8 @@ class LoginScreen extends Component {
                 <SignupView
                   state={this.state}
                   setState={this.setState.bind(this)}
+                  navigation={this.props.navigation}
+                  firebaseSignup={this.props.firebaseSignup}
                   presentErrorMessage={this.presentErrorMessage}
                   dissolveAnimate={this.dissolveAnimate.bind(this)}
                 />
@@ -129,7 +141,7 @@ class LoginScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ firebaseLogin }, dispatch);
+  return bindActionCreators({ firebaseLogin, firebaseSignup }, dispatch);
 };
 
 export default connect(null, mapDispatchToProps)(LoginScreen);
