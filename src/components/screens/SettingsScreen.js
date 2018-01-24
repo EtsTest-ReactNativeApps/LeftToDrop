@@ -73,6 +73,10 @@ class SettingsScreen extends Component {
 
   render() {
     const { modalContents, modalVisibility } = this.state;
+    const { user } = this.props;
+    const username = user ? user.username : null;
+    const email = user ? user.email : null;
+    const opacity = user ? 1 : 0.6;
 
     return (
       <ScrollView style={defaultStyles.containerView}>
@@ -84,30 +88,27 @@ class SettingsScreen extends Component {
 
         <StaticRow
           label="Username"
-          value={this.props.user.username}
-          onPressRow={() =>
-            this.presentModalAlert(
-              'Edit your username.',
-              this.props.user.username
-            )
-          }
+          labelStyle={{ opacity }}
+          value={username}
+          onPressRow={() => {
+            if (user) this.presentModalAlert('Edit your username.', username);
+          }}
         />
         <StaticRow
           label="Email"
-          value={this.props.user.email}
-          onPressRow={() =>
-            this.presentModalAlert(
-              'Edit your email address.',
-              this.props.user.email
-            )
-          }
+          labelStyle={{ opacity }}
+          value={email}
+          onPressRow={() => {
+            if (user) this.presentModalAlert('Edit your email address.', email);
+          }}
         />
         <StaticRow
           label="Password"
-          value="*******"
-          onPressRow={() =>
-            this.presentModalAlert('Edit your password', '*******')
-          }
+          labelStyle={{ opacity }}
+          value={user ? '*******' : null}
+          onPressRow={() => {
+            if (user) this.presentModalAlert('Edit your password', '*******');
+          }}
         />
         <SpacerView />
         <StaticRow
@@ -124,16 +125,16 @@ class SettingsScreen extends Component {
         <SpacerView />
         <StaticRow
           label="Delete Account"
-          onPressRow={() => this.deleteAccountPopup()}
-          labelStyle={styles.textDelete}
-          onPressRow={() =>
-            this.presentModalAlert(
-              "Are you sure you'd like to permanently delete your account?",
-              null,
-              undefined,
-              'Delete'
-            )
-          }
+          labelStyle={[styles.textDelete, { opacity }]}
+          onPressRow={() => {
+            if (user)
+              this.presentModalAlert(
+                "Are you sure you'd like to permanently delete your account?",
+                null,
+                undefined,
+                'Delete'
+              );
+          }}
         />
       </ScrollView>
     );
