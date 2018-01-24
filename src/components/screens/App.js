@@ -25,12 +25,7 @@ const Navigator = StackNavigator(
         title: 'Left To Drop'
       }
     },
-    Login: {
-      screen: LoginScreen,
-      navigationOptions: {
-        title: 'Login'
-      }
-    },
+    Login: { screen: LoginScreen },
     Favorites: {
       screen: FavoritesScreen,
       navigationOptions: {
