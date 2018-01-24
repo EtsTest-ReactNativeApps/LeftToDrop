@@ -4,35 +4,54 @@ import ItemButton from '../subcomponents/ItemButton.js';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 const login = props => {
-  const { state, setState, firebaseLogin } = props;
+  const { firebaseLogin, state } = props;
+  const { email, password } = state;
+  if (validateLogin(props)) {
+    firebaseLogin(email, password, error => loginCallback(props, error));
+  }
+};
+
+const validateLogin = props => {
+  const { state, setState } = props;
   const { email, password } = state;
 
-  console.log('EMAIL: ' + email + ', PASSWORD: ' + password);
+  let loginEmailError = null;
+  let loginPasswordError = null;
 
-  if (validateLogin.bind(this)()) {
-    const error = firebaseLogin(email, password);
-    if (!error) {
-      props.navigation.goBack();
-    }
+  // Validate username
+  if (email.length == 0) {
+    loginEmailError = 'Email cannot be empty.';
+  }
+
+  setState({
+    loginEmailError,
+    loginPasswordError
+  });
+
+  return !(loginEmailError || loginPasswordError);
+};
+
+const loginCallback = (props, loginError) => {
+  const { setState, navigation } = props;
+  setState({ loginError });
+
+  if (!loginError) {
+    navigation.goBack();
   } else {
     Keyboard.dismiss();
   }
 };
 
-const validateLogin = props => {
-  return true;
-  //  const { username, password } = this.state;
-  let loginError = null;
-
-  if (false) {
-    loginError = 'Invalid credentials.';
-  }
-};
-
 const LoginView = props => {
-  const { state, setState } = props;
-  const { username, email, password, fadeAnim } = state;
-  const { presentErrorMessage, dissolveAnimate } = props;
+  const { state, setState, presentErrorMessage, dissolveAnimate } = props;
+  const {
+    username,
+    email,
+    password,
+    fadeAnim,
+    loginError,
+    loginEmailError
+  } = state;
 
   return (
     <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
@@ -43,9 +62,11 @@ const LoginView = props => {
         <TextInput
           // Values
           style={[defaultStyles.text, defaultStyles.textInput]}
-          value={username || email} // Check username first, then email if username is null
+          value={/*username || */ email} // Check username first, then email if username is null
           onChangeText={text => {
-            // Either email or username must be null since login uses one or the other
+            setState({ email: text });
+
+            /*// Either email or username must be null since login uses one or the other
             if (text.includes('@')) {
               var key = 'email';
               var otherKey = 'username';
@@ -53,7 +74,7 @@ const LoginView = props => {
               var key = 'username';
               var otherKey = 'email';
             }
-            setState({ [key]: text, [otherKey]: null });
+            setState({ [key]: text, [otherKey]: null });*/
           }}
           onSubmitEditing={() => this.loginPasswordRef.focus()}
           // Configuration
@@ -63,6 +84,7 @@ const LoginView = props => {
           secureTextEntry={false}
         />
       </View>
+      {presentErrorMessage(loginEmailError)}
       <View style={styles.inputDescription}>
         <Text style={defaultStyles.text}>Password</Text>
       </View>
@@ -80,6 +102,7 @@ const LoginView = props => {
           secureTextEntry
         />
       </View>
+      {presentErrorMessage(loginError)}
       <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
         <ItemButton
           onPress={login.bind(this, props)}
