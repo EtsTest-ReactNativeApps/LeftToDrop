@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { Animated, Keyboard, Text, TextInput, View } from 'react-native';
 import ItemButton from '../subcomponents/ItemButton.js';
+import { usernameExists } from '../../firebase';
 import { isAlphaNumeric, isValidEmail } from '../../utility';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 const signup = props => {
-  if (validateSignup.bind(this)(props)) {
-    console.log('VALIDLOGIN: ' + JSON.stringify(props));
-  } else {
-    Keyboard.dismiss();
+  const { firebaseSignup, state } = props;
+  const { email, username, password, verifyPassword } = state;
+
+  Keyboard.dismiss();
+  if (validateSignup(props)) {
+    firebaseSignup(email, username, password, error =>
+      signupCallback(props, error)
+    );
   }
 };
 
@@ -22,44 +27,54 @@ const validateSignup = props => {
   let signupVerifyPasswordError = null;
 
   // Validate username
-  if (username.length < 3) {
+  if (username.length < 3)
     signupUsernameError = 'Username must be at least 3 characters.';
-  } else if (isAlphaNumeric(username)) {
+  if (isAlphaNumeric(username))
     signupUsernameError: 'Username must be alphanumeric.';
-  } else if (false) {
-    signupUsernameError = 'Username is already in use.';
-  }
 
-  // Validate email
-  if (!isValidEmail(email)) {
-    signupEmailError = 'Email format is not valid.';
-  } else if (false) {
-    signupEmailError = 'Email is already in use.';
-  }
+  let usernameExistsPromise = usernameExists(username);
 
   // Validate password
-  if (password.length < 8) {
+  if (password.length < 8)
     signupPasswordError = 'Password must be at least 8 characters.';
-  }
+
   // Validate verifyPassword
-  if (password != verifyPassword) {
+  if (password != verifyPassword)
     signupVerifyPasswordError = "Passwords don't match.";
-  }
 
-  setState({
-    signupUsernameError,
-    signupEmailError,
-    signupPasswordError,
-    signupVerifyPasswordError
+  // Wait for promises to resolve before setting state
+  Promise.all([usernameExistsPromise]).then(results => {
+    const usernameExists = results[0].val();
+    signupUsernameError = usernameExists
+      ? 'Username is already in use.'
+      : signupUsernameError;
+
+    setState({
+      signupUsernameError,
+      signupEmailError,
+      signupPasswordError,
+      signupVerifyPasswordError
+    });
+
+    // Return true if all errors are null
+    return !(
+      signupUsernameError ||
+      signupEmailError ||
+      signupPasswordError ||
+      signupVerifyPasswordError
+    );
   });
+};
 
-  // Return true if all errors are null
-  return !(
-    signupUsernameError ||
-    signupEmailError ||
-    signupPasswordError ||
-    signupVerifyPasswordError
-  );
+const signupCallback = (props, signupError) => {
+  const { setState, navigation } = props;
+  setState({ signupError });
+
+  if (!signupError) {
+    navigation.goBack();
+  } else {
+    Keyboard.dismiss();
+  }
 };
 
 const SignupView = props => {
@@ -70,7 +85,8 @@ const SignupView = props => {
     signupUsernameError,
     signupEmailError,
     signupPasswordError,
-    signupVerifyPasswordError
+    signupVerifyPasswordError,
+    signupError
   } = state;
 
   const { presentErrorMessage, dissolveAnimate } = props;
@@ -171,6 +187,7 @@ const SignupView = props => {
         />
       </View>
       {presentErrorMessage(signupVerifyPasswordError)}
+      {presentErrorMessage(signupError)}
       <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
         <ItemButton
           onPress={signup.bind(this, props)}
