@@ -19,6 +19,7 @@ export const fetchUser = () => dispatch => {
         const userObject = snapshot.val() || null;
         if (userObject) {
           userObject['id'] = snapshot.key;
+          userObject['email'] = firebase.auth().currentUser.email;
         }
 
         dispatch({
