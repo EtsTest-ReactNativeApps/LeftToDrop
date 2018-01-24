@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from './';
 import { LOGOUT_USER } from './types';
-import { usersRef } from '../firebase/references';
+import { rootRef, usersRef, usernamesRef } from '../firebase/references';
 
 export const firebaseLogin = (email, password, callback) => dispatch => {
   firebase
@@ -40,16 +40,27 @@ export const firebaseSignup = (
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(user => {
+      username = username.toLowerCase();
       const date = new Date();
       const joinDate =
         date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
 
-      // Add new user to database
+      let updates = {};
+      updates['/users/' + user.uid] = { username, joinDate }; // Add to users
+      updates['/usernames/' + username] = true; // Add to usernames
+
+      rootRef.update(updates).then(() => {
+        const chainedActions = bindActionCreators({ fetchUser }, dispatch);
+        chainedActions.fetchUser(user.uid);
+        callback(null);
+      });
+
+      /*// Add new user to database
       usersRef
-        .set({
+        .update({
           [user.uid]: {
             email: user.email,
-            username: user.username,
+            username,
             joinDate
           }
         })
@@ -58,6 +69,9 @@ export const firebaseSignup = (
           chainedActions.fetchUser(user.uid);
           callback(null);
         });
+
+      // Add new username to database
+      usernamesRef.update({ [username]: true });*/
     })
     .catch(error => {
       const { code, message } = error;
