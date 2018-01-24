@@ -6,6 +6,7 @@ import { defaultStyles, loginViewStyles as styles } from '../../styles';
 const login = props => {
   const { firebaseLogin, state } = props;
   const { email, password } = state;
+
   if (validateLogin(props)) {
     firebaseLogin(email, password, error => loginCallback(props, error));
   }
@@ -19,9 +20,7 @@ const validateLogin = props => {
   let loginPasswordError = null;
 
   // Validate username
-  if (email.length == 0) {
-    loginEmailError = 'Email cannot be empty.';
-  }
+  if (email.length == 0) loginEmailError = 'Email cannot be empty.';
 
   setState({
     loginEmailError,
@@ -35,10 +34,9 @@ const loginCallback = (props, loginError) => {
   const { setState, navigation } = props;
   setState({ loginError });
 
+  Keyboard.dismiss();
   if (!loginError) {
     navigation.goBack();
-  } else {
-    Keyboard.dismiss();
   }
 };
 
