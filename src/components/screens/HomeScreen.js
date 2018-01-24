@@ -11,19 +11,12 @@ import { defaultStyles } from '../../styles';
 
 class HomeScreen extends Component {
   // Parent Component owns the back button
-  static navigationOptions = state => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerBackTitle: 'Back',
       headerRight: (() => {
-        const { navigation } = state;
-        let user;
-        if (navigation) {
-          if (navigation.state) {
-            if (navigation.state.params) {
-              user = navigation.state.params.user;
-            }
-          }
-        }
+        const { params } = navigation.state;
+        const user = params ? params.user : {};
 
         // undefined user = user is still loading
         //if (user != undefined) {
