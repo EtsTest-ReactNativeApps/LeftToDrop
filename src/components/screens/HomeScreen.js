@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import TableViewScreen from './TableViewScreen';
 import EmptyView from '../subcomponents/EmptyView';
-import { fetchMetadata, fetchUser } from '../../actions';
+import { fetchMetadata, fetchUser, firebaseLogout } from '../../actions';
 import { defaultStyles } from '../../styles';
 
 class HomeScreen extends Component {
@@ -34,7 +34,7 @@ class HomeScreen extends Component {
         } else {
           // otherwise, user is loaded
           var label = 'Logout';
-          var onPress = () => console.log('LOGOUT');
+          var onPress = () => navigation.state.params.firebaseLogout();
         }
 
         return (
@@ -52,9 +52,10 @@ class HomeScreen extends Component {
   };
 
   componentWillMount() {
-    const { fetchMetadata, fetchUser } = this.props;
+    const { fetchMetadata, fetchUser, firebaseLogout } = this.props;
     fetchMetadata();
-    //fetchUser('krlargo');
+    fetchUser();
+    this.props.navigation.setParams({ firebaseLogout });
   }
 
   componentWillReceiveProps(newProps) {
@@ -99,7 +100,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       fetchMetadata,
-      fetchUser
+      fetchUser,
+      firebaseLogout
     },
     dispatch
   );
