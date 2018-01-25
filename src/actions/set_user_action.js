@@ -24,6 +24,7 @@ export const firebaseLogout = () => dispatch => {
     .auth()
     .signOut()
     .then(() => {
+      // Dispatch logout action to erase all redux states relating to currentUser
       dispatch({
         type: LOGOUT_USER
       });
@@ -51,30 +52,103 @@ export const firebaseSignup = (
 
       rootRef.update(updates).then(() => {
         const chainedActions = bindActionCreators({ fetchUser }, dispatch);
-        chainedActions.fetchUser(user.uid);
+        chainedActions.fetchUser();
         callback(null);
       });
-
-      /*// Add new user to database
-      usersRef
-        .update({
-          [user.uid]: {
-            email: user.email,
-            username,
-            joinDate
-          }
-        })
-        .then(() => {
-          const chainedActions = bindActionCreators({ fetchUser }, dispatch);
-          chainedActions.fetchUser(user.uid);
-          callback(null);
-        });
-
-      // Add new username to database
-      usernamesRef.update({ [username]: true });*/
     })
     .catch(error => {
       const { code, message } = error;
       callback(message);
     });
+};
+
+const getCurrentUser = () => firebase.auth().currentUser;
+
+export const setUsername = (username, oldUsername, callback) => dispatch => {
+  const user = getCurrentUser();
+  if (user) {
+    let updates = {};
+    updates['/users/' + user.uid + '/username/'] = username; // Add to users
+    updates['/usernames/' + username] = true; // Add to usernames
+    updates['/usernames/' + oldUsername] = null;
+
+    rootRef
+      .update(updates)
+      .then(() => {
+        // Success
+        const chainedActions = bindActionCreators({ fetchUser }, dispatch);
+        chainedActions.fetchUser();
+        callback(null);
+      })
+      .catch(error => {
+        // Failed
+        const { code, message } = error;
+        callback(message);
+      });
+  } else {
+    callback('Failed to update username.');
+  }
+};
+
+export const setEmail = (email, callback) => dispatch => {
+  const user = getCurrentUser();
+  if (user) {
+    user
+      .updateEmail(email)
+      .then(() => {
+        // Success
+        const chainedActions = bindActionCreators({ fetchUser }, dispatch);
+        chainedActions.fetchUser();
+        callback(null);
+      })
+      .catch(error => {
+        // Failed
+        const { code, message } = error;
+        callback(message);
+      });
+  } else {
+    callback('Failed to update email.');
+  }
+};
+
+export const setPassword = (password, callback) => dispatch => {
+  const user = getCurrentUser();
+  if (user) {
+    user
+      .updatePassword(password)
+      .then(() => {
+        // Success
+        const chainedActions = bindActionCreators({ fetchUser }, dispatch);
+        chainedActions.fetchUser();
+        callback(null);
+      })
+      .catch(error => {
+        // Failed
+        const { code, message } = error;
+        callback(message);
+      });
+  } else {
+    callback('Failed to update password.');
+  }
+};
+
+export const deleteAccount = callback => dispatch => {
+  const user = getCurrentUser();
+  if (user) {
+    user
+      .delete()
+      .then(() => {
+        // Success
+        const chainedActions = bindActionCreators({ fetchUser }, dispatch);
+        chainedActions.fetchUser();
+        callback(null);
+      })
+      .catch(error => {
+        // Failed
+        const { code, message } = error;
+        callback(message);
+      });
+  } else {
+    callback('Failed to delete account.');
+  }
 };
