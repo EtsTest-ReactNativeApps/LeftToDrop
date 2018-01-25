@@ -34,8 +34,7 @@ class LoginScreen extends Component {
       verifyPassword: 'abc12345',
       view: 'login',
       fadeAnim: new Animated.Value(1),
-      keyboardHeight: 0,
-      errorMessage: ''
+      keyboardHeight: 0
     };
   }
 
@@ -72,24 +71,24 @@ class LoginScreen extends Component {
     const title = capitalize(newView);
     this.props.navigation.setParams({ title });
 
-    Animated.timing(fadeAnim, {
+    /*Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 50
-    }).start(() => {
-      this.setState({
-        fadeAnim: new Animated.Value(0),
-        view: newView
-      });
+      duration: 10000
+    }).start(() => {*/
+    this.setState({
+      //fadeAnim: new Animated.Value(0),
+      view: newView
     });
+    /*});*/
   }
 
   render() {
     const { fadeAnim, keyboardHeight, view } = this.state;
 
-    Animated.timing(fadeAnim, {
+    /*Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000
-    }).start();
+    }).start();*/
 
     return (
       <View style={defaultStyles.containerView}>
