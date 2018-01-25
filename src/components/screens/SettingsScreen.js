@@ -18,6 +18,11 @@ import {
   deleteAccount
 } from '../../actions';
 import {
+  usernameExists,
+  validateUsername,
+  validatePassword
+} from '../../validation';
+import {
   defaults,
   defaultStyles,
   listViewStyles as styles
@@ -99,6 +104,46 @@ class SettingsScreen extends Component {
     });
   }
 
+  validateAndSubmitUsername(newUsername) {
+    const { setUsername, user } = this.props;
+    const oldUsername = user.username;
+
+    // If no username change, then erase error
+    if (newUsername === oldUsername)
+      return this.setErrorMessage('editUserError', null);
+
+    let editUsernameError = validateUsername(newUsername);
+    let usernameExistsPromise = usernameExists(newUsername);
+
+    Promise.all([usernameExistsPromise]).then(results => {
+      const usernameExists = results[0].val();
+      editUsernameError = usernameExists
+        ? 'Username is already in use.'
+        : editUsernameError;
+
+      if (!editUsernameError) {
+        // If no errors, set username
+        setUsername(newUsername, oldUsername, editUsernameError => {
+          this.setErrorMessage('editUserError', editUsernameError);
+        });
+      } else {
+        this.setErrorMessage('editUserError', editUsernameError);
+      }
+    });
+  }
+
+  validateAndSubmitPassword(newPassword) {
+    let editPasswordError = validatePassword(newPassword);
+    if (!editPasswordError) {
+      // If no errors, set password
+      setPassword(newPassword, editPasswordError => {
+        this.setErrorMessage('editUserError', editPasswordError);
+      });
+    } else {
+      this.setErrorMessage('editUserError', editPasswordError);
+    }
+  }
+
   render() {
     const {
       modalContents,
@@ -111,15 +156,13 @@ class SettingsScreen extends Component {
       setUsername,
       setEmail,
       setPassword,
-      deleteAccount
+      deleteAccount,
+      navigation
     } = this.props;
 
     const username = user ? user.username : null;
     const email = user ? user.auth.email : null;
     const opacity = user ? 1 : 0.6;
-
-    console.log('USERNAME: ' + username);
-    console.log('EMAIL: ' + email);
 
     return (
       <ScrollView
@@ -141,10 +184,7 @@ class SettingsScreen extends Component {
               this.presentModalAlert(
                 'Edit your username.',
                 username,
-                newUsername =>
-                  setUsername(newUsername, username, errorMessage => {
-                    this.setErrorMessage('editUserError', errorMessage);
-                  })
+                newUsername => this.validateAndSubmitUsername(newUsername)
               );
           }}
         />
@@ -173,10 +213,7 @@ class SettingsScreen extends Component {
               this.presentModalAlert(
                 'Edit your password',
                 '*******',
-                newPassword =>
-                  setPassword(newPassword, errorMessage => {
-                    this.setErrorMessage('editUserError', errorMessage);
-                  }),
+                newPassword => this.validateAndSubmitPassword(newPassword),
                 undefined, // default cancelLabel
                 undefined, // default submitLabel
                 true
@@ -213,6 +250,7 @@ class SettingsScreen extends Component {
                 () =>
                   deleteAccount(errorMessage => {
                     this.setErrorMessage('deleteUserError', errorMessage);
+                    if (!errorMessage) navigation.goBack();
                   }),
                 undefined, // default cancelLabel
                 'Delete' // submitLabel
