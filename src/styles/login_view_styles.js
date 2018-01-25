@@ -10,6 +10,5 @@ export const loginViewStyles = StyleSheet.create({
   inputDescription: {
     justifyContent: 'flex-end',
     height: defaults.cellContentHeight * 0.6
-  },
-  errorText: { color: 'red', fontSize: 15 }
+  }
 });
