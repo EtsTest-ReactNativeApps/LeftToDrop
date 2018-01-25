@@ -2,7 +2,12 @@ import firebase from 'firebase';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from './';
 import { LOGOUT_USER } from './types';
-import { rootRef, usersRef, usernamesRef } from '../firebase/references';
+import {
+  rootRef,
+  usersRef,
+  usernamesRef,
+  favoritesRef
+} from '../firebase/references';
 
 export const firebaseLogin = (email, password, callback) => dispatch => {
   firebase
@@ -66,6 +71,7 @@ const getCurrentUser = () => firebase.auth().currentUser;
 
 export const setUsername = (username, oldUsername, callback) => dispatch => {
   const user = getCurrentUser();
+
   if (user) {
     let updates = {};
     updates['/users/' + user.uid + '/username/'] = username; // Add to users
@@ -135,18 +141,42 @@ export const setPassword = (password, callback) => dispatch => {
 export const deleteAccount = callback => dispatch => {
   const user = getCurrentUser();
   if (user) {
-    user
-      .delete()
-      .then(() => {
-        // Success
-        const chainedActions = bindActionCreators({ fetchUser }, dispatch);
-        chainedActions.fetchUser();
-        callback(null);
-      })
-      .catch(error => {
-        // Failed
-        const { code, message } = error;
-        callback(message);
+    const userID = user.uid;
+
+    // Get current user's username for deletion
+    usersRef
+      .child(userID + '/username')
+      .once('value')
+      .then(snapshot => {
+        const username = snapshot.val();
+
+        // Delete user from auth database
+        user.delete().then(() => {
+          // If successful, delete user from database
+          let updates = {};
+          updates['/users/' + userID] = null;
+          updates['/usernames/' + username] = null;
+          updates['/favorites/' + userID] = null;
+          updates['/upvotedItems/' + userID] = null;
+          updates['/downvotedItems/' + userID] = null;
+
+          rootRef
+            .update(updates)
+            .then(() => {
+              // Success
+              const chainedActions = bindActionCreators(
+                { fetchUser },
+                dispatch
+              );
+              chainedActions.fetchUser();
+              callback(null);
+            })
+            .catch(error => {
+              // Failed
+              const { code, message } = error;
+              callback(message);
+            });
+        });
       });
   } else {
     callback('Failed to delete account.');
