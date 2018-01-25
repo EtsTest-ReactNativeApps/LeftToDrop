@@ -1,33 +1,13 @@
 import React, { Component } from 'react';
 import { Animated, Keyboard, Text, TextInput, View } from 'react-native';
 import ItemButton from '../subcomponents/ItemButton.js';
+import ErrorMessage from '../subcomponents/ErrorMessage';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 const login = props => {
   const { firebaseLogin, state } = props;
   const { email, password } = state;
-
-  if (validateLogin(props)) {
-    firebaseLogin(email, password, error => loginCallback(props, error));
-  }
-};
-
-const validateLogin = props => {
-  const { state, setState } = props;
-  const { email, password } = state;
-
-  let loginEmailError = null;
-  let loginPasswordError = null;
-
-  // Validate username
-  if (email.length == 0) loginEmailError = 'Email cannot be empty.';
-
-  setState({
-    loginEmailError,
-    loginPasswordError
-  });
-
-  return !(loginEmailError || loginPasswordError);
+  firebaseLogin(email, password, error => loginCallback(props, error));
 };
 
 const loginCallback = (props, loginError) => {
@@ -41,20 +21,13 @@ const loginCallback = (props, loginError) => {
 };
 
 const LoginView = props => {
-  const { state, setState, presentErrorMessage, dissolveAnimate } = props;
-  const {
-    username,
-    email,
-    password,
-    fadeAnim,
-    loginError,
-    loginEmailError
-  } = state;
+  const { state, setState, dissolveAnimate } = props;
+  const { username, email, password, fadeAnim, loginError } = state;
 
   return (
     <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
       <View style={styles.inputDescription}>
-        <Text style={defaultStyles.text}>Username or Email</Text>
+        <Text style={defaultStyles.text}>{/*Username or */}Email</Text>
       </View>
       <View style={defaultStyles.formRow}>
         <TextInput
@@ -82,7 +55,6 @@ const LoginView = props => {
           secureTextEntry={false}
         />
       </View>
-      {presentErrorMessage(loginEmailError)}
       <View style={styles.inputDescription}>
         <Text style={defaultStyles.text}>Password</Text>
       </View>
@@ -100,7 +72,7 @@ const LoginView = props => {
           secureTextEntry
         />
       </View>
-      {presentErrorMessage(loginError)}
+      <ErrorMessage errorMessage={loginError} />
       <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
         <ItemButton
           onPress={login.bind(this, props)}
