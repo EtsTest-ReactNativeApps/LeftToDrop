@@ -1,4 +1,10 @@
+import { usernamesRef } from '../firebase/references';
 import { isAlphaNumeric } from '../utility';
+
+export const usernameExists = username => {
+  username = username.toLowerCase();
+  return usernamesRef.child(username).once('value');
+};
 
 export const validateUsername = username => {
   if (username.length < 3) return 'Username must be at least 3 characters.';
