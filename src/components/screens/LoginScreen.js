@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 import LoginView from './LoginView';
 import SignupView from './SignupView';
-import ItemButton from '../subcomponents/ItemButton.js';
+import ItemButton from '../subcomponents/ItemButton';
 import { capitalize } from '../../utility';
 import { firebaseLogin, firebaseSignup } from '../../actions';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
@@ -29,7 +29,7 @@ class LoginScreen extends Component {
 
     this.state = {
       username: 'xkevlar',
-      email: 'xkv@live.com',
+      email: 'xkevlar@live.com',
       password: 'abc12345',
       verifyPassword: 'abc12345',
       view: 'login',
@@ -62,16 +62,6 @@ class LoginScreen extends Component {
 
   keyboardDidHide() {
     this.setState({ keyboardHeight: 0 });
-  }
-
-  presentErrorMessage(errorMessage) {
-    if (errorMessage) {
-      return (
-        <Text style={[defaultStyles.text, styles.errorText]}>
-          {errorMessage}
-        </Text>
-      );
-    }
   }
 
   dissolveAnimate() {
@@ -117,7 +107,6 @@ class LoginScreen extends Component {
                   setState={this.setState.bind(this)}
                   navigation={this.props.navigation}
                   firebaseLogin={this.props.firebaseLogin}
-                  presentErrorMessage={this.presentErrorMessage}
                   dissolveAnimate={this.dissolveAnimate.bind(this)}
                 />
               );
@@ -128,7 +117,6 @@ class LoginScreen extends Component {
                   setState={this.setState.bind(this)}
                   navigation={this.props.navigation}
                   firebaseSignup={this.props.firebaseSignup}
-                  presentErrorMessage={this.presentErrorMessage}
                   dissolveAnimate={this.dissolveAnimate.bind(this)}
                 />
               );
