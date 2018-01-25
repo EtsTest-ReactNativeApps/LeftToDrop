@@ -1,36 +1,18 @@
-import {
-  rootRef,
-  itemsRef,
-  upvotedItemsRef,
-  downvotedItemsRef
-} from '../firebase/references';
+import { rootRef } from '../firebase/references';
 
 export const toggleUpvoteItem = (itemID, userID, value) => dispatch => {
-  upvotedItemsRef.child(userID).update({ [itemID]: value });
-  //toggleItemVote(itemID, userID, value, 'upvotes', 'upvotedItems');
+  toggleItemVote(itemID, userID, value, 'upvotingUsers', 'upvotedItems');
 };
 
 export const toggleDownvoteItem = (itemID, userID, value) => dispatch => {
-  downvotedItemsRef.child(userID).update({ [itemID]: value });
-  //toggleItemVote(itemID, userID, value, 'downvotes', 'downvotedItems');
+  toggleItemVote(itemID, userID, value, 'downvotingUsers', 'downvotedItems');
 };
 
-/*const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
-  itemsRef.child(itemID + '/' + itemSubpath).transaction(oldCount => {
-    // Generate incremented/decremented value
-    const newCount = (oldCount || 0) + (value ? 1 : -1);
-
-    // Create new data object
-    let updatedVoteData = {};
-    updatedVoteData[rootPath + '/' + userID + '/' + itemID] = value;
-    updatedVoteData['items/' + itemID + '/' + itemSubpath] = newCount;
-
-    // Execute deep-path update
-    rootRef.update(updatedVoteData, error => {
-      if (error) {
-        console.log('Failed to vote for item: ', error);
-      }
-    });
-  });
+// Simultaneously update both user's up/downvotedItems
+// and item's up/downvotingUsers to keep values consistent
+const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
+  let updates = {};
+  updates[rootPath + '/' + userID + '/' + itemID] = value;
+  updates['items/' + itemID + '/' + itemSubpath + '/' + userID] = value;
+  rootRef.update(updates);
 };
-*/
