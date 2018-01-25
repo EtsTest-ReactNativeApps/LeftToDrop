@@ -14,8 +14,8 @@ const loginCallback = (props, loginError) => {
   const { setState, navigation } = props;
   setState({ loginError });
 
-  Keyboard.dismiss();
   if (!loginError) {
+    Keyboard.dismiss();
     navigation.goBack();
   }
 };
@@ -82,7 +82,7 @@ const LoginView = props => {
       </View>
       <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
         <ItemButton
-          onPress={dissolveAnimate.bind(this)}
+          onPress={dissolveAnimate}
           label={'Signup'}
           color={'black'}
         />
