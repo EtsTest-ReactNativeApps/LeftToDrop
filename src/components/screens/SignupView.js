@@ -2,70 +2,58 @@ import React, { Component } from 'react';
 import { Animated, Keyboard, Text, TextInput, View } from 'react-native';
 import ItemButton from '../subcomponents/ItemButton';
 import ErrorMessage from '../subcomponents/ErrorMessage';
-import { validateUsername, validatePasswords } from '../../validation';
-import { usernameExists } from '../../firebase';
+import {
+  usernameExists,
+  validateUsername,
+  validatePasswords
+} from '../../validation';
 import { isAlphaNumeric } from '../../utility';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 const signup = props => {
-  const { firebaseSignup, state } = props;
+  const { firebaseSignup, state, setState } = props;
   const { email, username, password, verifyPassword } = state;
-
-  Keyboard.dismiss();
-  if (validateSignup(props)) {
-    firebaseSignup(email, username, password, error =>
-      signupCallback(props, error)
-    );
-  }
-};
-
-export const validateSignup = props => {
-  const { state, setState } = props;
-  const { username, password, verifyPassword } = state;
 
   let signupUsernameError = validateUsername(username);
   let signupPasswordError = validatePasswords(password, verifyPassword);
+  let signupError = null;
   let usernameExistsPromise = usernameExists(username);
 
   // Wait for promises to resolve before setting state
-  Promise.all([usernameExistsPromise])
-    .then(results => {
-      const usernameExists = results[0].val();
-      signupUsernameError = usernameExists
-        ? 'Username is already in use.'
-        : signupUsernameError;
+  Promise.all([usernameExistsPromise]).then(results => {
+    const usernameExists = results[0].val();
+    signupUsernameError = usernameExists
+      ? 'Username is already in use.'
+      : signupUsernameError;
 
-      setState({
-        signupUsernameError,
-        signupPasswordError
-      });
-
-      // Return true if all errors are null
-      return !(signupUsernameError || signupPasswordError);
-    })
-    .catch(() => {
-      setState({
-        signupUsernameError: 'Could not verify that username is not in use.',
-        signupPasswordError
-      });
+    setState({
+      signupUsernameError,
+      signupPasswordError,
+      signupError
     });
+    // Return true if all errors are null
+    const valid = !(signupUsernameError || signupPasswordError);
+    if (valid) {
+      firebaseSignup(email, username, password, signupError =>
+        signupCallback(props, signupError)
+      );
+    }
+  });
 };
 
 const signupCallback = (props, signupError) => {
   const { setState, navigation } = props;
   setState({ signupError });
-  console.log('SIGNUPERROR: ' + signupError);
+
   if (!signupError) {
-    navigation.goBack();
-  } else {
     Keyboard.dismiss();
+    navigation.goBack();
   }
 };
 
 const SignupView = props => {
   const { state, setState } = props;
   const { username, email, password, verifyPassword, fadeAnim } = state;
-
   const { signupUsernameError, signupPasswordError, signupError } = state;
 
   const { dissolveAnimate } = props;
