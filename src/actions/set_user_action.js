@@ -5,8 +5,8 @@ import { LOGOUT_USER } from './types';
 import {
   rootRef,
   usersRef,
-  usernamesRef,
-  favoritesRef
+  upvotedItemsRef,
+  downvotedItemsRef
 } from '../firebase/references';
 
 export const firebaseLogin = (email, password, callback) => dispatch => {
@@ -143,23 +143,36 @@ export const deleteAccount = callback => dispatch => {
   if (user) {
     const userID = user.uid;
 
-    // Get current user's username for deletion
-    usersRef
-      .child(userID + '/username')
-      .once('value')
-      .then(snapshot => {
-        const username = snapshot.val();
+    const usernamePromise = usersRef.child(userID + '/username').once('value');
+    const upvotedItemsPromise = upvotedItemsRef.child(userID).once('value');
+    const downvotedItemsPromise = downvotedItemsRef.child(userID).once('value');
+
+    Promise.all([usernamePromise, upvotedItemsPromise, downvotedItemsPromise])
+      .then(results => {
+        const username = results[0] ? results[0].val() : null;
+        const upvotedItemIDs = Object.keys(results[1].val() || {});
+        const downvotedItemIDs = Object.keys(results[2].val() || {});
 
         // Delete user from auth database
         user.delete().then(() => {
-          // If successful, delete user from database
+          // If successful, delete user-related data from database
           let updates = {};
           updates['/users/' + userID] = null;
-          updates['/usernames/' + username] = null;
+          if (username) updates['/usernames/' + username] = null;
           updates['/favorites/' + userID] = null;
           updates['/upvotedItems/' + userID] = null;
           updates['/downvotedItems/' + userID] = null;
 
+          // nullify user's upvotes from items
+          for (index in upvotedItemIDs) {
+            const itemID = upvotedItemIDs[index];
+            updates['/items/' + itemID + '/upvotingUsers/' + userID] = null;
+          }
+          // nullify user's downvotes from items
+          for (index in downvotedItemIDs) {
+            const itemID = downvotedItemIDs[index];
+            updates['/items/' + itemID + '/downvotingUsers/' + userID] = null;
+          }
           rootRef
             .update(updates)
             .then(() => {
@@ -177,8 +190,12 @@ export const deleteAccount = callback => dispatch => {
               callback(message);
             });
         });
+      })
+      .catch(error => {
+        const { code, message } = error;
+        callback(message);
       });
   } else {
-    callback('Failed to delete account.');
+    callback('Failed to delete user.');
   }
 };
