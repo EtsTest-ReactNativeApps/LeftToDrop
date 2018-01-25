@@ -12,6 +12,7 @@ export const defaults = {
   fontSize: 20,
   cellHeight: 50,
   cellContentHeight: 50 * 0.8,
+  marginHorizontal: 15,
   separatorColor: 'lightgray'
 };
 

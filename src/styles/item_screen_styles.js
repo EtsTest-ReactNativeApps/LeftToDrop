@@ -10,7 +10,7 @@ export const itemScreenStyles = StyleSheet.create({
     backgroundColor: defaults.contentBackgroundColor,
     height: defaults.cellHeight,
     justifyContent: 'center',
-    paddingHorizontal: 15
+    paddingHorizontal: defaults.marginHorizontal
   },
   itemNameText: {
     textAlign: 'left'
@@ -27,7 +27,7 @@ export const itemScreenStyles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     padding: 10,
-    margin: 15,
+    margin: defaults.marginHorizontal,
     overflow: 'hidden',
     width: '100%'
   },
@@ -42,14 +42,14 @@ export const itemScreenStyles = StyleSheet.create({
     backgroundColor: defaults.contentBackgroundColor,
     flexDirection: 'row',
     //    height: 50,
-    paddingHorizontal: 15,
+    paddingHorizontal: defaults.marginHorizontal,
     paddingVertical: 5
   },
   descriptionView: {
     backgroundColor: defaults.contentBackgroundColor,
     //flex: 1,
     minHeight: 100,
-    paddingHorizontal: 15,
+    paddingHorizontal: defaults.marginHorizontal,
     paddingVertical: 10
   },
   descriptionText: {

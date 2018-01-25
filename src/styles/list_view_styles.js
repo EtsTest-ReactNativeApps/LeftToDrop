@@ -11,7 +11,7 @@ export const listViewStyles = StyleSheet.create({
     flexDirection: 'row',
     height: defaults.cellHeight,
     justifyContent: 'flex-start',
-    paddingHorizontal: 15
+    paddingHorizontal: defaults.marginHorizontal
   },
   imageView: {
     aspectRatio: 1,
