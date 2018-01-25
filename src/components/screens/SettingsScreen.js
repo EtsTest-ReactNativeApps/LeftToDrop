@@ -10,10 +10,22 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ModalView from '../subcomponents/ModalView';
-import { defaultStyles, listViewStyles as styles } from '../../styles';
+import ErrorMessage from '../subcomponents/ErrorMessage';
+import {
+  setUsername,
+  setEmail,
+  setPassword,
+  deleteAccount
+} from '../../actions';
+import {
+  defaults,
+  defaultStyles,
+  listViewStyles as styles
+} from '../../styles';
 
 class StaticRow extends Component {
   render() {
+    // null means NO VALUE, undefined means no value SET YET
     const { label, value, onPressRow, labelStyle } = this.props;
     return (
       <TouchableHighlight underlayColor="whitesmoke" onPress={onPressRow}>
@@ -34,26 +46,36 @@ class SettingsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      // Needs default modalContents for invisible ModalView
       modalContents: {
-        description: 'DESCRIPTION',
-        value: 'VALUE',
-        submitLabel: 'LABEL'
+        description: null,
+        value: null,
+        submitAction: null,
+        cancelLabel: null,
+        submitLabel: null,
+        secureTextEntry: null
       },
-      modalVisibility: false
+      modalVisibility: false,
+      editUserError: null,
+      deleteUserError: null
     };
   }
 
   presentModalAlert(
     description,
     value,
+    submitAction = null,
     cancelLabel = 'Cancel',
-    submitLabel = 'Save'
+    submitLabel = 'Save',
+    secureTextEntry = false
   ) {
     const modalContents = {
       description,
       value,
+      submitAction,
       cancelLabel,
-      submitLabel
+      submitLabel,
+      secureTextEntry
     };
     this.setState({
       modalContents,
@@ -61,8 +83,14 @@ class SettingsScreen extends Component {
     });
   }
 
-  aboutPopup() {
-    console.log('PRESENTABOUTPOPOUP');
+  setErrorMessage(errorType, errorMessage) {
+    // Remove other error; only one error message should be visible at a time
+    const otherErrorType =
+      errorType == 'editUserError' ? 'deleteUserError' : 'editUserError';
+    this.setState({
+      [errorType]: errorMessage,
+      [otherErrorType]: null
+    });
   }
 
   closeModal() {
@@ -72,14 +100,32 @@ class SettingsScreen extends Component {
   }
 
   render() {
-    const { modalContents, modalVisibility } = this.state;
-    const { user } = this.props;
+    const {
+      modalContents,
+      modalVisibility,
+      editUserError,
+      deleteUserError
+    } = this.state;
+    const {
+      user,
+      setUsername,
+      setEmail,
+      setPassword,
+      deleteAccount
+    } = this.props;
+
     const username = user ? user.username : null;
-    const email = user ? user.email : null;
+    const email = user ? user.auth.email : null;
     const opacity = user ? 1 : 0.6;
 
+    console.log('USERNAME: ' + username);
+    console.log('EMAIL: ' + email);
+
     return (
-      <ScrollView style={defaultStyles.containerView}>
+      <ScrollView
+        style={defaultStyles.containerView}
+        keyboardShouldPersistTaps="always"
+      >
         <ModalView
           closeModal={() => this.closeModal.bind(this)()}
           contents={modalContents}
@@ -91,7 +137,15 @@ class SettingsScreen extends Component {
           labelStyle={{ opacity }}
           value={username}
           onPressRow={() => {
-            if (user) this.presentModalAlert('Edit your username.', username);
+            if (user)
+              this.presentModalAlert(
+                'Edit your username.',
+                username,
+                newUsername =>
+                  setUsername(newUsername, username, errorMessage => {
+                    this.setErrorMessage('editUserError', errorMessage);
+                  })
+              );
           }}
         />
         <StaticRow
@@ -99,7 +153,15 @@ class SettingsScreen extends Component {
           labelStyle={{ opacity }}
           value={email}
           onPressRow={() => {
-            if (user) this.presentModalAlert('Edit your email address.', email);
+            if (user)
+              this.presentModalAlert(
+                'Edit your email address.',
+                email,
+                newEmail =>
+                  setEmail(newEmail, errorMessage => {
+                    this.setErrorMessage('editUserError', errorMessage);
+                  })
+              );
           }}
         />
         <StaticRow
@@ -107,18 +169,35 @@ class SettingsScreen extends Component {
           labelStyle={{ opacity }}
           value={user ? '*******' : null}
           onPressRow={() => {
-            if (user) this.presentModalAlert('Edit your password', '*******');
+            if (user)
+              this.presentModalAlert(
+                'Edit your password',
+                '*******',
+                newPassword =>
+                  setPassword(newPassword, errorMessage => {
+                    this.setErrorMessage('editUserError', errorMessage);
+                  }),
+                undefined, // default cancelLabel
+                undefined, // default submitLabel
+                true
+              );
           }}
         />
+        <View
+          style={{ marginHorizontal: defaults.marginHorizontal, marginTop: 5 }}
+        >
+          <ErrorMessage errorMessage={editUserError} />
+        </View>
         <SpacerView />
         <StaticRow
           label="Contact"
           onPressRow={() =>
             this.presentModalAlert(
               "If you've got any questions or have any suggestions, please send an email to kevinlargoapps@gmail.com",
-              null,
-              null,
-              'Dismiss'
+              null, // no value
+              this.closeModal.bind(this), // no submitAction
+              null, // no cancelLabel
+              'Dismiss' // submitLabel
             )
           }
         />
@@ -130,12 +209,21 @@ class SettingsScreen extends Component {
             if (user)
               this.presentModalAlert(
                 "Are you sure you'd like to permanently delete your account?",
-                null,
-                undefined,
-                'Delete'
+                null, // value
+                () =>
+                  deleteAccount(errorMessage => {
+                    this.setErrorMessage('deleteUserError', errorMessage);
+                  }),
+                undefined, // default cancelLabel
+                'Delete' // submitLabel
               );
           }}
         />
+        <View
+          style={{ marginHorizontal: defaults.marginHorizontal, marginTop: 5 }}
+        >
+          <ErrorMessage errorMessage={deleteUserError} />
+        </View>
       </ScrollView>
     );
   }
@@ -145,9 +233,14 @@ mapStateToProps = ({ user }) => {
   return { user };
 };
 
-mapDispatchToProps => dispatch => {
+mapDispatchToProps = dispatch => {
   return bindActionCreators(
-    { setUsername, setPassword, setEmail, deleteAccount },
+    {
+      setUsername,
+      setEmail,
+      setPassword,
+      deleteAccount
+    },
     dispatch
   );
 };
