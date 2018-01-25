@@ -24,11 +24,9 @@ const loadUserData = (user, dispatch) => {
     const userID = user.uid;
 
     usersRef.child(userID).on('value', snapshot => {
-      const userObject = snapshot.val() || null;
-      if (userObject) {
-        userObject['id'] = snapshot.key;
-        userObject['auth'] = user;
-      }
+      const userObject = snapshot.val() || {};
+      userObject['id'] = userID;
+      userObject['auth'] = user;
 
       dispatch({
         type: FETCH_USER,
@@ -36,7 +34,10 @@ const loadUserData = (user, dispatch) => {
       });
     });
 
-    const chainedActions = bindActionCreators({ fetchFavorites }, dispatch);
+    const chainedActions = bindActionCreators(
+      { fetchFavorites, fetchUpvotedItemIDs, fetchDownvotedItemIDs },
+      dispatch
+    );
     for (action in chainedActions) {
       chainedActions[action](userID);
     }
