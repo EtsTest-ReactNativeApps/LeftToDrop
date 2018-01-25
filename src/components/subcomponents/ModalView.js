@@ -8,16 +8,45 @@ import {
   View
 } from 'react-native';
 import ItemButton from '../subcomponents/ItemButton';
+import ErrorMessage from '../subcomponents/ErrorMessage';
 import {
   defaults,
   defaultStyles,
-  modalViewStyles as styles
+  modalViewStyles as styles,
+  loginViewStyles
 } from '../../styles';
 
 class ModalView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: undefined, errorMessage: null };
+  }
+
+  // ModalView is setup before it appears; componentWillReceiveProps() will act as constructor()
+  componentWillReceiveProps(newProps) {
+    this.setState({ value: newProps.contents.value });
+  }
+
+  presentErrorMessage(errorMessage) {
+    if (errorMessage) {
+      return (
+        <Text style={[defaultStyles.text, loginViewStyles.errorText]}>
+          {errorMessage}
+        </Text>
+      );
+    }
+  }
+
   render() {
     const { closeModal, contents, visibility } = this.props;
-    const { description, value, cancelLabel, submitLabel } = contents;
+    const {
+      description,
+      submitAction,
+      cancelLabel,
+      submitLabel,
+      secureTextEntry
+    } = contents;
+    const { value, errorMessage } = this.state;
 
     return (
       <Modal
@@ -36,8 +65,8 @@ class ModalView extends Component {
                 style={[
                   defaultStyles.formRow,
                   (() => {
-                    // Double desription height if there are no textFields
-                    if (!value) {
+                    // Double description height if there are no textFields
+                    if (value === null) {
                       return { height: defaults.cellContentHeight * 2 };
                     }
                   })()
@@ -48,17 +77,41 @@ class ModalView extends Component {
                 </Text>
               </View>
               {(() => {
-                if (value) {
+                if (value !== null) {
+                  // Show TextInput for undefined values
                   return (
                     <View style={defaultStyles.formRow}>
                       <TextInput
                         style={[defaultStyles.text, defaultStyles.textInput]}
                         value={value}
+                        onChangeText={value => this.setState({ value })}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        autoFocus
+                        secureTextEntry={secureTextEntry}
                       />
                     </View>
                   );
                 }
               })()}
+              {(() => {
+                if (errorMessage) {
+                  return (
+                    <View
+                      style={{
+                        justifyContent: 'flex-start',
+                        height: 20,
+                        width: '100%'
+                      }}
+                    >
+                      <ErrorMessage
+                        errorMessage={'Failed to update username.'}
+                      />
+                    </View>
+                  );
+                }
+              })()}
+
               <View style={defaultStyles.formRow}>
                 {(() => {
                   if (cancelLabel) {
@@ -74,7 +127,10 @@ class ModalView extends Component {
                   }
                 })()}
                 <ItemButton
-                  onPress={closeModal}
+                  onPress={() => {
+                    submitAction(value);
+                    closeModal();
+                  }}
                   label={submitLabel}
                   color={'red'}
                   marginLeft={cancelLabel ? 5 : 0}
