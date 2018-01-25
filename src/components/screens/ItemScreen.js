@@ -141,8 +141,16 @@ class ItemScreen extends Component {
             <View style={styles.bottomContainerView}>
               <SeparatorView />
               <RatingBarView
-                upvoteCount={item.upvotes || 0}
-                downvoteCount={item.downvotes || 0}
+                upvoteCount={
+                  item.upvotingUsers
+                    ? Object.keys(item.upvotingUsers).length
+                    : 0
+                }
+                downvoteCount={
+                  item.downvotingUsers
+                    ? Object.keys(item.downvotingUsers).length
+                    : 0
+                }
               />
               <SeparatorView />
               <View style={styles.buttonContainerView}>
