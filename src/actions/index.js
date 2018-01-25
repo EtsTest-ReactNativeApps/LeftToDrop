@@ -4,7 +4,7 @@ export { fetchItem } from './fetch_item_action';
 export { fetchItems } from './fetch_items_action';
 export { fetchMetadata } from './fetch_metadata_action';
 export { fetchSeasons } from './fetch_seasons_action';
-export { fetchUser } from './fetch_user_action';
+export { fetchUser, listenForAuthStateChange } from './fetch_user_action';
 export {
   fetchUpvotedItemIDs,
   fetchDownvotedItemIDs
@@ -14,5 +14,9 @@ export { toggleUpvoteItem, toggleDownvoteItem } from './set_item_action';
 export {
   firebaseLogin,
   firebaseLogout,
-  firebaseSignup
+  firebaseSignup,
+  setUsername,
+  setEmail,
+  setPassword,
+  deleteAccount
 } from './set_user_action';
