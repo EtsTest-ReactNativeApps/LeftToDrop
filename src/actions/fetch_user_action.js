@@ -1,4 +1,5 @@
 import { bindActionCreators } from 'redux';
+import Firebase from 'firebase';
 import { usersRef } from '../firebase/references';
 import { fetchFavorites } from './fetch_favorites_action';
 import {
@@ -7,42 +8,43 @@ import {
 } from './fetch_voted_items_action';
 import { FETCH_USER } from './types';
 
-import firebase from 'firebase';
+export const listenForAuthStateChange = () => dispatch => {
+  Firebase.auth().onAuthStateChanged(user => loadUserData(user, dispatch));
+};
 
+// Will be called after user data is edited (i.e. username/email change)
 export const fetchUser = () => dispatch => {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      // User is logged in
-      const userID = user.uid;
+  const currentUser = Firebase.auth().currentUser;
+  loadUserData(currentUser, dispatch);
+};
 
-      usersRef.child(userID).on('value', snapshot => {
-        const userObject = snapshot.val() || null;
-        if (userObject) {
-          userObject['id'] = snapshot.key;
-          userObject['email'] = firebase.auth().currentUser.email;
-        }
+// Called whenever authStateChanges or when fetchUser() is explicitly called
+const loadUserData = (user, dispatch) => {
+  if (user) {
+    const userID = user.uid;
 
-        dispatch({
-          type: FETCH_USER,
-          payload: userObject
-        });
-      });
-
-      // Bind fetch actions to dispatch
-      const chainedActions = bindActionCreators(
-        { fetchFavorites, fetchUpvotedItemIDs, fetchDownvotedItemIDs },
-        dispatch
-      );
-      // Call each fetch action
-      for (action in chainedActions) {
-        chainedActions[action](userID);
+    usersRef.child(userID).on('value', snapshot => {
+      const userObject = snapshot.val() || null;
+      if (userObject) {
+        userObject['id'] = snapshot.key;
+        userObject['auth'] = user;
       }
-    } else {
-      // No user is logged in
-      return dispatch({
+
+      dispatch({
         type: FETCH_USER,
-        payload: null
+        payload: userObject
       });
+    });
+
+    const chainedActions = bindActionCreators({ fetchFavorites }, dispatch);
+    for (action in chainedActions) {
+      chainedActions[action](userID);
     }
-  });
+  } else {
+    // No user is logged in
+    return dispatch({
+      type: FETCH_USER,
+      payload: null
+    });
+  }
 };
