@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Animated, Keyboard, Text, TextInput, View } from 'react-native';
-import ItemButton from '../subcomponents/ItemButton.js';
+import ItemButton from '../subcomponents/ItemButton';
+import ErrorMessage from '../subcomponents/ErrorMessage';
+import { validateUsername, validatePasswords } from '../../validation';
 import { usernameExists } from '../../firebase';
-import { isAlphaNumeric, isValidEmail } from '../../utility';
+import { isAlphaNumeric } from '../../utility';
 import { defaultStyles, loginViewStyles as styles } from '../../styles';
 
 const signup = props => {
@@ -17,59 +19,42 @@ const signup = props => {
   }
 };
 
-const validateSignup = props => {
+export const validateSignup = props => {
   const { state, setState } = props;
-  const { username, email, password, verifyPassword } = state;
+  const { username, password, verifyPassword } = state;
 
-  let signupUsernameError = null;
-  let signupEmailError = null;
-  let signupPasswordError = null;
-  let signupVerifyPasswordError = null;
-
-  // Validate username
-  if (username.length < 3)
-    signupUsernameError = 'Username must be at least 3 characters.';
-  if (isAlphaNumeric(username))
-    signupUsernameError: 'Username must be alphanumeric.';
-
+  let signupUsernameError = validateUsername(username);
+  let signupPasswordError = validatePasswords(password, verifyPassword);
   let usernameExistsPromise = usernameExists(username);
 
-  // Validate password
-  if (password.length < 8)
-    signupPasswordError = 'Password must be at least 8 characters.';
-
-  // Validate verifyPassword
-  if (password != verifyPassword)
-    signupVerifyPasswordError = "Passwords don't match.";
-
   // Wait for promises to resolve before setting state
-  Promise.all([usernameExistsPromise]).then(results => {
-    const usernameExists = results[0].val();
-    signupUsernameError = usernameExists
-      ? 'Username is already in use.'
-      : signupUsernameError;
+  Promise.all([usernameExistsPromise])
+    .then(results => {
+      const usernameExists = results[0].val();
+      signupUsernameError = usernameExists
+        ? 'Username is already in use.'
+        : signupUsernameError;
 
-    setState({
-      signupUsernameError,
-      signupEmailError,
-      signupPasswordError,
-      signupVerifyPasswordError
+      setState({
+        signupUsernameError,
+        signupPasswordError
+      });
+
+      // Return true if all errors are null
+      return !(signupUsernameError || signupPasswordError);
+    })
+    .catch(() => {
+      setState({
+        signupUsernameError: 'Could not verify that username is not in use.',
+        signupPasswordError
+      });
     });
-
-    // Return true if all errors are null
-    return !(
-      signupUsernameError ||
-      signupEmailError ||
-      signupPasswordError ||
-      signupVerifyPasswordError
-    );
-  });
 };
 
 const signupCallback = (props, signupError) => {
   const { setState, navigation } = props;
   setState({ signupError });
-
+  console.log('SIGNUPERROR: ' + signupError);
   if (!signupError) {
     navigation.goBack();
   } else {
@@ -81,15 +66,9 @@ const SignupView = props => {
   const { state, setState } = props;
   const { username, email, password, verifyPassword, fadeAnim } = state;
 
-  const {
-    signupUsernameError,
-    signupEmailError,
-    signupPasswordError,
-    signupVerifyPasswordError,
-    signupError
-  } = state;
+  const { signupUsernameError, signupPasswordError, signupError } = state;
 
-  const { presentErrorMessage, dissolveAnimate } = props;
+  const { dissolveAnimate } = props;
 
   return (
     <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
@@ -101,19 +80,7 @@ const SignupView = props => {
           // Values
           style={[defaultStyles.text, defaultStyles.textInput]}
           value={username}
-          onChangeText={username => {
-            // Don't change username unless alphanumeric
-            if (isAlphaNumeric(username)) {
-              setState({
-                username,
-                signupUsernameError: null
-              });
-            } else {
-              setState({
-                signupUsernameError: 'Username must be alphanumeric.'
-              });
-            }
-          }}
+          onChangeText={username => setState({ username })}
           onSubmitEditing={() => this.signupEmailRef.focus()}
           // Configuration
           autoCapitalize="none"
@@ -123,7 +90,7 @@ const SignupView = props => {
           secureTextEntry={false}
         />
       </View>
-      {presentErrorMessage(signupUsernameError)}
+      <ErrorMessage errorMessage={signupUsernameError} />
       <View style={styles.inputDescription}>
         <Text style={defaultStyles.text}>Email</Text>
       </View>
@@ -133,7 +100,7 @@ const SignupView = props => {
           style={[defaultStyles.text, defaultStyles.textInput]}
           value={email}
           ref={signupEmailRef => (this.signupEmailRef = signupEmailRef)}
-          onChangeText={email => setState({ email, signupEmailError: null })}
+          onChangeText={email => setState({ email })}
           onSubmitEditing={() => this.signupPasswordRef.focus()}
           // Configuration
           autoCapitalize="none"
@@ -142,7 +109,6 @@ const SignupView = props => {
           secureTextEntry={false}
         />
       </View>
-      {presentErrorMessage(signupEmailError)}
       <View style={styles.inputDescription}>
         <Text style={defaultStyles.text}>Password</Text>
       </View>
@@ -164,7 +130,7 @@ const SignupView = props => {
           secureTextEntry
         />
       </View>
-      {presentErrorMessage(signupPasswordError)}
+      <ErrorMessage errorMessage={signupPasswordError} />
       <View style={styles.inputDescription}>
         <Text style={defaultStyles.text}>Verify Password</Text>
       </View>
@@ -176,9 +142,7 @@ const SignupView = props => {
           ref={signupVerifyPasswordRef =>
             (this.signupVerifyPasswordRef = signupVerifyPasswordRef)
           }
-          onChangeText={verifyPassword =>
-            setState({ verifyPassword, signupVerifyPasswordError: null })
-          }
+          onChangeText={verifyPassword => setState({ verifyPassword })}
           onSubmitEditing={signup.bind(this, props)}
           // Configuration
           autoCapitalize="none"
@@ -186,8 +150,7 @@ const SignupView = props => {
           secureTextEntry
         />
       </View>
-      {presentErrorMessage(signupVerifyPasswordError)}
-      {presentErrorMessage(signupError)}
+      <ErrorMessage errorMessage={signupError} />
       <View style={[defaultStyles.formRow, { marginTop: 10 }]}>
         <ItemButton
           onPress={signup.bind(this, props)}
