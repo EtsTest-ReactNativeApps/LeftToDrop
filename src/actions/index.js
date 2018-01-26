@@ -10,6 +10,7 @@ export { toggleFavoriteItem } from './set_favorite_action';
 export { toggleUpvoteItem, toggleDownvoteItem } from './set_item_action';
 export {
   firebaseLogin,
+  firebaseAnonymousLogin,
   firebaseLogout,
   firebaseSignup,
   setUsername,
