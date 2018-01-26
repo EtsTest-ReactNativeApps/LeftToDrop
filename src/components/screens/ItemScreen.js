@@ -77,10 +77,6 @@ class ItemScreen extends Component {
     const upvotedItemIDs = userVoteItemIDs.upvotedItemIDs;
     const downvotedItemIDs = userVoteItemIDs.downvotedItemIDs;
 
-    console.log('UPVOTEDITEMIDS: ' + [upvotedItemIDs]);
-    console.log('DOWNVOTEITEMIDS: ' + downvotedItemIDs);
-    console.log('ITEMID: ' + this.itemID);
-
     const buttonData = [
       {
         objectArray: upvotedItemIDs,
@@ -128,11 +124,6 @@ class ItemScreen extends Component {
 
     const upvotedItemIDs = userVoteItemIDs.upvotedItemIDs;
     const downvotedItemIDs = userVoteItemIDs.downvotedItemIDs;
-
-    console.log('ITEM: ' + item);
-    console.log('FAVITEMIDS: ' + favoriteItemIDs);
-    console.log('UPVOTEDIDS: ' + upvotedItemIDs);
-    console.log('DOWNVOTEIDS: ' + downvotedItemIDs);
 
     if (
       item == null ||
