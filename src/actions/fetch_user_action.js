@@ -1,11 +1,7 @@
 import { bindActionCreators } from 'redux';
 import Firebase from 'firebase';
 import { usersRef } from '../firebase/references';
-import { fetchFavorites } from './fetch_favorites_action';
-import {
-  fetchUpvotedItemIDs,
-  fetchDownvotedItemIDs
-} from './fetch_voted_items_action';
+import { fetchFavorites, fetchUserVoteItemIDs } from '.';
 import { FETCH_USER } from './types';
 
 export const listenForAuthStateChange = () => dispatch => {
@@ -35,7 +31,7 @@ const loadUserData = (user, dispatch) => {
     });
 
     const chainedActions = bindActionCreators(
-      { fetchFavorites, fetchUpvotedItemIDs, fetchDownvotedItemIDs },
+      { fetchFavorites, fetchUserVoteItemIDs },
       dispatch
     );
     for (action in chainedActions) {

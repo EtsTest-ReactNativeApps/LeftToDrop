@@ -3,10 +3,7 @@ import {
   favoriteItemIDsReducer,
   favoriteItemsReducer
 } from './favorites_reducer';
-import {
-  upvotedItemIDsReducer,
-  downvotedItemIDsReducer
-} from './voted_items_reducer';
+import userVoteItemIDsReducer from './user_votes_reducer';
 import metadataReducer from './metadata_reducer';
 import seasonsReducer from './seasons_reducer';
 import categoriesReducer from './categories_reducer';
@@ -23,6 +20,5 @@ export default (rootReducer = combineReducers({
   user: userReducer,
   favoriteItemIDs: favoriteItemIDsReducer,
   favoriteItems: favoriteItemsReducer,
-  upvotedItemIDs: upvotedItemIDsReducer,
-  downvotedItemIDs: downvotedItemIDsReducer
+  userVoteItemIDs: userVoteItemIDsReducer
 }));
