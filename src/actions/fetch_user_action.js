@@ -1,16 +1,20 @@
 import { bindActionCreators } from 'redux';
-import Firebase from 'firebase';
+import firebase from 'firebase';
 import { usersRef } from '../firebase/references';
-import { fetchFavorites, fetchUserVoteItemIDs } from '.';
+import {
+  fetchFavorites,
+  fetchUserVoteItemIDs,
+  firebaseAnonymousLogin
+} from '.';
 import { FETCH_USER } from './types';
 
 export const listenForAuthStateChange = () => dispatch => {
-  Firebase.auth().onAuthStateChanged(user => loadUserData(user, dispatch));
+  firebase.auth().onAuthStateChanged(user => loadUserData(user, dispatch));
 };
 
 // Will be called after user data is edited (i.e. username/email change)
 export const fetchUser = () => dispatch => {
-  const currentUser = Firebase.auth().currentUser;
+  const currentUser = firebase.auth().currentUser;
   loadUserData(currentUser, dispatch);
 };
 
@@ -38,10 +42,18 @@ const loadUserData = (user, dispatch) => {
       chainedActions[action](userID);
     }
   } else {
-    // No user is logged in
+    /*// No user is logged in
     return dispatch({
       type: FETCH_USER,
-      payload: null
-    });
+      payload: {}
+    });*/
+
+    firebase
+      .auth()
+      .signInAnonymously()
+      .catch(error => {
+        const { code, message } = error;
+        console.log('\n\nANONYMOUS LOGIN ERROR: ' + message + '\n\n');
+      });
   }
 };
