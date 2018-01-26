@@ -112,24 +112,30 @@ class SettingsScreen extends Component {
     if (newUsername === oldUsername)
       return this.setErrorMessage('editUserError', null);
 
+    // If error found during validation, return from here
     let editUsernameError = validateUsername(newUsername);
-    let usernameExistsPromise = usernameExists(newUsername);
 
-    Promise.all([usernameExistsPromise]).then(results => {
-      const usernameExists = results[0].val();
-      editUsernameError = usernameExists
-        ? 'Username is already in use.'
-        : editUsernameError;
+    if (editUsernameError) {
+      return this.setErrorMessage('editUserError', editUsernameError);
+    } else {
+      // Else, continue with checking if username already exists;
+      let usernameExistsPromise = usernameExists(newUsername);
+      Promise.all([usernameExistsPromise]).then(results => {
+        const usernameExists = results[0].val();
+        editUsernameError = usernameExists
+          ? 'Username is already in use.'
+          : editUsernameError;
 
-      if (!editUsernameError) {
-        // If no errors, set username
-        setUsername(newUsername, oldUsername, editUsernameError => {
+        if (!editUsernameError) {
+          // If no errors, set username
+          setUsername(newUsername, oldUsername, editUsernameError => {
+            this.setErrorMessage('editUserError', editUsernameError);
+          });
+        } else {
           this.setErrorMessage('editUserError', editUsernameError);
-        });
-      } else {
-        this.setErrorMessage('editUserError', editUsernameError);
-      }
-    });
+        }
+      });
+    }
   }
 
   validateAndSubmitPassword(newPassword) {
@@ -160,9 +166,20 @@ class SettingsScreen extends Component {
       navigation
     } = this.props;
 
-    const username = user ? user.username : null;
-    const email = user ? user.auth.email : null;
-    const opacity = user ? 1 : 0.6;
+    //const username = user ? user.username : null;
+    //const email = user ? user.auth.email : null;
+    //const opacity = user ? 1 : 0.6;
+
+    let username = null;
+    let email = null;
+    let opacity = 0.6;
+
+    // If logged-in user
+    if (user && !user.auth.isAnonymous) {
+      username = user.username;
+      email = user.auth.email;
+      opacity = 1;
+    }
 
     return (
       <ScrollView
@@ -180,7 +197,7 @@ class SettingsScreen extends Component {
           labelStyle={{ opacity }}
           value={username}
           onPressRow={() => {
-            if (user)
+            if (user && !user.auth.isAnonymous)
               this.presentModalAlert(
                 'Edit your username.',
                 username,
@@ -193,7 +210,7 @@ class SettingsScreen extends Component {
           labelStyle={{ opacity }}
           value={email}
           onPressRow={() => {
-            if (user)
+            if (user && !user.auth.isAnonymous)
               this.presentModalAlert(
                 'Edit your email address.',
                 email,
@@ -207,9 +224,9 @@ class SettingsScreen extends Component {
         <StaticRow
           label="Password"
           labelStyle={{ opacity }}
-          value={user ? '*******' : null}
+          value={user && !user.auth.isAnonymous ? '*******' : null}
           onPressRow={() => {
-            if (user)
+            if (user && !user.auth.isAnonymous)
               this.presentModalAlert(
                 'Edit your password',
                 '*******',
@@ -243,7 +260,7 @@ class SettingsScreen extends Component {
           label="Delete Account"
           labelStyle={[styles.textDelete, { opacity }]}
           onPressRow={() => {
-            if (user)
+            if (user && !user.auth.isAnonymous)
               this.presentModalAlert(
                 "Are you sure you'd like to permanently delete your account?",
                 null, // value
