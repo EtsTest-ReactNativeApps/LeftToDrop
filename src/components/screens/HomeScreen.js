@@ -9,6 +9,7 @@ import EmptyView from '../subcomponents/EmptyView';
 import {
   fetchMetadata,
   listenForAuthStateChange,
+  firebaseAnonymousLogin,
   firebaseLogout
 } from '../../actions';
 import { defaultStyles } from '../../styles';
@@ -20,15 +21,17 @@ class HomeScreen extends Component {
       headerBackTitle: 'Back',
       headerRight: (() => {
         const { params } = navigation.state;
-        const user = params ? params.user : {};
+        const user = params ? params.user : null;
 
         // undefined user = user is still loading
-        //if (user != undefined) {
-        if (_.isEmpty(user)) {
+        //if (_.isEmpty(user)) {
+        if (!user) return null; // Still loading user
+
+        if (user.auth.isAnonymous) {
           // empty user = no user to load
           var label = 'Login';
           var onPress = () => navigation.navigate('Login');
-        } else {
+        } else if (!user.auth.isAnonymous) {
           // otherwise, user is loaded
           var label = 'Logout';
           var onPress = () => navigation.state.params.firebaseLogout();
