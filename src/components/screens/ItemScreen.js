@@ -43,10 +43,11 @@ class ItemScreen extends Component {
 
   upvoteItem(itemID, userID, value) {
     const {
-      downvotedItemIDs,
+      userVoteItemIDs,
       toggleUpvoteItem,
       toggleDownvoteItem
     } = this.props;
+    const downvotedItemIDs = userVoteItemIDs.downvotedItemIDs;
 
     toggleUpvoteItem(itemID, userID, value);
     // If previously downvoted, remove downvote
@@ -56,7 +57,12 @@ class ItemScreen extends Component {
   }
 
   downvoteItem(itemID, userID, value) {
-    const { upvotedItemIDs, toggleUpvoteItem, toggleDownvoteItem } = this.props;
+    const {
+      userVoteItemIDs,
+      toggleUpvoteItem,
+      toggleDownvoteItem
+    } = this.props;
+    const upvotedItemIDs = userVoteItemIDs.upvotedItemIDs;
 
     toggleDownvoteItem(itemID, userID, value);
     // If previously upvoted, remove upvote
@@ -66,12 +72,14 @@ class ItemScreen extends Component {
   }
 
   renderButtons() {
-    const {
-      upvotedItemIDs,
-      favoriteItemIDs,
-      downvotedItemIDs,
-      toggleFavoriteItem
-    } = this.props;
+    const { favoriteItemIDs, userVoteItemIDs, toggleFavoriteItem } = this.props;
+
+    const upvotedItemIDs = userVoteItemIDs.upvotedItemIDs;
+    const downvotedItemIDs = userVoteItemIDs.downvotedItemIDs;
+
+    console.log('UPVOTEDITEMIDS: ' + [upvotedItemIDs]);
+    console.log('DOWNVOTEITEMIDS: ' + downvotedItemIDs);
+    console.log('ITEMID: ' + this.itemID);
 
     const buttonData = [
       {
@@ -116,12 +124,15 @@ class ItemScreen extends Component {
   }
 
   render() {
-    const {
-      item,
-      favoriteItemIDs,
-      upvotedItemIDs,
-      downvotedItemIDs
-    } = this.props;
+    const { item, favoriteItemIDs, userVoteItemIDs } = this.props;
+
+    const upvotedItemIDs = userVoteItemIDs.upvotedItemIDs;
+    const downvotedItemIDs = userVoteItemIDs.downvotedItemIDs;
+
+    console.log('ITEM: ' + item);
+    console.log('FAVITEMIDS: ' + favoriteItemIDs);
+    console.log('UPVOTEDIDS: ' + upvotedItemIDs);
+    console.log('DOWNVOTEIDS: ' + downvotedItemIDs);
 
     if (
       item == null ||
@@ -141,16 +152,8 @@ class ItemScreen extends Component {
             <View style={styles.bottomContainerView}>
               <SeparatorView />
               <RatingBarView
-                upvoteCount={
-                  item.upvotingUsers
-                    ? Object.keys(item.upvotingUsers).length
-                    : 0
-                }
-                downvoteCount={
-                  item.downvotingUsers
-                    ? Object.keys(item.downvotingUsers).length
-                    : 0
-                }
+                upvoteCount={item.upvoteCount}
+                downvoteCount={item.downvoteCount}
               />
               <SeparatorView />
               <View style={styles.buttonContainerView}>
@@ -180,14 +183,8 @@ class ItemScreen extends Component {
   }
 }
 
-mapStateToProps = ({
-  item,
-  user,
-  favoriteItemIDs,
-  upvotedItemIDs,
-  downvotedItemIDs
-}) => {
-  return { item, user, favoriteItemIDs, upvotedItemIDs, downvotedItemIDs };
+mapStateToProps = ({ item, user, favoriteItemIDs, userVoteItemIDs }) => {
+  return { item, user, favoriteItemIDs, userVoteItemIDs };
 };
 
 mapDispatchToProps = dispatch => {

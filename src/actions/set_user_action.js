@@ -2,12 +2,7 @@ import firebase from 'firebase';
 import { bindActionCreators } from 'redux';
 import { fetchUser } from './';
 import { LOGOUT_USER } from './types';
-import {
-  rootRef,
-  usersRef,
-  upvotedItemsRef,
-  downvotedItemsRef
-} from '../firebase/references';
+import { rootRef, usersRef, userVotesRef } from '../firebase/references';
 
 export const firebaseLogin = (email, password, callback) => dispatch => {
   firebase
@@ -143,35 +138,33 @@ export const deleteAccount = callback => dispatch => {
   if (user) {
     const userID = user.uid;
 
-    const usernamePromise = usersRef.child(userID + '/username').once('value');
-    const upvotedItemsPromise = upvotedItemsRef.child(userID).once('value');
-    const downvotedItemsPromise = downvotedItemsRef.child(userID).once('value');
+    const usernamePromise = usersRef.child(userID + '/username/').once('value');
+    const userVotesPromise = userVotesRef.child(userID).once('value');
 
-    Promise.all([usernamePromise, upvotedItemsPromise, downvotedItemsPromise])
+    Promise.all([usernamePromise, userVotesPromise])
       .then(results => {
         const username = results[0] ? results[0].val() : null;
-        const upvotedItemIDs = Object.keys(results[1].val() || {});
-        const downvotedItemIDs = Object.keys(results[2].val() || {});
+        const userVotes = results[1] ? results[1].val() : {};
+        const upvotedItemIDs = Object.keys(userVotes.upvotes || {});
+        const downvotedItemIDs = Object.keys(userVotes.downvotes || {});
 
         // Delete user from auth database
         user.delete().then(() => {
           // If successful, delete user-related data from database
           let updates = {};
-          updates['/users/' + userID] = null;
+          updates['/users/' + userID] = null; // Remove from /users/
           if (username) updates['/usernames/' + username] = null;
-          updates['/favorites/' + userID] = null;
-          updates['/upvotedItems/' + userID] = null;
-          updates['/downvotedItems/' + userID] = null;
+          updates['/userFavorites/' + userID] = null; // Remove from /userFavorites/
+          updates['/userVotes/' + userID] = null; // Remove from /userVotes/
 
-          // nullify user's upvotes from items
+          // Remove from /itemVotes/
           for (index in upvotedItemIDs) {
             const itemID = upvotedItemIDs[index];
-            updates['/items/' + itemID + '/upvotingUsers/' + userID] = null;
+            updates['/itemVotes/' + itemID + '/upvotes/' + userID] = null;
           }
-          // nullify user's downvotes from items
           for (index in downvotedItemIDs) {
             const itemID = downvotedItemIDs[index];
-            updates['/items/' + itemID + '/downvotingUsers/' + userID] = null;
+            updates['/itemVotes/' + itemID + '/downvotes/' + userID] = null;
           }
           rootRef
             .update(updates)

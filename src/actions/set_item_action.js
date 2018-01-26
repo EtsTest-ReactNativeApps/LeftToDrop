@@ -1,18 +1,17 @@
 import { rootRef } from '../firebase/references';
 
 export const toggleUpvoteItem = (itemID, userID, value) => dispatch => {
-  toggleItemVote(itemID, userID, value, 'upvotingUsers', 'upvotedItems');
+  toggleItemVote(itemID, userID, value, 'upvotes');
 };
 
 export const toggleDownvoteItem = (itemID, userID, value) => dispatch => {
-  toggleItemVote(itemID, userID, value, 'downvotingUsers', 'downvotedItems');
+  toggleItemVote(itemID, userID, value, 'downvotes');
 };
 
-// Simultaneously update both user's up/downvotedItems
-// and item's up/downvotingUsers to keep values consistent
-const toggleItemVote = (itemID, userID, value, itemSubpath, rootPath) => {
+// voteSubpath is either 'upvotes' or 'downvotes'
+const toggleItemVote = (itemID, userID, value, voteSubpath) => {
   let updates = {};
-  updates[rootPath + '/' + userID + '/' + itemID] = value;
-  updates['items/' + itemID + '/' + itemSubpath + '/' + userID] = value;
+  updates['/userVotes/' + userID + '/' + voteSubpath + '/' + itemID] = value;
+  updates['/itemVotes/' + itemID + '/' + voteSubpath + '/' + userID] = value;
   rootRef.update(updates);
 };
