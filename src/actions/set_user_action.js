@@ -4,7 +4,19 @@ import { fetchUser } from './';
 import { LOGOUT_USER } from './types';
 import { rootRef, usersRef, userVotesRef } from '../firebase/references';
 
+const getCurrentUser = () => firebase.auth().currentUser;
+
 export const firebaseLogin = (email, password, callback) => dispatch => {
+  // Delete anonymous user if logging into another account
+  const user = getCurrentUser;
+  console.log('USER: ' + user);
+  if (user.isAnonymous) {
+    console.log('USER IS ANONYMOUS');
+    const chainedActions = bindActionCreators({ deleteAccount }, dispatch);
+    chainedActions.deleteAccount(callback);
+  }
+
+  // Proceed with signin
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
@@ -37,9 +49,11 @@ export const firebaseSignup = (
   password,
   callback
 ) => dispatch => {
+  var credential = firebase.auth.EmailAuthProvider.credential(email, password);
   firebase
     .auth()
-    .createUserWithEmailAndPassword(email, password)
+    .currentUser.linkWithCredential(credential)
+    //firebase.auth().createUserWithEmailAndPassword(email, password) // Old signup w/o anonymous conversion
     .then(user => {
       username = username.toLowerCase();
       const date = new Date();
@@ -62,12 +76,12 @@ export const firebaseSignup = (
     });
 };
 
-const getCurrentUser = () => firebase.auth().currentUser;
-
 export const setUsername = (username, oldUsername, callback) => dispatch => {
   const user = getCurrentUser();
 
   if (user) {
+    username = username.toLowerCase();
+
     let updates = {};
     updates['/users/' + user.uid + '/username/'] = username; // Add to users
     updates['/usernames/' + username] = true; // Add to usernames
@@ -144,7 +158,8 @@ export const deleteAccount = callback => dispatch => {
     Promise.all([usernamePromise, userVotesPromise])
       .then(results => {
         const username = results[0] ? results[0].val() : null;
-        const userVotes = results[1] ? results[1].val() : {};
+        const userVotes = results[1] ? results[1].val() || {} : {};
+
         const upvotedItemIDs = Object.keys(userVotes.upvotes || {});
         const downvotedItemIDs = Object.keys(userVotes.downvotes || {});
 
