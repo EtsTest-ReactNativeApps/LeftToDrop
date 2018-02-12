@@ -8,26 +8,26 @@ const getCurrentUser = () => firebase.auth().currentUser;
 
 export const firebaseLogin = (email, password, callback) => dispatch => {
   // Delete anonymous user if logging into another account
-  const user = getCurrentUser;
-  console.log('USER: ' + user);
-  if (user.isAnonymous) {
-    console.log('USER IS ANONYMOUS');
+  const user = getCurrentUser();
+  /*if (user.isAnonymous) {
     const chainedActions = bindActionCreators({ deleteAccount }, dispatch);
     chainedActions.deleteAccount(callback);
-  }
+  }*/
 
   // Proceed with signin
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(user => {
+      console.log('SIGNEDIN');
+
       const chainedActions = bindActionCreators({ fetchUser }, dispatch);
       chainedActions.fetchUser();
       callback(null);
     })
     .catch(error => {
       const { code, message } = error;
-      callback(message);
+      console.log('CODE: ' + code + ', MESSAGE: ' + message);
     });
 };
 
@@ -185,11 +185,11 @@ export const deleteAccount = callback => dispatch => {
             .update(updates)
             .then(() => {
               // Success
-              const chainedActions = bindActionCreators(
+              /*const chainedActions = bindActionCreators(
                 { fetchUser },
                 dispatch
               );
-              chainedActions.fetchUser();
+              chainedActions.fetchUser();*/
               callback(null);
             })
             .catch(error => {
