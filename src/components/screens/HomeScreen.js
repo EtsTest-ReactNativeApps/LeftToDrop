@@ -86,7 +86,11 @@ class HomeScreen extends Component {
             label: 'Previous Drops',
             nextScreen: 'Categories'
           },
-          { label: 'Seasons', nextScreen: 'Seasons' },
+          /*{ label: 'Seasons', nextScreen: 'Seasons' },*/
+          {
+            label: "This Week's Drop",
+            nextScreen: 'Current'
+          },
           { label: 'Favorites', nextScreen: 'Favorites' },
           { label: 'Settings', nextScreen: 'Settings' }
         ]}
